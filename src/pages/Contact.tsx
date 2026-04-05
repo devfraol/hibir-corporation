@@ -22,10 +22,10 @@ const Contact = () => {
       <section className="section-padding">
         <div className="container-custom grid md:grid-cols-2 gap-16">
           <AnimatedSection>
-            <span className="text-accent font-body font-semibold text-sm tracking-widest uppercase">Get in Touch</span>
-            <h2 className="section-title mt-2 mb-8">We'd Love to Hear From You</h2>
+            <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Get in Touch</span>
+            <h2 className="section-title mt-3 mb-10">We'd Love to Hear From You</h2>
 
-            <div className="space-y-6 mb-10">
+            <div className="space-y-6 mb-12">
               {[
                 { icon: <MapPin size={20} />, label: "Address", value: "Bahir Dar, Amhara Region, Ethiopia" },
                 { icon: <Phone size={20} />, label: "Phone", value: "+251 58 220 5678 / +251 58 220 1234" },
@@ -33,9 +33,11 @@ const Contact = () => {
                 { icon: <Clock size={20} />, label: "Working Hours", value: "Mon – Fri: 8:00 AM – 5:00 PM" },
               ].map((c, i) => (
                 <div key={i} className="flex items-start gap-4">
-                  <div className="text-accent shrink-0 mt-1">{c.icon}</div>
+                  <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent shrink-0">
+                    {c.icon}
+                  </div>
                   <div>
-                    <p className="font-body font-semibold text-sm">{c.label}</p>
+                    <p className="font-body font-semibold text-sm text-foreground">{c.label}</p>
                     <p className="text-muted-foreground text-sm font-body">{c.value}</p>
                   </div>
                 </div>
@@ -43,7 +45,7 @@ const Contact = () => {
             </div>
 
             {/* Map */}
-            <div className="rounded-xl overflow-hidden border border-border h-64">
+            <div className="rounded-2xl overflow-hidden border border-border h-64">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d124930.47829473694!2d37.34!3d11.59!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164326f4fa3dc3b7%3A0xe08b4e3e5bae9d89!2sBahir%20Dar!5e0!3m2!1sen!2set!4v1700000000000"
                 width="100%"
@@ -58,54 +60,38 @@ const Contact = () => {
           </AnimatedSection>
 
           <AnimatedSection delay={0.2}>
-            <form onSubmit={handleSubmit} className="bg-card rounded-xl p-8 border border-border shadow-lg">
-              <h3 className="font-display font-semibold text-2xl mb-6">Send a Message</h3>
-              <div className="space-y-5">
+            <form onSubmit={handleSubmit} className="glass-card p-8 md:p-10">
+              <h3 className="font-display font-semibold text-2xl mb-8 text-foreground">Send a Message</h3>
+              <div className="space-y-6">
+                {[
+                  { label: "Full Name", type: "text", key: "name" as const, placeholder: "Your name" },
+                  { label: "Email", type: "email", key: "email" as const, placeholder: "your@email.com" },
+                  { label: "Subject", type: "text", key: "subject" as const, placeholder: "Project inquiry" },
+                ].map((field) => (
+                  <div key={field.key}>
+                    <label className="block text-sm font-body font-medium mb-2 text-foreground/80">{field.label}</label>
+                    <input
+                      type={field.type}
+                      required
+                      value={form[field.key]}
+                      onChange={e => setForm(p => ({ ...p, [field.key]: e.target.value }))}
+                      className="w-full px-4 py-3.5 rounded-xl border border-border bg-secondary/50 font-body text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent/50 focus:shadow-[0_0_20px_hsla(38,92%,50%,0.1)] transition-all duration-300"
+                      placeholder={field.placeholder}
+                    />
+                  </div>
+                ))}
                 <div>
-                  <label className="block text-sm font-body font-medium mb-1.5">Full Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={form.name}
-                    onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-lg border border-input bg-background font-body text-sm focus:outline-none focus:ring-2 focus:ring-accent/50"
-                    placeholder="Your name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-body font-medium mb-1.5">Email</label>
-                  <input
-                    type="email"
-                    required
-                    value={form.email}
-                    onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-lg border border-input bg-background font-body text-sm focus:outline-none focus:ring-2 focus:ring-accent/50"
-                    placeholder="your@email.com"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-body font-medium mb-1.5">Subject</label>
-                  <input
-                    type="text"
-                    required
-                    value={form.subject}
-                    onChange={e => setForm(p => ({ ...p, subject: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-lg border border-input bg-background font-body text-sm focus:outline-none focus:ring-2 focus:ring-accent/50"
-                    placeholder="Project inquiry"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-body font-medium mb-1.5">Message</label>
+                  <label className="block text-sm font-body font-medium mb-2 text-foreground/80">Message</label>
                   <textarea
                     required
                     rows={5}
                     value={form.message}
                     onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-lg border border-input bg-background font-body text-sm focus:outline-none focus:ring-2 focus:ring-accent/50 resize-none"
+                    className="w-full px-4 py-3.5 rounded-xl border border-border bg-secondary/50 font-body text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent/50 focus:shadow-[0_0_20px_hsla(38,92%,50%,0.1)] transition-all duration-300 resize-none"
                     placeholder="Tell us about your project..."
                   />
                 </div>
-                <button type="submit" className="btn-accent w-full inline-flex items-center justify-center gap-2">
+                <button type="submit" className="btn-accent w-full inline-flex items-center justify-center gap-2 py-4">
                   <Send size={18} /> Send Message
                 </button>
               </div>

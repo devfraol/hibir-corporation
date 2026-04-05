@@ -29,15 +29,16 @@ const Projects = () => {
 
       <section className="section-padding">
         <div className="container-custom">
-          <div className="flex justify-center gap-3 mb-12">
+          {/* Filters */}
+          <div className="flex justify-center gap-3 mb-14">
             {filters.map(f => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-6 py-2 rounded-full text-sm font-body font-medium transition-all ${
+                className={`px-6 py-2.5 rounded-xl text-sm font-body font-medium transition-all duration-300 ${
                   filter === f
-                    ? "bg-accent text-accent-foreground shadow-md"
-                    : "bg-muted text-muted-foreground hover:bg-muted/80"
+                    ? "bg-accent text-accent-foreground shadow-lg shadow-accent/20"
+                    : "glass-card text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {f}
@@ -51,24 +52,26 @@ const Projects = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4 }}
               className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
               {filtered.map((p, i) => (
-                <AnimatedSection key={p.title} delay={i * 0.1}>
-                  <div className="group bg-card rounded-xl overflow-hidden border border-border card-hover">
-                    <div className="relative overflow-hidden h-52">
+                <AnimatedSection key={p.title} delay={i * 0.08}>
+                  <div className="group glass-card rounded-2xl overflow-hidden">
+                    <div className="relative overflow-hidden h-56">
                       <img src={p.image} alt={p.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
-                      <span className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-body font-semibold ${
-                        p.status === "Completed" ? "bg-green-500/90 text-primary-foreground" : "bg-accent/90 text-accent-foreground"
+                      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <span className={`absolute top-4 right-4 px-3 py-1.5 rounded-lg text-xs font-body font-semibold backdrop-blur-sm ${
+                        p.status === "Completed" ? "bg-green-500/15 text-green-400 border border-green-500/20" : "bg-accent/15 text-accent border border-accent/20"
                       }`}>
                         {p.status}
                       </span>
                     </div>
                     <div className="p-6">
-                      <h3 className="font-display font-semibold text-lg mb-3">{p.title}</h3>
-                      <div className="space-y-1.5 text-sm font-body text-muted-foreground">
-                        <p><span className="font-medium text-foreground">Client:</span> {p.client}</p>
-                        <p><span className="font-medium text-foreground">Budget:</span> {p.budget}</p>
+                      <h3 className="font-display font-semibold text-lg mb-3 text-foreground">{p.title}</h3>
+                      <div className="space-y-2 text-sm font-body text-muted-foreground">
+                        <p><span className="font-medium text-foreground/80">Client:</span> {p.client}</p>
+                        <p><span className="font-medium text-foreground/80">Budget:</span> <span className="text-accent font-semibold">{p.budget}</span></p>
                       </div>
                     </div>
                   </div>
