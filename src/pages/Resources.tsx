@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Truck, Users, Wrench, Factory, GraduationCap, Briefcase } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import AnimatedSection from "@/components/AnimatedSection";
@@ -21,7 +22,6 @@ const Resources = () => (
   <main>
     <PageHero title="Our Resources" subtitle="State-of-the-art machinery and skilled workforce powering Ethiopia's development" image={equipmentImg} />
 
-    {/* Stats */}
     <section className="bg-primary py-16">
       <div className="container-custom grid grid-cols-2 md:grid-cols-4 gap-8">
         <Counter end={800} suffix="+" label="Total Staff" />
@@ -31,7 +31,6 @@ const Resources = () => (
       </div>
     </section>
 
-    {/* Machinery */}
     <section className="section-padding">
       <div className="container-custom">
         <AnimatedSection className="text-center mb-16">
@@ -53,7 +52,6 @@ const Resources = () => (
       </div>
     </section>
 
-    {/* Human Resources */}
     <section className="section-padding bg-muted/50">
       <div className="container-custom">
         <AnimatedSection className="text-center mb-16">
@@ -73,7 +71,6 @@ const Resources = () => (
           ))}
         </div>
 
-        {/* Bar Chart Visual */}
         <AnimatedSection className="mt-16">
           <div className="bg-card rounded-xl p-8 border border-border">
             <h3 className="font-display font-semibold text-xl mb-8 text-center">Workforce Distribution</h3>
@@ -103,5 +100,4 @@ const Resources = () => (
   </main>
 );
 
-import { motion } from "framer-motion";
 export default Resources;
