@@ -9,7 +9,7 @@ interface Props {
   decimals?: number;
 }
 
-const Counter = ({ end, suffix = "", label, duration = 2 }: Props) => {
+const Counter = ({ end, suffix = "", label, duration = 2, decimals = 0 }: Props) => {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true });
