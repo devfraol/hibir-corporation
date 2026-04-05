@@ -24,7 +24,7 @@ const Counter = ({ end, suffix = "", label, duration = 2, decimals = 0 }: Props)
         setCount(end);
         clearInterval(timer);
       } else {
-        setCount(Math.floor(start));
+        setCount(Math.floor(start * Math.pow(10, decimals)) / Math.pow(10, decimals));
       }
     }, 1000 / 60);
     return () => clearInterval(timer);
