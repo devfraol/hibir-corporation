@@ -6,6 +6,7 @@ interface Props {
   suffix?: string;
   label: string;
   duration?: number;
+  decimals?: number;
 }
 
 const Counter = ({ end, suffix = "", label, duration = 2 }: Props) => {
