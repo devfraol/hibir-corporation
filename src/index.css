@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,48 +6,52 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 215 30% 12%;
+    --background: 220 20% 4%;
+    --foreground: 210 20% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 215 30% 12%;
+    --card: 220 18% 8%;
+    --card-foreground: 210 20% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 215 30% 12%;
+    --popover: 220 18% 8%;
+    --popover-foreground: 210 20% 95%;
 
-    --primary: 215 70% 18%;
+    --primary: 220 60% 12%;
     --primary-foreground: 45 100% 96%;
 
-    --secondary: 215 25% 92%;
-    --secondary-foreground: 215 30% 12%;
+    --secondary: 220 15% 14%;
+    --secondary-foreground: 210 20% 90%;
 
-    --muted: 210 15% 94%;
-    --muted-foreground: 215 15% 46%;
+    --muted: 220 15% 12%;
+    --muted-foreground: 215 15% 55%;
 
     --accent: 38 92% 50%;
-    --accent-foreground: 215 70% 12%;
+    --accent-foreground: 220 60% 8%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214 20% 88%;
-    --input: 214 20% 88%;
-    --ring: 215 70% 18%;
+    --border: 220 15% 16%;
+    --input: 220 15% 16%;
+    --ring: 38 92% 50%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --hero-gradient: linear-gradient(135deg, hsl(215 70% 14%) 0%, hsl(215 50% 25%) 50%, hsl(215 40% 32%) 100%);
-    --gold-gradient: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(45 90% 55%) 100%);
-    --overlay-dark: linear-gradient(180deg, hsla(215, 70%, 10%, 0.85) 0%, hsla(215, 70%, 10%, 0.6) 100%);
+    --hero-gradient: linear-gradient(135deg, hsl(220 60% 6%) 0%, hsl(220 50% 14%) 50%, hsl(220 40% 20%) 100%);
+    --gold-gradient: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(45 90% 60%) 50%, hsl(38 85% 45%) 100%);
+    --glass-bg: hsla(220, 20%, 8%, 0.6);
+    --glass-border: hsla(210, 20%, 95%, 0.08);
+    --glow-gold: 0 0 30px hsla(38, 92%, 50%, 0.3);
+    --glow-blue: 0 0 40px hsla(220, 60%, 40%, 0.2);
+    --overlay-dark: linear-gradient(180deg, hsla(220, 60%, 4%, 0.9) 0%, hsla(220, 60%, 4%, 0.5) 100%);
 
-    --sidebar-background: 0 0% 98%;
+    --sidebar-background: 220 18% 8%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
     --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 240 4.8% 95.9%;
     --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-border: 220 13% 16%;
+    --sidebar-ring: 38 92% 50%;
   }
 }
 
@@ -65,7 +69,7 @@
 
 @layer components {
   .section-padding {
-    @apply py-20 md:py-28 px-4 md:px-8;
+    @apply py-24 md:py-32 px-4 md:px-8;
   }
   .container-custom {
     @apply max-w-7xl mx-auto;
@@ -74,22 +78,64 @@
     @apply bg-clip-text text-transparent;
     background-image: var(--gold-gradient);
   }
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+  }
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    @apply rounded-2xl transition-all duration-500;
+  }
+  .glass-card:hover {
+    border-color: hsla(38, 92%, 50%, 0.2);
+    box-shadow: var(--glow-gold);
+  }
+  .glow-border {
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    @apply transition-all duration-500;
+  }
+  .glow-border:hover {
+    border-color: hsla(38, 92%, 50%, 0.3);
+    box-shadow: var(--glow-gold);
+  }
   .btn-primary {
-    @apply bg-primary text-primary-foreground px-8 py-3 rounded-md font-semibold font-body
-           transition-all duration-300 hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5;
+    @apply bg-primary text-primary-foreground px-8 py-3.5 rounded-xl font-semibold font-body
+           transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5;
+    border: 1px solid hsla(210, 20%, 95%, 0.1);
+  }
+  .btn-primary:hover {
+    box-shadow: var(--glow-blue);
+    border-color: hsla(210, 20%, 95%, 0.2);
   }
   .btn-accent {
-    @apply px-8 py-3 rounded-md font-semibold font-body
-           transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5;
+    @apply px-8 py-3.5 rounded-xl font-semibold font-body
+           transition-all duration-300 hover:-translate-y-0.5;
     background-image: var(--gold-gradient);
-    color: hsl(215 70% 12%);
+    color: hsl(220 60% 8%);
+  }
+  .btn-accent:hover {
+    box-shadow: var(--glow-gold);
+    transform: translateY(-2px) scale(1.02);
   }
   .btn-outline-light {
-    @apply border-2 border-primary-foreground/40 text-primary-foreground px-8 py-3 rounded-md font-semibold font-body
-           transition-all duration-300 hover:bg-primary-foreground/10 hover:-translate-y-0.5;
+    @apply border border-primary-foreground/20 text-primary-foreground px-8 py-3.5 rounded-xl font-semibold font-body
+           transition-all duration-300 hover:bg-primary-foreground/5 hover:-translate-y-0.5;
+  }
+  .btn-outline-light:hover {
+    border-color: hsla(38, 92%, 50%, 0.4);
+    box-shadow: 0 0 20px hsla(38, 92%, 50%, 0.1);
   }
   .card-hover {
-    @apply transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 hover:shadow-primary/10;
+    @apply transition-all duration-500 hover:-translate-y-2;
+  }
+  .card-hover:hover {
+    box-shadow: 0 20px 60px -15px hsla(38, 92%, 50%, 0.15), var(--glow-blue);
   }
   .section-title {
     @apply text-3xl md:text-4xl lg:text-5xl font-bold font-display text-foreground;
@@ -102,6 +148,32 @@
   }
 }
 
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(220 20% 4%);
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(220 15% 20%);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(38 92% 50%);
+}
+
 html {
   scroll-behavior: smooth;
+}
+
+/* Scroll progress bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background-image: var(--gold-gradient);
+  z-index: 100;
+  transition: width 0.1s linear;
 }
