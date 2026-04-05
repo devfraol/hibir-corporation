@@ -39,7 +39,7 @@ const Counter = ({ end, suffix = "", label, duration = 2, decimals = 0 }: Props)
       className="text-center"
     >
       <div className="text-4xl md:text-5xl font-display font-bold text-accent">
-        {count}{suffix}
+        {decimals > 0 ? count.toFixed(decimals) : count}{suffix}
       </div>
       <div className="text-sm text-primary-foreground/70 font-body mt-2">{label}</div>
     </motion.div>
