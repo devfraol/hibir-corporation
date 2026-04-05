@@ -20,21 +20,22 @@ const Safety = () => (
   <main>
     <PageHero title="Safety & Quality" subtitle="Uncompromising commitment to safety and quality excellence" image={safetyImg} />
 
+    {/* Safety */}
     <section className="section-padding">
       <div className="container-custom">
         <AnimatedSection className="text-center mb-16">
-          <span className="text-accent font-body font-semibold text-sm tracking-widest uppercase">Safety Policy</span>
-          <h2 className="section-title mt-2">Zero Accidents, Zero Compromise</h2>
-          <p className="section-subtitle mx-auto mt-4">
-            Safety is not just a policy — it's a core value embedded in every operation.
-          </p>
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Safety Policy</span>
+          <h2 className="section-title mt-3">Zero Accidents, Zero Compromise</h2>
+          <p className="section-subtitle mx-auto mt-4">Safety is not just a policy — it's a core value embedded in every operation.</p>
         </AnimatedSection>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {safetyPoints.map((s, i) => (
-            <AnimatedSection key={i} delay={i * 0.1}>
-              <div className="bg-card rounded-xl p-6 border border-border card-hover h-full">
-                <div className="text-accent mb-4">{s.icon}</div>
-                <h3 className="font-display font-semibold mb-2">{s.title}</h3>
+            <AnimatedSection key={i} delay={i * 0.08}>
+              <div className="glass-card p-7 h-full">
+                <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center text-accent mb-5">
+                  {s.icon}
+                </div>
+                <h3 className="font-display font-semibold mb-2 text-foreground">{s.title}</h3>
                 <p className="text-muted-foreground text-sm font-body">{s.desc}</p>
               </div>
             </AnimatedSection>
@@ -43,21 +44,28 @@ const Safety = () => (
       </div>
     </section>
 
-    <section className="section-padding bg-primary">
-      <div className="container-custom grid md:grid-cols-2 gap-16 items-center">
+    {/* Quality */}
+    <section className="section-padding relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-secondary/30 to-background" />
+      <div className="container-custom relative z-10 grid md:grid-cols-2 gap-16 items-center">
         <AnimatedSection>
-          <img src={safetyImg} alt="Safety on construction site" className="rounded-xl shadow-2xl" loading="lazy" width={1280} height={720} />
+          <div className="relative">
+            <div className="absolute -inset-4 rounded-3xl bg-accent/5 blur-2xl" />
+            <img src={safetyImg} alt="Safety on construction site" className="relative rounded-2xl shadow-2xl shadow-black/30" loading="lazy" />
+          </div>
         </AnimatedSection>
         <AnimatedSection delay={0.2}>
-          <span className="text-accent font-body font-semibold text-sm tracking-widest uppercase">Quality Assurance</span>
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-primary-foreground mt-2 mb-8">Our Quality Policy</h2>
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Quality Assurance</span>
+          <h2 className="section-title mt-3 mb-8">Our Quality Policy</h2>
           <div className="space-y-6">
             {qualityPoints.map((q, i) => (
-              <div key={i} className="flex gap-4">
-                <div className="text-accent shrink-0 mt-1">{q.icon}</div>
+              <div key={i} className="flex gap-4 glass-card p-5">
+                <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center text-accent shrink-0">
+                  {q.icon}
+                </div>
                 <div>
-                  <h3 className="font-display font-semibold text-primary-foreground mb-1">{q.title}</h3>
-                  <p className="text-primary-foreground/60 text-sm font-body">{q.desc}</p>
+                  <h3 className="font-display font-semibold text-foreground mb-1">{q.title}</h3>
+                  <p className="text-muted-foreground text-sm font-body">{q.desc}</p>
                 </div>
               </div>
             ))}
@@ -66,20 +74,26 @@ const Safety = () => (
       </div>
     </section>
 
-    <AnimatedSection className="section-padding bg-muted/50">
+    {/* Awards */}
+    <AnimatedSection className="section-padding">
       <div className="container-custom text-center">
-        <h2 className="section-title mb-6">Awards & Certifications</h2>
+        <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Recognition</span>
+        <h2 className="section-title mt-3 mb-14">Awards & Certifications</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {[
             { title: "ISO 9001:2015", desc: "Quality Management System Certified" },
             { title: "National Safety Award", desc: "Recognized for outstanding site safety record" },
             { title: "Best Contractor Award", desc: "Amhara Region Best Performing Contractor" },
           ].map((a, i) => (
-            <div key={i} className="bg-card rounded-xl p-8 border border-border card-hover">
-              <Award className="text-accent mx-auto mb-4" size={40} />
-              <h3 className="font-display font-semibold text-lg mb-2">{a.title}</h3>
-              <p className="text-muted-foreground text-sm font-body">{a.desc}</p>
-            </div>
+            <AnimatedSection key={i} delay={i * 0.1}>
+              <div className="glass-card p-8 h-full">
+                <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mx-auto mb-5">
+                  <Award className="text-accent" size={28} />
+                </div>
+                <h3 className="font-display font-semibold text-lg mb-2 text-foreground">{a.title}</h3>
+                <p className="text-muted-foreground text-sm font-body">{a.desc}</p>
+              </div>
+            </AnimatedSection>
           ))}
         </div>
       </div>

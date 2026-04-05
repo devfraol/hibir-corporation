@@ -28,7 +28,7 @@ const Counter = ({ end, suffix = "", label, duration = 2, decimals = 0 }: Props)
       }
     }, 1000 / 60);
     return () => clearInterval(timer);
-  }, [inView, end, duration]);
+  }, [inView, end, duration, decimals]);
 
   return (
     <motion.div
@@ -38,10 +38,10 @@ const Counter = ({ end, suffix = "", label, duration = 2, decimals = 0 }: Props)
       viewport={{ once: true }}
       className="text-center"
     >
-      <div className="text-4xl md:text-5xl font-display font-bold text-accent">
+      <div className="text-4xl md:text-5xl font-display font-bold text-gradient-gold">
         {decimals > 0 ? count.toFixed(decimals) : count}{suffix}
       </div>
-      <div className="text-sm text-primary-foreground/70 font-body mt-2">{label}</div>
+      <div className="text-sm text-muted-foreground font-body mt-2 tracking-wide">{label}</div>
     </motion.div>
   );
 };
