@@ -6,9 +6,10 @@ interface Props {
   suffix?: string;
   label: string;
   duration?: number;
+  decimals?: number;
 }
 
-const Counter = ({ end, suffix = "", label, duration = 2 }: Props) => {
+const Counter = ({ end, suffix = "", label, duration = 2, decimals = 0 }: Props) => {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true });
@@ -23,7 +24,7 @@ const Counter = ({ end, suffix = "", label, duration = 2 }: Props) => {
         setCount(end);
         clearInterval(timer);
       } else {
-        setCount(Math.floor(start));
+        setCount(Math.floor(start * Math.pow(10, decimals)) / Math.pow(10, decimals));
       }
     }, 1000 / 60);
     return () => clearInterval(timer);
@@ -38,7 +39,7 @@ const Counter = ({ end, suffix = "", label, duration = 2 }: Props) => {
       className="text-center"
     >
       <div className="text-4xl md:text-5xl font-display font-bold text-accent">
-        {count}{suffix}
+        {decimals > 0 ? count.toFixed(decimals) : count}{suffix}
       </div>
       <div className="text-sm text-primary-foreground/70 font-body mt-2">{label}</div>
     </motion.div>
