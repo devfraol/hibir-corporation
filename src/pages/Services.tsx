@@ -1,4 +1,4 @@
-import { HardHat, Landmark, Wrench, Truck, Factory, Settings } from "lucide-react";
+import { HardHat, Landmark, Wrench, Truck, Factory, GraduationCap } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import AnimatedSection from "@/components/AnimatedSection";
 import roadImg from "@/assets/road-construction.jpg";
@@ -9,12 +9,12 @@ import airportImg from "@/assets/airport-project.jpg";
 import safetyImg from "@/assets/safety-workers.jpg";
 
 const services = [
-  { icon: <HardHat size={32} />, title: "Road Construction", desc: "Design and construction of highways, urban roads, and rural access roads across Ethiopia's diverse terrain. We handle grading, paving, and finishing to international standards.", image: roadImg },
-  { icon: <Landmark size={32} />, title: "Asphalt & Infrastructure Development", desc: "Full-service asphalt production and laying, including hot mix plants, surface dressing, and bituminous treatments for durable road surfaces.", image: heroImg },
-  { icon: <Wrench size={32} />, title: "Bridge Construction", desc: "Engineering and construction of reinforced concrete bridges, culverts, and drainage structures that connect communities and withstand Ethiopia's varied climate.", image: bridgeImg },
-  { icon: <Settings size={32} />, title: "Road Maintenance & Upgrading", desc: "Comprehensive rehabilitation, maintenance, and upgrading of existing road networks to extend service life and improve safety.", image: safetyImg },
-  { icon: <Factory size={32} />, title: "Material Production & Supply", desc: "Production and supply of construction materials including crushed aggregate, asphalt, and concrete from our own plants and quarries.", image: airportImg },
-  { icon: <Truck size={32} />, title: "Equipment Leasing", desc: "Leasing of heavy construction equipment including excavators, graders, loaders, and dump trucks to other contractors and organizations.", image: equipmentImg },
+  { icon: <HardHat size={32} />, title: "Road Construction", desc: "Construct, improve, and maintain appropriate roads across the regional and national levels. We build new quality roads with economic feasibility, supporting development activities and alleviating infrastructural difficulties for communities.", image: roadImg },
+  { icon: <Landmark size={32} />, title: "Asphalt & Infrastructure Development", desc: "Full-service asphalt production and laying from our own 2 asphalt plants and 5 crusher & sand making plants, including hot mix production, surface dressing, and bituminous treatments for durable road surfaces.", image: heroImg },
+  { icon: <Wrench size={32} />, title: "Bridge Construction", desc: "Engineering and construction of reinforced concrete bridges, culverts, and drainage structures — including design-and-build projects like the Dura Bridge and Gimbober & Berbisa Bridges for the Ethiopian Roads Authority.", image: bridgeImg },
+  { icon: <Truck size={32} />, title: "Road Maintenance & Upgrading", desc: "Comprehensive rehabilitation, heavy maintenance, and upgrading of existing road networks to extend service life, improve safety, and bring roads to modern standards.", image: safetyImg },
+  { icon: <Factory size={32} />, title: "Material Production & Supply", desc: "Production and supply of various construction materials and tools necessary for road and other construction works from our own plants and quarries — including crushed aggregate, sand, and asphalt.", image: airportImg },
+  { icon: <GraduationCap size={32} />, title: "Capacity Building & Training", desc: "Road sector capacity building activities including device operator training and other related training programs, formulated and implemented upon approval of the managing board.", image: equipmentImg },
 ];
 
 const Services = () => (
@@ -24,8 +24,9 @@ const Services = () => (
     <section className="section-padding">
       <div className="container-custom">
         <AnimatedSection className="text-center mb-20">
-          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">What We Do</span>
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Duties & Responsibilities</span>
           <h2 className="section-title mt-3">End-to-End Infrastructure Solutions</h2>
+          <p className="section-subtitle mx-auto mt-4">As a GC-1 rated general contractor, Hibir Construction Corporation delivers complete infrastructure solutions from material production to project completion</p>
         </AnimatedSection>
 
         <div className="space-y-20">

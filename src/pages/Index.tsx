@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import {
   ArrowRight, HardHat, Truck, Users, ChevronDown,
   Shield, Award, CheckCircle, Wrench, Factory, Building2,
-  CarFront, Cog, TreePine, ChevronRight
+  CarFront, Cog, TreePine, ChevronRight, GraduationCap
 } from "lucide-react";
 import heroImg from "@/assets/hero-highway.jpg";
 import bridgeImg from "@/assets/bridge-construction.jpg";
@@ -25,28 +25,30 @@ const fadeUp = {
 };
 
 const featuredProjects = [
-  { title: "Bahir Dar Airport Expansion", image: airportImg, client: "Ethiopian Airports Enterprise", status: "Ongoing", budget: "2.1B Birr" },
-  { title: "Lalibela – Sekota Road Project", image: roadImg, client: "Ethiopian Roads Authority", status: "Completed", budget: "890M Birr" },
-  { title: "Gondar Asphalt Road Project", image: bridgeImg, client: "Amhara Region Bureau", status: "Ongoing", budget: "1.5B Birr" },
-  { title: "Integrated Agro Industry Park", image: heroImg, client: "Ministry of Industry", status: "Completed", budget: "1.2B Birr" },
+  { title: "Bale Egziaber–Airport Asphalt Road", image: airportImg, client: "Dessie City Administration", status: "Ongoing", budget: "5.12B Birr" },
+  { title: "Werabe–Bojober Road Project", image: roadImg, client: "Woldia City Mayor Office", status: "Ongoing", budget: "2.78B Birr" },
+  { title: "Debecha–Feresbet Asphalt Road", image: bridgeImg, client: "Ethiopian Roads Authority", status: "Ongoing", budget: "1.79B Birr" },
+  { title: "Gagbaya–Kurba Gravel Road", image: heroImg, client: "ANRS Road Bureau", status: "Completed", budget: "1.02B Birr" },
 ];
 
 const services = [
-  { icon: <HardHat size={28} />, title: "Road Construction", desc: "Durable road networks connecting communities and driving economic progress." },
-  { icon: <Building2 size={28} />, title: "Asphalt & Infrastructure", desc: "High-quality asphalt solutions for large-scale development projects." },
-  { icon: <Truck size={28} />, title: "Bridge Construction", desc: "Safe, reliable bridge structures engineered for long-term durability." },
-  { icon: <Wrench size={28} />, title: "Road Maintenance", desc: "Modern upgrades and maintenance ensuring road safety standards." },
-  { icon: <Factory size={28} />, title: "Material Production", desc: "In-house aggregates and asphalt from our own quarries and plants." },
-  { icon: <Cog size={28} />, title: "Equipment Leasing", desc: "Modern construction machinery available for project support." },
+  { icon: <HardHat size={28} />, title: "Road Construction", desc: "Design and construction of highways, urban roads, and rural access roads across Ethiopia's diverse terrain." },
+  { icon: <Building2 size={28} />, title: "Asphalt & Infrastructure", desc: "Full-service asphalt production and laying from our own plants for durable road surfaces." },
+  { icon: <Truck size={28} />, title: "Bridge Construction", desc: "Engineering and construction of reinforced concrete bridges, culverts, and drainage structures." },
+  { icon: <Wrench size={28} />, title: "Road Maintenance", desc: "Comprehensive rehabilitation and upgrading of existing road networks to extend service life." },
+  { icon: <Factory size={28} />, title: "Material Production", desc: "Production and supply of crushed aggregate, asphalt, and concrete from our own plants and quarries." },
+  { icon: <GraduationCap size={28} />, title: "Capacity Building", desc: "Road sector training programs for device operators and construction professionals." },
 ];
 
 const clientLogos = [
-  "Ethiopian Roads Authority",
-  "Ministry of Transport",
-  "Amhara Region Bureau",
-  "Ethiopian Airports Enterprise",
-  "Ministry of Industry",
-  "Bahir Dar City Admin",
+  "Ethiopian Roads Authority (ERA)",
+  "ANRS Road & Transport Bureau",
+  "Bahir Dar City Administration",
+  "Gondar Town Administration",
+  "Dessie Town Administration",
+  "Ethiopian Sugar Corporation",
+  "ANRS Industry Parks Dev. Corp.",
+  "Woldia City Administration",
 ];
 
 const Home = () => (
@@ -55,22 +57,15 @@ const Home = () => (
     <section className="relative h-screen min-h-[700px] flex items-center overflow-hidden">
       <img src={heroImg} alt="Highway construction in Ethiopia" className="absolute inset-0 w-full h-full object-cover scale-105" />
       <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/30" />
-      {/* Glow orbs */}
       <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-accent/5 blur-[150px] animate-pulse-glow" />
       <div className="absolute bottom-0 left-0 w-[600px] h-[300px] rounded-full bg-primary/30 blur-[120px]" />
-      {/* Grid pattern */}
       <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "linear-gradient(hsla(210,20%,95%,0.1) 1px, transparent 1px), linear-gradient(90deg, hsla(210,20%,95%,0.1) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
 
       <div className="relative z-10 container-custom">
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          animate="visible"
-          className="max-w-3xl"
-        >
+        <motion.div variants={stagger} initial="hidden" animate="visible" className="max-w-3xl">
           <motion.div variants={fadeUp} className="inline-flex items-center gap-2 glass rounded-full px-5 py-2 text-sm font-body mb-8">
             <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-            <span className="text-accent text-xs tracking-widest uppercase">Government-Owned Corporation</span>
+            <span className="text-accent text-xs tracking-widest uppercase">GC-1 Government-Owned Corporation</span>
           </motion.div>
 
           <motion.h1 variants={fadeUp} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-foreground leading-[1.1] mb-6">
@@ -79,7 +74,7 @@ const Home = () => (
           </motion.h1>
 
           <motion.p variants={fadeUp} className="text-base md:text-lg text-muted-foreground font-body mb-10 max-w-xl leading-relaxed">
-            Large-scale road, bridge, and infrastructure projects delivered with precision, quality, and long-term impact across Ethiopia.
+            Hibir Construction Corporation delivers large-scale road, bridge, and infrastructure projects with precision, quality, and long-term impact — with a portfolio exceeding 20.3 billion Birr.
           </motion.p>
 
           <motion.div variants={fadeUp} className="flex flex-wrap gap-4">
@@ -91,7 +86,6 @@ const Home = () => (
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
       <motion.div
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         animate={{ y: [0, 10, 0] }}
@@ -102,15 +96,15 @@ const Home = () => (
       </motion.div>
     </section>
 
-    {/* 2. STATS - Floating glass cards */}
+    {/* 2. STATS */}
     <section className="relative -mt-20 z-20 px-4 md:px-8 mb-12">
       <div className="container-custom">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           {[
-            { end: 800, suffix: "+", label: "Skilled Professionals" },
-            { end: 240, suffix: "+", label: "Machinery & Equipment" },
+            { end: 803, suffix: "+", label: "Skilled Professionals" },
+            { end: 242, suffix: "", label: "Machinery & Equipment" },
             { end: 2.5, suffix: "B+", label: "Birr Annual Turnover", decimals: 1 },
-            { end: 50, suffix: "+", label: "Major Projects" },
+            { end: 33, suffix: "+", label: "Major Projects" },
           ].map((s, i) => (
             <motion.div
               key={i}
@@ -134,10 +128,10 @@ const Home = () => (
           <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Who We Are</span>
           <h2 className="section-title mt-3 mb-6">Ethiopia's Leading Construction Corporation</h2>
           <p className="text-muted-foreground font-body leading-relaxed mb-4">
-            Hibir Construction Corporation is a leading government-owned construction enterprise based in Bahir Dar, Ethiopia. Established through multiple national proclamations, the corporation has grown into a key player in national infrastructure development.
+            Hibir Construction Corporation is a government-owned construction enterprise headquartered in Bahir Dar, Ethiopia. Originally established as "Amhara Road Works Enterprise" by Proclamation No. 71/2010, the corporation was re-established by Proclamation No. 170/2018 and upgraded to corporation level by Proclamation No. 214/2024.
           </p>
           <p className="text-muted-foreground font-body leading-relaxed mb-8">
-            With strong technical capacity, experienced professionals, and modern machinery, we deliver high-quality road and infrastructure projects that support economic growth.
+            With 803 professionals, 242 units of machinery, and a portfolio exceeding 20.3 billion Birr, we are a key driver of Ethiopia's infrastructure development — accountable to the Regional Public Enterprises' Authority.
           </p>
           <Link to="/about" className="btn-primary inline-flex items-center gap-2">
             Learn More <ChevronRight size={18} />
@@ -147,8 +141,8 @@ const Home = () => (
           <div className="absolute -inset-4 rounded-3xl bg-accent/5 blur-2xl" />
           <img src={aboutImg} alt="Construction machinery" className="relative rounded-2xl w-full shadow-2xl shadow-black/30" loading="lazy" />
           <div className="absolute -bottom-6 -left-6 glass-card p-6 hidden sm:block">
-            <div className="text-3xl font-display font-bold text-gradient-gold">25+</div>
-            <div className="text-sm text-muted-foreground font-body">Years of Excellence</div>
+            <div className="text-3xl font-display font-bold text-gradient-gold">15+</div>
+            <div className="text-sm text-muted-foreground font-body">Years Since Establishment</div>
           </div>
         </div>
       </div>
@@ -188,6 +182,7 @@ const Home = () => (
         <AnimatedSection className="text-center mb-16">
           <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Featured Projects</span>
           <h2 className="section-title mt-3">Our Flagship Work</h2>
+          <p className="section-subtitle mx-auto mt-4">Total project portfolio exceeding 20.3 billion Birr with annual turnover above 2.5 billion Birr</p>
         </AnimatedSection>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {featuredProjects.map((p, i) => (
@@ -226,14 +221,14 @@ const Home = () => (
           <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Our Capacity</span>
           <h2 className="section-title mt-3 mb-6">Built for Scale</h2>
           <p className="text-muted-foreground font-body leading-relaxed mb-10">
-            Advanced machinery and a highly skilled workforce enabling efficient execution of complex infrastructure projects across Ethiopia.
+            The corporation has strategically built its capacity through gradual investment expansion — owning 242 units of vehicles, plants, and machinery operated by 803 skilled professionals across Ethiopia.
           </p>
           <div className="grid grid-cols-2 gap-6">
             {[
-              { icon: <CarFront size={22} />, val: "146", label: "Vehicles" },
-              { icon: <Cog size={22} />, val: "89", label: "Heavy Machinery" },
-              { icon: <Factory size={22} />, val: "7+", label: "Production Plants" },
-              { icon: <Users size={22} />, val: "800+", label: "Workforce" },
+              { icon: <CarFront size={22} />, val: "146", label: "Vehicles", sub: "82 Light + 64 Heavy Duty" },
+              { icon: <Cog size={22} />, val: "89", label: "Machinery", sub: "39 Earth Moving + 50 Tyre" },
+              { icon: <Factory size={22} />, val: "7", label: "Plants", sub: "5 Crusher + 2 Asphalt" },
+              { icon: <Users size={22} />, val: "803", label: "Staff", sub: "63 Masters, 348 Bachelors" },
             ].map((item, i) => (
               <div key={i} className="glass-card p-5 flex items-start gap-3">
                 <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center text-accent shrink-0">
@@ -242,6 +237,7 @@ const Home = () => (
                 <div>
                   <div className="text-xl font-display font-bold text-foreground">{item.val}</div>
                   <div className="text-xs text-muted-foreground font-body">{item.label}</div>
+                  <div className="text-[10px] text-muted-foreground/60 font-body mt-0.5">{item.sub}</div>
                 </div>
               </div>
             ))}
@@ -271,10 +267,10 @@ const Home = () => (
               <Shield className="text-accent mb-5" size={36} />
               <h3 className="text-xl font-display font-semibold text-foreground mb-4">Safety First</h3>
               <p className="text-muted-foreground font-body leading-relaxed mb-6">
-                Strict adherence to health, safety, and environmental standards. Our goal is zero accidents and zero man-hours lost.
+                The corporation follows scientific HSE procedures with strict implementation and follow-up to ensure a safe workplace. Our goal: zero accidents and zero man-hours lost.
               </p>
               <ul className="space-y-3">
-                {["PPE compliance on all sites", "Trained safety supervisors", "Regular safety audits"].map((item, i) => (
+                {["Use of Personal Protective Equipment (PPE)", "Use of safe tools & equipment", "Trained & competent staff", "Regular on-site safety supervisions"].map((item, i) => (
                   <li key={i} className="flex items-center gap-3 text-muted-foreground text-sm font-body">
                     <CheckCircle size={14} className="text-accent shrink-0" /> {item}
                   </li>
@@ -287,10 +283,10 @@ const Home = () => (
               <Award className="text-accent mb-5" size={36} />
               <h3 className="text-xl font-display font-semibold text-foreground mb-4">Quality Assurance</h3>
               <p className="text-muted-foreground font-body leading-relaxed mb-6">
-                Rigorous quality control including inspection, testing, and continuous monitoring for the highest standards.
+                HCC maintains a rigorous quality control program with continuous awareness, communication, and implementation — monitored through planned supervision and management reviews.
               </p>
               <ul className="space-y-3">
-                {["Rigorous inspection & testing", "Process control systems", "Customer-first approach"].map((item, i) => (
+                {["Procurement quality controls", "Construction process control", "Inspection & testing at every phase", "Control of non-conforming outputs"].map((item, i) => (
                   <li key={i} className="flex items-center gap-3 text-muted-foreground text-sm font-body">
                     <CheckCircle size={14} className="text-accent shrink-0" /> {item}
                   </li>
@@ -306,20 +302,17 @@ const Home = () => (
     <section className="py-20 overflow-hidden">
       <div className="container-custom">
         <AnimatedSection className="text-center mb-14">
-          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Our Partners</span>
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Major Clients & Strategic Partners</span>
           <h2 className="section-title mt-3">Trusted By Leading Institutions</h2>
         </AnimatedSection>
         <div className="relative">
           <motion.div
             className="flex gap-6"
             animate={{ x: ["0%", "-50%"] }}
-            transition={{ repeat: Infinity, duration: 25, ease: "linear" }}
+            transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
           >
             {[...clientLogos, ...clientLogos].map((name, i) => (
-              <div
-                key={i}
-                className="shrink-0 px-8 py-5 glass-card flex items-center justify-center min-w-[220px]"
-              >
+              <div key={i} className="shrink-0 px-8 py-5 glass-card flex items-center justify-center min-w-[240px]">
                 <div className="flex items-center gap-3">
                   <TreePine size={18} className="text-muted-foreground" />
                   <span className="text-sm font-body font-medium text-muted-foreground whitespace-nowrap">{name}</span>
@@ -331,7 +324,34 @@ const Home = () => (
       </div>
     </section>
 
-    {/* 9. CTA */}
+    {/* 9. AWARDS */}
+    <section className="section-padding">
+      <div className="container-custom">
+        <AnimatedSection className="text-center mb-14">
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Recognition</span>
+          <h2 className="section-title mt-3">Awards & Certifications</h2>
+        </AnimatedSection>
+        <div className="grid md:grid-cols-3 gap-8">
+          {[
+            { title: "National Kaizen Award — 1st Place", desc: "Awarded by Ethiopian Kaizen Institute (EKI) on October 29, 2019 for implementing first-level Kaizen — ranked 1st nationally." },
+            { title: "GC-1 Contractor Grade", desc: "Certified as Grade One General Contractor by Ethiopian Construction Authority, valid until 08/05/2027." },
+            { title: "Revenue Bureau Recognition", desc: "Recognized by ANRS Bureau of Revenue for outstanding tax compliance and corporate responsibility." },
+          ].map((a, i) => (
+            <AnimatedSection key={i} delay={i * 0.1}>
+              <div className="glass-card p-8 h-full text-center">
+                <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mx-auto mb-5">
+                  <Award className="text-accent" size={28} />
+                </div>
+                <h3 className="font-display font-semibold text-lg mb-2 text-foreground">{a.title}</h3>
+                <p className="text-muted-foreground text-sm font-body">{a.desc}</p>
+              </div>
+            </AnimatedSection>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* 10. CTA */}
     <section className="relative py-28 overflow-hidden">
       <img src={ctaBg} alt="" className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
       <div className="absolute inset-0 bg-background/90" />
@@ -342,7 +362,7 @@ const Home = () => (
             Let's Build the Future Together
           </h2>
           <p className="text-muted-foreground font-body text-lg max-w-2xl mx-auto mb-12">
-            Partner with Hibir Construction Corporation for reliable, high-quality infrastructure solutions.
+            Partner with Hibir Construction Corporation for reliable, high-quality infrastructure solutions backed by 803 professionals and 242 units of modern machinery.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link to="/contact" className="btn-accent inline-flex items-center gap-2">
