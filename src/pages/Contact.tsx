@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, Globe, User } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import AnimatedSection from "@/components/AnimatedSection";
 import heroImg from "@/assets/hero-construction.jpg";
@@ -27,10 +27,14 @@ const Contact = () => {
 
             <div className="space-y-6 mb-12">
               {[
-                { icon: <MapPin size={20} />, label: "Address", value: "Bahir Dar, Amhara Region, Ethiopia" },
-                { icon: <Phone size={20} />, label: "Phone", value: "+251 58 220 5678 / +251 58 220 1234" },
-                { icon: <Mail size={20} />, label: "Email", value: "info@hibirconstruction.com" },
-                { icon: <Clock size={20} />, label: "Working Hours", value: "Mon – Fri: 8:00 AM – 5:00 PM" },
+                { icon: <MapPin size={20} />, label: "Physical Address", value: "Amhara Regional State, Bahir Dar\nNear Bahir Dar University, Gish Abay Campus" },
+                { icon: <Mail size={20} />, label: "Postal Address", value: "P.O. Box 1678, Bahir Dar, Ethiopia" },
+                { icon: <Phone size={20} />, label: "Phone", value: "+251 582 20 4493 / 7659 / 3201299" },
+                { icon: <Phone size={20} />, label: "Fax", value: "+251 582 20 4501" },
+                { icon: <Mail size={20} />, label: "Email", value: "HCCnt2005@gmail.com" },
+                { icon: <Globe size={20} />, label: "Website", value: "www.Hibir.et" },
+                { icon: <User size={20} />, label: "CEO", value: "Ato Mebit Admas — +251 918 353 821" },
+                { icon: <Clock size={20} />, label: "Working Hours", value: "Mon – Sat: 8:00 AM – 5:00 PM" },
               ].map((c, i) => (
                 <div key={i} className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent shrink-0">
@@ -38,7 +42,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="font-body font-semibold text-sm text-foreground">{c.label}</p>
-                    <p className="text-muted-foreground text-sm font-body">{c.value}</p>
+                    <p className="text-muted-foreground text-sm font-body whitespace-pre-line">{c.value}</p>
                   </div>
                 </div>
               ))}
@@ -54,7 +58,7 @@ const Contact = () => {
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Hibir Construction Location"
+                title="Hibir Construction Location — Bahir Dar"
               />
             </div>
           </AnimatedSection>

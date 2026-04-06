@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
-import { MapPin, Phone, Mail, ArrowUpRight } from "lucide-react";
+import { MapPin, Phone, Mail, ArrowUpRight, Globe } from "lucide-react";
 
 const Footer = () => (
   <footer className="relative bg-background border-t border-border overflow-hidden">
-    {/* Background glow */}
     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-accent/3 rounded-full blur-[150px]" />
 
     <div className="container-custom section-padding relative z-10">
@@ -22,8 +21,11 @@ const Footer = () => (
               <span className="text-muted-foreground text-[10px] tracking-[0.2em] uppercase font-body">Construction Corp.</span>
             </div>
           </div>
-          <p className="text-muted-foreground text-sm font-body leading-relaxed mb-6">
-            Government-owned corporation building Ethiopia's future infrastructure with precision and scale.
+          <p className="text-muted-foreground text-sm font-body leading-relaxed mb-4">
+            GC-1 rated government-owned corporation building Ethiopia's infrastructure with 803 professionals and 242 units of machinery.
+          </p>
+          <p className="text-muted-foreground text-xs font-body">
+            Reg. No: 980/2008 · TIN: 0013324621
           </p>
         </div>
 
@@ -37,6 +39,7 @@ const Footer = () => (
               { to: "/projects", label: "Projects" },
               { to: "/resources", label: "Resources" },
               { to: "/safety", label: "Safety & Quality" },
+              { to: "/organization", label: "Organization" },
               { to: "/contact", label: "Contact" },
             ].map((l) => (
               <Link
@@ -59,7 +62,7 @@ const Footer = () => (
             <span>Bridge Construction</span>
             <span>Asphalt & Infrastructure</span>
             <span>Material Production</span>
-            <span>Equipment Leasing</span>
+            <span>Capacity Building</span>
           </div>
         </div>
 
@@ -69,15 +72,23 @@ const Footer = () => (
           <div className="flex flex-col gap-4 text-muted-foreground text-sm font-body">
             <div className="flex items-start gap-3">
               <MapPin size={16} className="mt-0.5 text-accent shrink-0" />
-              <span>Bahir Dar, Amhara Region, Ethiopia</span>
+              <span>Near Bahir Dar University, Gish Abay Campus, Bahir Dar, Ethiopia</span>
             </div>
             <div className="flex items-start gap-3">
               <Phone size={16} className="mt-0.5 text-accent shrink-0" />
-              <span>+251 58 220 5678</span>
+              <span>+251 582 20 4493</span>
             </div>
             <div className="flex items-start gap-3">
               <Mail size={16} className="mt-0.5 text-accent shrink-0" />
-              <span>info@hibirconstruction.com</span>
+              <span>HCCnt2005@gmail.com</span>
+            </div>
+            <div className="flex items-start gap-3">
+              <Globe size={16} className="mt-0.5 text-accent shrink-0" />
+              <span>www.Hibir.et</span>
+            </div>
+            <div className="flex items-start gap-3">
+              <Mail size={16} className="mt-0.5 text-accent shrink-0" />
+              <span>P.O. Box 1678</span>
             </div>
           </div>
         </div>
@@ -89,8 +100,8 @@ const Footer = () => (
           © {new Date().getFullYear()} Hibir Construction Corporation. All rights reserved.
         </p>
         <div className="flex gap-6 text-muted-foreground/60 text-xs font-body">
-          <span>Privacy Policy</span>
-          <span>Terms of Service</span>
+          <span>VAT: 3028900006</span>
+          <span>Contractor Grade: GC-1</span>
         </div>
       </div>
     </div>
