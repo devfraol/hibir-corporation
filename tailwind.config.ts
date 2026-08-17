@@ -21,6 +21,17 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        surface: {
+          DEFAULT: "hsl(var(--surface))",
+          muted: "hsl(var(--surface-muted))",
+        },
+        gold: "hsl(var(--gold))",
+        success: "hsl(var(--success))",
+        "on-media": {
+          DEFAULT: "hsl(var(--on-media))",
+          muted: "hsl(var(--on-media-muted))",
+        },
+
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",

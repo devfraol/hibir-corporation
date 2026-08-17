@@ -14,6 +14,10 @@ import safetyImg from "@/assets/safety-quality.jpg";
 import ctaBg from "@/assets/cta-background.jpg";
 import Counter from "@/components/Counter";
 import AnimatedSection from "@/components/AnimatedSection";
+import Hero from "@/components/Hero";
+import StatsSection from "@/components/home/StatsSection";
+import Timeline from "@/components/home/Timeline";
+import ProjectShowcase from "@/components/home/ProjectShowcase";
 
 const stagger = {
   hidden: {},
@@ -53,73 +57,11 @@ const clientLogos = [
 
 const Home = () => (
   <main>
-    {/* 1. HERO */}
-    <section className="relative h-screen min-h-[700px] flex items-center overflow-hidden">
-      <img src={heroImg} alt="Highway construction in Ethiopia" className="absolute inset-0 w-full h-full object-cover scale-105" />
-      <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/30" />
-      <div className="absolute top-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-accent/5 blur-[150px] animate-pulse-glow" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[300px] rounded-full bg-primary/30 blur-[120px]" />
-      <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "linear-gradient(hsla(210,20%,95%,0.1) 1px, transparent 1px), linear-gradient(90deg, hsla(210,20%,95%,0.1) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
+    <Hero />
 
-      <div className="relative z-10 container-custom">
-        <motion.div variants={stagger} initial="hidden" animate="visible" className="max-w-3xl">
-          <motion.div variants={fadeUp} className="inline-flex items-center gap-2 glass rounded-full px-5 py-2 text-sm font-body mb-8">
-            <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-            <span className="text-accent text-xs tracking-widest uppercase">GC-1 Government-Owned Corporation</span>
-          </motion.div>
+    <StatsSection />
 
-          <motion.h1 variants={fadeUp} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-foreground leading-[1.1] mb-6">
-            Building Ethiopia's Infrastructure for a{" "}
-            <span className="text-gradient-gold">Stronger Tomorrow</span>
-          </motion.h1>
-
-          <motion.p variants={fadeUp} className="text-base md:text-lg text-muted-foreground font-body mb-10 max-w-xl leading-relaxed">
-            Hibir Construction Corporation delivers large-scale road, bridge, and infrastructure projects with precision, quality, and long-term impact — with a portfolio exceeding 20.3 billion Birr.
-          </motion.p>
-
-          <motion.div variants={fadeUp} className="flex flex-wrap gap-4">
-            <Link to="/projects" className="btn-accent inline-flex items-center gap-2">
-              View Our Projects <ArrowRight size={18} />
-            </Link>
-            <Link to="/contact" className="btn-outline-light">Contact Us</Link>
-          </motion.div>
-        </motion.div>
-      </div>
-
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        animate={{ y: [0, 10, 0] }}
-        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-      >
-        <span className="text-muted-foreground text-xs font-body tracking-widest uppercase">Scroll</span>
-        <ChevronDown size={20} className="text-accent" />
-      </motion.div>
-    </section>
-
-    {/* 2. STATS */}
-    <section className="relative -mt-20 z-20 px-4 md:px-8 mb-12">
-      <div className="container-custom">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {[
-            { end: 803, suffix: "+", label: "Skilled Professionals" },
-            { end: 242, suffix: "", label: "Machinery & Equipment" },
-            { end: 2.5, suffix: "B+", label: "Birr Annual Turnover", decimals: 1 },
-            { end: 33, suffix: "+", label: "Major Projects" },
-          ].map((s, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.6 }}
-              className="glass-card p-6 md:p-8 text-center"
-            >
-              <Counter end={s.end} suffix={s.suffix} label={s.label} decimals={s.decimals || 0} />
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
+    <Timeline />
 
     {/* 3. ABOUT PREVIEW */}
     <AnimatedSection className="section-padding">
@@ -176,44 +118,7 @@ const Home = () => (
       </div>
     </section>
 
-    {/* 5. FEATURED PROJECTS */}
-    <section className="section-padding">
-      <div className="container-custom">
-        <AnimatedSection className="text-center mb-16">
-          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Featured Projects</span>
-          <h2 className="section-title mt-3">Our Flagship Work</h2>
-          <p className="section-subtitle mx-auto mt-4">Total project portfolio exceeding 20.3 billion Birr with annual turnover above 2.5 billion Birr</p>
-        </AnimatedSection>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredProjects.map((p, i) => (
-            <AnimatedSection key={i} delay={i * 0.1}>
-              <div className="group rounded-2xl overflow-hidden glass-card">
-                <div className="relative overflow-hidden h-52">
-                  <img src={p.image} alt={p.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <span className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-body font-semibold backdrop-blur-sm ${
-                    p.status === "Completed" ? "bg-green-500/20 text-green-400 border border-green-500/30" : "bg-accent/20 text-accent border border-accent/30"
-                  }`}>
-                    {p.status}
-                  </span>
-                </div>
-                <div className="p-5">
-                  <h3 className="font-display font-semibold text-sm mb-1 text-foreground">{p.title}</h3>
-                  <p className="text-muted-foreground text-xs font-body mb-1">{p.client}</p>
-                  <p className="text-accent text-sm font-body font-semibold">{p.budget}</p>
-                </div>
-              </div>
-            </AnimatedSection>
-          ))}
-        </div>
-        <div className="text-center mt-14">
-          <Link to="/projects" className="btn-primary inline-flex items-center gap-2">
-            View All Projects <ArrowRight size={18} />
-          </Link>
-        </div>
-      </div>
-    </section>
-
+    <ProjectShowcase />
     {/* 6. CAPACITY */}
     <AnimatedSection className="section-padding">
       <div className="container-custom grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
