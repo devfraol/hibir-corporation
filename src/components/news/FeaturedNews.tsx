@@ -11,7 +11,6 @@ const FeaturedNews = ({ article }: { article: NewsArticle }) => (
     transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
     className="relative overflow-hidden rounded-3xl border border-border group"
   >
-    <Link to={`/news/${article.slug}`} data-cursor="READ" className="block">
       <div className="relative aspect-[16/11] md:aspect-[21/9]">
         <img
           src={article.featuredImage.url}

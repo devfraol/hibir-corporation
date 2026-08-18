@@ -8,7 +8,6 @@ const featured = projects.slice(0, 6);
 
 const Panel = ({ project }: { project: (typeof featured)[number] }) => (
   <article
-    data-cursor="VIEW PROJECT"
     className="group relative shrink-0 w-[82vw] sm:w-[58vw] lg:w-[38vw] xl:w-[32vw] h-[62vh] max-h-[560px] rounded-3xl overflow-hidden border border-border transition-colors duration-500 hover:border-accent/60"
   >
     <img
