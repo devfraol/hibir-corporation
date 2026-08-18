@@ -2,203 +2,218 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
-import heroImg from "@/assets/hero-highway.jpg";
+import heroPoster from "@/assets/hero-highway.jpg";
+import heroVideo from "@/assets/hero-infrastructure.mp4.asset.json";
 
 /** Verified figures from the company profile. */
-const dataCards = [
-  { value: "GC-1", label: "Contractor Grade", pos: "top-[22%] right-[6%]", depth: 26 },
-  { value: "803", label: "Professionals", pos: "top-[44%] right-[14%]", depth: 42 },
-  { value: "242", label: "Plant & Machinery Units", pos: "bottom-[26%] right-[7%]", depth: 34 },
-  { value: "2.5B+", label: "Birr Annual Turnover", pos: "bottom-[13%] left-[4%]", depth: 20 },
+const indicators = [
+  { value: "GC-1", label: "Contractor Grade" },
+  { value: "803+", label: "Professionals" },
+  { value: "242", label: "Plant & Machinery Units" },
 ];
 
 const Hero = () => {
   const ref = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const reduced = useReducedMotion();
-  const [pointer, setPointer] = useState({ x: 0, y: 0 });
+  const [videoReady, setVideoReady] = useState(false);
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const smooth = useSpring(scrollYProgress, { stiffness: 90, damping: 24, mass: 0.4 });
+  const smooth = useSpring(scrollYProgress, { stiffness: 90, damping: 26, mass: 0.4 });
 
-  // Hero transforms into the next section rather than simply scrolling away.
-  const imageScale = useTransform(smooth, [0, 1], [1.12, 1]);
-  const imageY = useTransform(smooth, [0, 1], ["0%", "12%"]);
-  const titleY = useTransform(smooth, [0, 1], ["0%", "-42%"]);
-  const titleOpacity = useTransform(smooth, [0, 0.7], [1, 0]);
-  const cardsX = useTransform(smooth, [0, 1], [0, 120]);
-  const cardsOpacity = useTransform(smooth, [0, 0.55], [1, 0]);
-  const gridRotate = useTransform(smooth, [0, 1], [58, 74]);
-  const gridOpacity = useTransform(smooth, [0, 0.8], [0.7, 0]);
-  const veil = useTransform(smooth, [0, 1], [0, 0.55]);
+  const mediaScale = useTransform(smooth, [0, 1], [1.06, 0.94]);
+  const mediaY = useTransform(smooth, [0, 1], ["0%", "8%"]);
+  const contentY = useTransform(smooth, [0, 1], ["0%", "-32%"]);
+  const contentOpacity = useTransform(smooth, [0, 0.65], [1, 0]);
+  const panelY = useTransform(smooth, [0, 1], ["0%", "-14%"]);
+  const panelOpacity = useTransform(smooth, [0, 0.55], [1, 0]);
+  const veil = useTransform(smooth, [0, 1], [0, 0.6]);
 
+  /** Pause playback when the hero leaves the viewport (performance). */
   useEffect(() => {
-    if (reduced) return;
-    const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (!fine) return;
-    let raf = 0;
-    const onMove = (e: MouseEvent) => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() =>
-        setPointer({
-          x: (e.clientX / window.innerWidth - 0.5) * 2,
-          y: (e.clientY / window.innerHeight - 0.5) * 2,
-        }),
-      );
-    };
-    window.addEventListener("mousemove", onMove, { passive: true });
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(raf);
-    };
-  }, [reduced]);
+    const el = ref.current;
+    const video = videoRef.current;
+    if (!el || !video) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) video.play().catch(() => undefined);
+        else video.pause();
+      },
+      { threshold: 0.05 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
-  const px = reduced ? 0 : pointer.x;
-  const py = reduced ? 0 : pointer.y;
-
-  const words = ["Engineering", "the connections", "that move", "Ethiopia forward"];
+  const ease = [0.22, 1, 0.36, 1] as const;
+  const lines = [
+    { text: "Engineering", accent: false },
+    { text: "the connections", accent: false },
+    { text: "that move", accent: false },
+    { text: "Ethiopia forward", accent: true },
+  ];
 
   return (
     <section
       ref={ref}
       aria-label="Hibir Construction Corporation — infrastructure in motion"
-      className="relative h-[100svh] min-h-[640px] overflow-hidden"
+      className="relative h-[100svh] min-h-[620px] overflow-hidden"
     >
-      {/* Layer 1 — cinematic background */}
-      <motion.div className="absolute inset-0" style={{ scale: imageScale, y: imageY }}>
-        <motion.img
-          src={heroImg}
-          alt="Highway infrastructure under construction in Ethiopia"
+      {/* Layer 1 — cinematic video (poster fallback) */}
+      <motion.div className="absolute inset-0" style={{ scale: mediaScale, y: mediaY }}>
+        <img
+          src={heroPoster}
+          alt="Newly constructed highway in Ethiopia with construction machinery on site"
           fetchPriority="high"
-          className="absolute inset-0 w-full h-full object-cover"
-          animate={{ x: px * -18, y: py * -12 }}
-          transition={{ type: "spring", stiffness: 40, damping: 20 }}
-          style={{ scale: 1.08 }}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${videoReady ? "opacity-0" : "opacity-100"}`}
+        />
+        <video
+          ref={videoRef}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${videoReady ? "opacity-100" : "opacity-0"}`}
+          src={heroVideo.url}
+          poster={heroPoster}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          aria-hidden
+          tabIndex={-1}
+          onCanPlay={() => setVideoReady(true)}
+          onError={() => setVideoReady(false)}
         />
       </motion.div>
 
-      {/* Layer 2 — gradient overlays (keep text readable in both themes) */}
+      {/* Layer 2 — cinematic gradients, bloom and vignette */}
       <div className="absolute inset-0 media-overlay-side" aria-hidden />
       <div className="absolute inset-0 media-overlay" aria-hidden />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden
+        style={{
+          background:
+            "radial-gradient(60% 45% at 78% 28%, hsl(var(--accent) / 0.20), transparent 70%), radial-gradient(50% 40% at 10% 85%, hsl(var(--accent) / 0.10), transparent 72%)",
+        }}
+      />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden
+        style={{ boxShadow: "inset 0 0 220px 60px rgba(0,0,0,0.55)" }}
+      />
       <motion.div className="absolute inset-0 bg-background" style={{ opacity: veil }} aria-hidden />
 
-      {/* Layer 3 — engineering blueprint plane in perspective */}
-      <motion.div
-        className="absolute inset-x-0 bottom-0 h-[55%] pointer-events-none"
-        style={{ opacity: gridOpacity, perspective: 700 }}
-        aria-hidden
-      >
-        <motion.div
-          className="absolute inset-0 origin-bottom"
-          style={{
-            rotateX: gridRotate,
-            backgroundImage:
-              "linear-gradient(hsla(0,0%,100%,0.16) 1px, transparent 1px), linear-gradient(90deg, hsla(0,0%,100%,0.16) 1px, transparent 1px)",
-            backgroundSize: "70px 70px",
-            maskImage: "linear-gradient(to top, black, transparent 78%)",
-            WebkitMaskImage: "linear-gradient(to top, black, transparent 78%)",
-            x: px * 18,
-          }}
-        />
-      </motion.div>
-
-      {/* Layer 4 — drifting light particles */}
+      {/* Layer 3 — very light atmospheric particles */}
       {!reduced && (
         <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
-          {Array.from({ length: 14 }).map((_, i) => (
+          {Array.from({ length: 8 }).map((_, i) => (
             <motion.span
               key={i}
-              className="absolute rounded-full bg-accent/50"
+              className="absolute rounded-full bg-accent/35"
               style={{
-                width: 2 + (i % 3),
-                height: 2 + (i % 3),
-                left: `${(i * 37) % 100}%`,
-                top: `${(i * 53) % 100}%`,
-                filter: "blur(0.5px)",
+                width: 2 + (i % 2),
+                height: 2 + (i % 2),
+                left: `${(i * 41) % 100}%`,
+                top: `${(i * 59) % 100}%`,
+                filter: "blur(0.6px)",
               }}
-              animate={{ y: [0, -60, 0], opacity: [0, 0.7, 0] }}
-              transition={{ duration: 9 + (i % 5) * 2, repeat: Infinity, delay: i * 0.7, ease: "easeInOut" }}
+              animate={{ y: [0, -70, 0], opacity: [0, 0.5, 0] }}
+              transition={{ duration: 12 + (i % 4) * 3, repeat: Infinity, delay: i * 1.1, ease: "easeInOut" }}
             />
           ))}
         </div>
       )}
 
-      {/* Layer 5 — composition */}
-      <div className="relative h-full container-custom px-4 md:px-8 flex flex-col justify-center">
-        <motion.div style={{ y: titleY, opacity: titleOpacity }} className="max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-md px-4 py-1.5 mb-8"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" aria-hidden />
-            <span className="text-[10px] md:text-[11px] font-body font-semibold tracking-[0.28em] uppercase on-media">
-              Hibir Construction Corporation
-            </span>
-          </motion.div>
-
-          <h1 className="display-xl on-media uppercase">
-            {words.map((w, i) => (
-              <motion.span
-                key={w}
-                initial={{ opacity: 0, y: 44, filter: "blur(10px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                transition={{ duration: 0.85, delay: 0.15 + i * 0.11, ease: [0.22, 1, 0.36, 1] }}
-                className={`block ${i === 3 ? "text-gradient-gold" : ""}`}
-                style={{ x: px * (i % 2 === 0 ? -6 : -10) }}
-              >
-                {w}
-              </motion.span>
-            ))}
-          </h1>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.6 }}
-            className="mt-10 flex flex-wrap items-center gap-4"
-          >
-            <Link to="/projects" className="btn-accent text-sm" data-cursor="VIEW PROJECTS">
-              Explore Projects <ArrowRight size={16} />
-            </Link>
-            <Link to="/about" className="btn-outline-media text-sm">
-              About the Corporation
-            </Link>
-          </motion.div>
-        </motion.div>
-
-        {/* Floating interface data cards */}
-        <motion.div style={{ x: cardsX, opacity: cardsOpacity }} className="pointer-events-none" aria-hidden>
-          {dataCards.map((c, i) => (
+      {/* Layer 4 — composition */}
+      <div className="relative h-full container-custom px-4 md:px-8 flex items-center">
+        <div className="w-full grid lg:grid-cols-12 gap-10 items-center">
+          <motion.div style={{ y: contentY, opacity: contentOpacity }} className="lg:col-span-7 xl:col-span-6">
             <motion.div
-              key={c.label}
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{
-                opacity: 1,
-                scale: 1,
-                y: 0,
-                x: px * c.depth * -1,
-              }}
-              transition={{ delay: 0.85 + i * 0.12, duration: 0.6, ease: "easeOut" }}
-              className={`hidden lg:block absolute ${c.pos} rounded-xl border border-white/15 bg-black/35 backdrop-blur-xl px-5 py-3.5`}
-              style={{ boxShadow: "0 20px 50px -30px rgba(0,0,0,0.9)" }}
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease }}
+              className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-md px-4 py-1.5 mb-7"
             >
-              <div className="font-display font-bold text-xl text-gradient-gold leading-none">{c.value}</div>
-              <div className="text-[9px] font-body tracking-[0.2em] uppercase on-media-muted mt-1.5">{c.label}</div>
+              <span className="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden />
+              <span className="text-[10px] font-body font-semibold tracking-[0.28em] uppercase on-media">
+                Hibir Construction Corporation
+              </span>
             </motion.div>
-          ))}
-        </motion.div>
+
+            <h1 className="hero-display on-media uppercase">
+              {lines.map((l, i) => (
+                <motion.span
+                  key={l.text}
+                  initial={{ opacity: 0, y: 26, filter: "blur(8px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  transition={{ duration: 0.95, delay: 0.25 + i * 0.14, ease }}
+                  className={`block ${l.accent ? "text-accent" : ""}`}
+                >
+                  {l.text}
+                </motion.span>
+              ))}
+            </h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.85, duration: 0.8, ease }}
+              className="mt-7 max-w-md text-sm md:text-[15px] leading-relaxed font-body on-media-muted"
+            >
+              Building roads, bridges and infrastructure that connect communities, enable economic
+              activity and support Ethiopia's continued development.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.0, duration: 0.8, ease }}
+              className="mt-9 flex flex-wrap items-center gap-4"
+            >
+              <Link to="/projects" className="btn-accent text-sm">
+                Explore Projects <ArrowRight size={16} />
+              </Link>
+              <Link to="/about" className="btn-outline-media text-sm">
+                About Hibir
+              </Link>
+            </motion.div>
+          </motion.div>
+
+          {/* Right — restrained data panel */}
+          <motion.div
+            style={{ y: panelY, opacity: panelOpacity }}
+            className="hidden lg:flex lg:col-span-5 xl:col-span-4 xl:col-start-9 justify-end"
+          >
+            <div className="w-full max-w-xs rounded-2xl border border-white/12 bg-black/30 backdrop-blur-xl divide-y divide-white/10">
+              {indicators.map((c, i) => (
+                <motion.div
+                  key={c.label}
+                  initial={{ opacity: 0, x: 24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.15 + i * 0.14, duration: 0.75, ease }}
+                  className="px-6 py-5"
+                >
+                  <div className="font-display font-bold text-2xl xl:text-3xl text-gradient-gold leading-none">
+                    {c.value}
+                  </div>
+                  <div className="text-[9px] font-body tracking-[0.22em] uppercase on-media-muted mt-2">
+                    {c.label}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
       </div>
 
       {/* Scroll cue */}
       <motion.div
-        style={{ opacity: titleOpacity }}
+        style={{ opacity: contentOpacity }}
         className="absolute bottom-7 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
         <span className="text-[9px] font-body tracking-[0.3em] uppercase on-media-muted">Scroll</span>
         <motion.span
           animate={reduced ? undefined : { y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
           className="text-accent"
         >
           <ArrowDown size={16} />
