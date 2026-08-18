@@ -316,13 +316,6 @@
   will-change: width;
 }
 
-/* Hide native cursor when custom cursor is active (fine pointers only) */
-@media (hover: hover) and (pointer: fine) {
-  html.has-custom-cursor,
-  html.has-custom-cursor * {
-    cursor: none !important;
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   html {
