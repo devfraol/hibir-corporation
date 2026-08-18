@@ -10,7 +10,6 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollProgress from "@/components/ScrollProgress";
-import CustomCursor from "@/components/CustomCursor";
 import Loader from "@/components/Loader";
 import PageTransition from "@/components/PageTransition";
 import Index from "./pages/Index";
@@ -23,6 +22,7 @@ import Organization from "./pages/Organization";
 import Contact from "./pages/Contact";
 import News from "./pages/News";
 import NewsArticlePage from "./pages/NewsArticlePage";
+import ProjectDetail from "./pages/ProjectDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -42,6 +42,7 @@ const AnimatedRoutes = () => {
         <Route path="/about" element={<PageTransition><About /></PageTransition>} />
         <Route path="/services" element={<PageTransition><Services /></PageTransition>} />
         <Route path="/projects" element={<PageTransition><Projects /></PageTransition>} />
+        <Route path="/projects/:slug" element={<PageTransition><ProjectDetail /></PageTransition>} />
         <Route path="/resources" element={<PageTransition><Resources /></PageTransition>} />
         <Route path="/safety" element={<PageTransition><Safety /></PageTransition>} />
         <Route path="/organization" element={<PageTransition><Organization /></PageTransition>} />
@@ -62,7 +63,6 @@ const App = () => (
           <Toaster />
           <Sonner />
           <Loader />
-          <CustomCursor />
           <BrowserRouter>
             <ScrollProgress />
             <ScrollToTop />
