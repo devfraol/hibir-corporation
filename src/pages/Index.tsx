@@ -18,6 +18,7 @@ import Hero from "@/components/Hero";
 import StatsSection from "@/components/home/StatsSection";
 import Timeline from "@/components/home/Timeline";
 import ProjectShowcase from "@/components/home/ProjectShowcase";
+import LatestNews from "@/components/home/LatestNews";
 
 const stagger = {
   hidden: {},
@@ -255,6 +256,8 @@ const Home = () => (
         </div>
       </div>
     </section>
+
+    <LatestNews />
 
     {/* 10. CTA */}
     <section className="relative py-28 overflow-hidden">
