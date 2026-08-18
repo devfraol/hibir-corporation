@@ -14,7 +14,6 @@ const NewsCard = ({ article, index = 0 }: { article: NewsArticle; index?: number
   >
     <Link
       to={`/news/${article.slug}`}
-      data-cursor="READ"
       className="group surface-card overflow-hidden h-full flex flex-col hover:-translate-y-1.5 hover:border-accent/40"
     >
       <div className="relative overflow-hidden aspect-[16/10]">

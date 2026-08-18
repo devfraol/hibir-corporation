@@ -251,6 +251,11 @@
     @apply font-display font-bold tracking-[-0.03em] leading-[0.95];
     font-size: clamp(2.6rem, 8vw, 6.5rem);
   }
+  /* Editorial hero headline: 34-46px mobile, 42-60px tablet, 64-90px desktop */
+  .hero-display {
+    @apply font-display font-bold tracking-[-0.025em] leading-[1.04];
+    font-size: clamp(2.125rem, 4.6vw + 0.6rem, 5.625rem);
+  }
   .section-subtitle {
     @apply text-lg text-muted-foreground font-body max-w-2xl;
   }
@@ -311,13 +316,6 @@
   will-change: width;
 }
 
-/* Hide native cursor when custom cursor is active (fine pointers only) */
-@media (hover: hover) and (pointer: fine) {
-  html.has-custom-cursor,
-  html.has-custom-cursor * {
-    cursor: none !important;
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   html {
