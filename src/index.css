@@ -330,3 +330,15 @@
     transition-duration: 0.001ms !important;
   }
 }
+
+/* Seamless partner logo marquee (duplicated track => -50% loop) */
+@keyframes marquee-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+.marquee-track {
+  animation-name: marquee-scroll;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
