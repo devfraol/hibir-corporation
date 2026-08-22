@@ -22,7 +22,7 @@ const Footer = () => (
             </div>
           </div>
           <p className="text-muted-foreground text-sm font-body leading-relaxed mb-4">
-            GC-1 rated government-owned corporation building Ethiopia's infrastructure with 803 professionals and 242 units of machinery.
+            GC-1 rated government-owned corporation building Ethiopia's infrastructure with 843 professionals and 282 vehicles, plants and machinery units.
           </p>
           <p className="text-muted-foreground text-xs font-body">
             Reg. No: 980/2008 · TIN: 0013324621
