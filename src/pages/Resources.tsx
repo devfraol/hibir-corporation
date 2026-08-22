@@ -178,6 +178,43 @@ const Resources = () => (
         </AnimatedSection>
       </div>
     </section>
+
+    {/* Financial capacity */}
+    <section id="financial-capacity" className="section-padding scroll-mt-24">
+      <div className="container-custom">
+        <AnimatedSection className="text-center mb-14">
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Financial Capacity</span>
+          <h2 className="section-title mt-3">The Balance Sheet Behind Delivery</h2>
+        </AnimatedSection>
+        <div className="grid sm:grid-cols-3 gap-6">
+          {[
+            { value: "ETB 3.4B+", label: "Average annual construction turnover" },
+            { value: "ETB 25B+", label: "Active project contract value" },
+            { value: "ETB 929M+", label: "Recorded capital" },
+          ].map((f) => (
+            <div key={f.label} className="glass-card p-8 text-center">
+              <div className="text-3xl font-display font-bold text-gradient-gold">{f.value}</div>
+              <p className="text-sm text-muted-foreground font-body mt-2">{f.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* Construction experience */}
+    <section id="construction-experience" className="section-padding pt-0 scroll-mt-24">
+      <div className="container-custom">
+        <AnimatedSection className="text-center mb-14">
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Construction Experience</span>
+          <h2 className="section-title mt-3">Fifteen Years of Infrastructure Delivery</h2>
+          <p className="section-subtitle mx-auto mt-4">
+            From the 2010 establishment as Amhara Road Works Enterprise to corporation status under Proclamation
+            No. 214/2024, HCC has delivered asphalt and gravel roads, bridges, urban infrastructure and building
+            works as a GC-1 classified general contractor.
+          </p>
+        </AnimatedSection>
+      </div>
+    </section>
   </main>
 );
 
