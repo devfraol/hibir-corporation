@@ -9,12 +9,12 @@ import airportImg from "@/assets/airport-project.jpg";
 import safetyImg from "@/assets/safety-workers.jpg";
 
 const services = [
-  { icon: <HardHat size={32} />, title: "Road Construction", desc: "Construct, improve, and maintain appropriate roads across the regional and national levels. We build new quality roads with economic feasibility, supporting development activities and alleviating infrastructural difficulties for communities.", image: roadImg },
-  { icon: <Landmark size={32} />, title: "Asphalt & Infrastructure Development", desc: "Full-service asphalt production and laying from our own 2 asphalt plants and 5 crusher & sand making plants, including hot mix production, surface dressing, and bituminous treatments for durable road surfaces.", image: heroImg },
-  { icon: <Wrench size={32} />, title: "Bridge Construction", desc: "Engineering and construction of reinforced concrete bridges, culverts, and drainage structures — including design-and-build projects like the Dura Bridge and Gimbober & Berbisa Bridges for the Ethiopian Roads Authority.", image: bridgeImg },
-  { icon: <Truck size={32} />, title: "Road Maintenance & Upgrading", desc: "Comprehensive rehabilitation, heavy maintenance, and upgrading of existing road networks to extend service life, improve safety, and bring roads to modern standards.", image: safetyImg },
-  { icon: <Factory size={32} />, title: "Material Production & Supply", desc: "Production and supply of various construction materials and tools necessary for road and other construction works from our own plants and quarries — including crushed aggregate, sand, and asphalt.", image: airportImg },
-  { icon: <GraduationCap size={32} />, title: "Capacity Building & Training", desc: "Road sector capacity building activities including device operator training and other related training programs, formulated and implemented upon approval of the managing board.", image: equipmentImg },
+  { id: "road-construction", icon: <HardHat size={32} />, title: "Road Construction", desc: "Construct, improve, and maintain appropriate roads across the regional and national levels. We build new quality roads with economic feasibility, supporting development activities and alleviating infrastructural difficulties for communities.", image: roadImg },
+  { id: "urban-infrastructure", icon: <Landmark size={32} />, title: "Asphalt & Urban Infrastructure", desc: "Full-service asphalt production and laying from our own asphalt, crusher and sand-making plants (10 in total), including hot mix production, surface dressing, and bituminous treatments for durable road surfaces.", image: heroImg },
+  { id: "bridge-construction", icon: <Wrench size={32} />, title: "Bridge Construction", desc: "Engineering and construction of reinforced concrete bridges, culverts, and drainage structures — including design-and-build projects like the Dura Bridge and Gimbober & Berbisa Bridges for the Ethiopian Roads Authority.", image: bridgeImg },
+  { id: "road-maintenance", icon: <Truck size={32} />, title: "Road Maintenance & Upgrading", desc: "Comprehensive rehabilitation, heavy maintenance, and upgrading of existing road networks to extend service life, improve safety, and bring roads to modern standards.", image: safetyImg },
+  { id: "materials", icon: <Factory size={32} />, title: "Materials Production & Supply", desc: "Production and supply of various construction materials and tools necessary for road and other construction works from our own plants and quarries — including crushed aggregate, sand, and asphalt.", image: airportImg },
+  { id: "capacity-building", icon: <GraduationCap size={32} />, title: "Capacity Building & Training", desc: "Road sector capacity building activities including device operator training and other related training programs, formulated and implemented upon approval of the managing board.", image: equipmentImg },
 ];
 
 const Services = () => (
@@ -32,7 +32,7 @@ const Services = () => (
         <div className="space-y-20">
           {services.map((s, i) => (
             <AnimatedSection key={i}>
-              <div className={`grid md:grid-cols-2 gap-12 items-center ${i % 2 === 1 ? "md:flex-row-reverse" : ""}`}>
+              <div id={s.id} className={`scroll-mt-28 grid md:grid-cols-2 gap-12 items-center ${i % 2 === 1 ? "md:flex-row-reverse" : ""}`}>
                 <div className={i % 2 === 1 ? "md:order-2" : ""}>
                   <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center text-accent mb-6">
                     {s.icon}
