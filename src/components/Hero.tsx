@@ -127,7 +127,7 @@ const Hero = () => {
       {/* Layer 4 — composition */}
       <div className="relative h-full container-custom px-4 md:px-8 flex items-center">
         <div className="w-full grid lg:grid-cols-12 gap-10 items-center">
-          <motion.div style={{ y: contentY, opacity: contentOpacity }} className="lg:col-span-7 xl:col-span-6">
+          <motion.div style={{ y: contentY, opacity: contentOpacity }} className="lg:col-span-6 xl:col-span-5">
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
@@ -140,7 +140,7 @@ const Hero = () => {
               </span>
             </motion.div>
 
-            <h1 className="hero-display on-media uppercase">
+            <h1 className="hero-display on-media uppercase max-w-[16ch]">
               {lines.map((l, i) => (
                 <motion.span
                   key={l.text}
