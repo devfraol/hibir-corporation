@@ -33,10 +33,10 @@ export const newsArticles: NewsArticle[] = [
     content: [
       { type: "paragraph", text: "The Bale Egziaber–Airport asphalt road project, contracted by the Dessie City Administration at a value of 5,119,831,284 Birr, is currently the largest ongoing undertaking in Hibir Construction Corporation's portfolio." },
       { type: "heading", level: 2, text: "Delivered with in-house capacity" },
-      { type: "paragraph", text: "The corporation executes the works using its own production and equipment base rather than relying on subcontracted capacity. That base includes two asphalt plants, five crusher and sand-making plants, 146 vehicles and 89 machinery units — 242 units of vehicles, plants and machinery in total." },
+      { type: "paragraph", text: "The corporation executes the works using its own production and equipment base rather than relying on subcontracted capacity. That base includes ten production plants, 155 vehicles and 117 machinery units — 282 units of vehicles, plants and machinery in total." },
       { type: "list", items: ["Client: Dessie City Administration", "Contract value: 5.12 billion Birr", "Status: Ongoing", "Scope: Asphalt concrete road construction"] },
-      { type: "heading", level: 2, text: "Part of a 20.3 billion Birr programme" },
-      { type: "paragraph", text: "The project sits inside a current asphalt project portfolio valued at more than 20.3 billion Birr including VAT, supported by an annual construction turnover exceeding 2.5 billion Birr." },
+      { type: "heading", level: 2, text: "Part of a 25 billion Birr programme" },
+      { type: "paragraph", text: "The project sits inside a current asphalt project portfolio valued at more than 25 billion Birr, supported by an average annual construction turnover exceeding 3.4 billion Birr." },
       { type: "quote", text: "Our mandate is to construct, improve and maintain roads that carry regional and national development forward.", attribution: "Hibir Construction Corporation" },
     ],
     featuredImage: { url: airportImg, alt: "Asphalt road construction works approaching an airport corridor" },
@@ -151,12 +151,12 @@ export const newsArticles: NewsArticle[] = [
   },
   {
     id: "n-006",
-    title: "803 professionals and 242 units of plant behind every contract",
+    title: "843 professionals and 282 units of plant behind every contract",
     slug: "human-resources-and-equipment-capacity",
     excerpt:
-      "Human resources of 803 people work alongside 146 vehicles, 89 machinery units and 7 plants — the delivery capacity behind the corporation's active programme.",
+      "Human resources of 843 people work alongside 155 vehicles, 117 machinery units and 10 plants — the delivery capacity behind the corporation's active programme.",
     content: [
-      { type: "paragraph", text: "Hibir Construction Corporation employs 803 people and operates 242 units of vehicles, plants and machinery: 146 vehicles, 89 machinery units and 7 plants." },
+      { type: "paragraph", text: "Hibir Construction Corporation employs 843 people and operates 282 units of vehicles, plants and machinery: 155 vehicles, 117 machinery units and 10 plants." },
       { type: "heading", level: 2, text: "Production plants" },
       { type: "paragraph", text: "The plant base comprises two asphalt plants and five crusher and sand-making plants, enabling in-house production and supply of construction materials for road works." },
       { type: "paragraph", text: "The corporation also carries out road sector capacity building, including device operator training and related programmes implemented upon approval of the managing board." },

@@ -20,15 +20,15 @@ const Projects = () => {
 
   return (
     <main>
-      <PageHero title="Our Projects" subtitle="A portfolio exceeding 20.3 billion Birr across Ethiopia's infrastructure landscape" image={heroImg} />
+      <PageHero title="Our Projects" subtitle="An active contract portfolio exceeding 25 billion Birr across Ethiopia's infrastructure landscape" image={heroImg} />
 
       {/* Summary Stats */}
       <section className="relative -mt-16 z-20 px-4 md:px-8 mb-12">
         <div className="container-custom">
           <div className="grid grid-cols-3 gap-4 md:gap-6">
             {[
-              { label: "Total Portfolio Value", value: "20.3B+ Birr" },
-              { label: "Annual Turnover", value: "2.5B+ Birr" },
+              { label: "Active Contract Value", value: "25B+ Birr" },
+              { label: "Annual Turnover", value: "3.4B+ Birr" },
               { label: "Total Projects", value: `${projects.length}+` },
             ].map((s, i) => (
               <div key={i} className="glass-card p-6 text-center">

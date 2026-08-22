@@ -91,7 +91,7 @@ const ProjectShowcase = () => {
       <div>
         <span className="label-eyebrow">Selected Works</span>
         <h2 id="project-showcase" className="section-title mt-4 max-w-xl">
-          A portfolio exceeding 20.3 billion Birr
+          An active portfolio exceeding 25 billion Birr
         </h2>
       </div>
       <Link to="/projects" className="btn-outline-light text-sm px-6 py-3">

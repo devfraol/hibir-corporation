@@ -251,11 +251,12 @@
     @apply font-display font-bold tracking-[-0.03em] leading-[0.95];
     font-size: clamp(2.6rem, 8vw, 6.5rem);
   }
-  /* Editorial hero headline: 34-46px mobile, 42-60px tablet, 64-90px desktop */
+  /* Editorial hero headline: 32-44px mobile, 44-58px tablet, 58-76px desktop, max 82px */
   .hero-display {
-    @apply font-display font-bold tracking-[-0.025em] leading-[1.04];
-    font-size: clamp(2.125rem, 4.6vw + 0.6rem, 5.625rem);
+    @apply font-display font-bold tracking-[-0.02em] leading-[1.06];
+    font-size: clamp(2rem, 2.9vw + 1rem, 5.125rem);
   }
+
   .section-subtitle {
     @apply text-lg text-muted-foreground font-body max-w-2xl;
   }
@@ -328,4 +329,16 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+/* Seamless partner logo marquee (duplicated track => -50% loop) */
+@keyframes marquee-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+.marquee-track {
+  animation-name: marquee-scroll;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
 }

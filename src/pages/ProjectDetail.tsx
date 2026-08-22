@@ -131,8 +131,8 @@ provider: { "@type": "Organization", name: "Hibir Construction Corporation" },
             <h2 className="section-title mt-3 mb-6">Delivered under a GC-1 general contractor licence</h2>
             <p className="text-muted-foreground font-body leading-relaxed">{project.description}</p>
             <p className="text-muted-foreground font-body leading-relaxed mt-4">
-              Hibir Construction Corporation delivers the works with its own workforce of 803 professionals and
-              a fleet of 242 vehicles, plants and machinery units, applying the corporation's safety and quality
+              Hibir Construction Corporation delivers the works with its own workforce of 843 professionals and
+              a fleet of 282 vehicles, plants and machinery units, applying the corporation's safety and quality
               management procedures throughout construction.
             </p>
           </div>
