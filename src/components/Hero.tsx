@@ -5,12 +5,13 @@ import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "fr
 import heroPoster from "@/assets/hero-highway.jpg";
 import heroVideo from "@/assets/hero-infrastructure.mp4.asset.json";
 
-/** Verified figures from the company profile. */
+/** Verified figures from the 2026 company profile. */
 const indicators = [
   { value: "GC-1", label: "Contractor Grade" },
-  { value: "803+", label: "Professionals" },
-  { value: "242", label: "Plant & Machinery Units" },
+  { value: "843", label: "Professionals" },
+  { value: "282", label: "Total Assets" },
 ];
+
 
 const Hero = () => {
   const ref = useRef<HTMLElement>(null);
