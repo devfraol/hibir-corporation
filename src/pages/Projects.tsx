@@ -40,6 +40,7 @@ const Projects = () => {
         </div>
       </section>
 
+      <div id="featured" className="scroll-mt-24" />
       <FeaturedProject project={projects.find((p) => p.featured) ?? projects[0]} />
 
       <section className="section-padding pt-0">
