@@ -5,7 +5,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 import heroImg from "@/assets/hero-construction.jpg";
 import PartnersMarquee from "@/components/PartnersMarquee";
 import DocumentGallery from "@/components/DocumentGallery";
-import { awards, companyStats, legalEntities, partners } from "@/data/company";
+import { certificates, companyStats, legalEntities, partners } from "@/data/company";
 
 const values = [
   { icon: <Users size={28} />, title: "Team Work", desc: "Collaborative effort across all departments and project sites." },
@@ -227,11 +227,12 @@ const About = () => (
         </AnimatedSection>
         <DocumentGallery
           placeholderLabel="Legal Document"
-          documents={legalEntities.map((e, i) => ({
-            id: `legal-${i}`,
+          documents={legalEntities.map((e) => ({
+            id: e.id,
             title: e.title,
-            documentType: "Legal Entity",
-            description: e.detail,
+            documentType: e.documentType,
+            description: e.description,
+            image: e.image,
             meta: e.reference,
           }))}
         />
@@ -247,12 +248,13 @@ const About = () => (
         </AnimatedSection>
         <DocumentGallery
           placeholderLabel="Certificate"
-          documents={awards.map((a, i) => ({
-            id: `award-${i}`,
-            title: a.title,
-            documentType: "Certificate / Award",
-            description: a.detail,
-            meta: `${a.issuer} — ${a.year}`,
+          documents={certificates.map((c) => ({
+            id: c.id,
+            title: c.title,
+            documentType: c.type,
+            description: c.description,
+            image: c.image,
+            meta: `${c.issuedBy} — ${c.issueDate}`,
           }))}
         />
       </div>
