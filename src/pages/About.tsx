@@ -3,6 +3,9 @@ import { motion } from "framer-motion";
 import PageHero from "@/components/PageHero";
 import AnimatedSection from "@/components/AnimatedSection";
 import heroImg from "@/assets/hero-construction.jpg";
+import PartnersMarquee from "@/components/PartnersMarquee";
+import DocumentGallery from "@/components/DocumentGallery";
+import { certificates, companyStats, legalEntities, partners } from "@/data/company";
 
 const values = [
   { icon: <Users size={28} />, title: "Team Work", desc: "Collaborative effort across all departments and project sites." },
@@ -23,7 +26,7 @@ const About = () => (
     <PageHero title="About Us" subtitle="Ethiopia's premier government-owned construction corporation since 2010" image={heroImg} />
 
     {/* Overview + Vision/Mission */}
-    <AnimatedSection className="section-padding">
+    <AnimatedSection id="overview" className="section-padding scroll-mt-24">
       <div className="container-custom grid md:grid-cols-2 gap-16 items-start">
         <div>
           <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Company Overview</span>
@@ -32,14 +35,14 @@ const About = () => (
             Hibir Construction Corporation is a government-owned construction enterprise headquartered in Bahir Dar, Amhara Regional State, Ethiopia — near Bahir Dar University, Gish Abay Campus. The corporation is entirely owned and run by Ethiopian professionals.
           </p>
           <p className="text-muted-foreground font-body leading-relaxed mb-4">
-            With 803 employees, 242 units of machinery, and a current project portfolio exceeding 20.3 billion Birr, we specialize in road construction, bridge building, asphalt production, and large-scale infrastructure development. Our annual construction turnover exceeds 2.5 billion Birr.
+            With 843 employees, 282 units of vehicles, plants and machinery, and an active contract portfolio exceeding 25 billion Birr, we specialize in road construction, bridge building, asphalt production, and large-scale infrastructure development. Our average annual construction turnover exceeds 3.4 billion Birr.
           </p>
           <p className="text-muted-foreground font-body leading-relaxed">
             The corporation supports national and regional development by constructing quality roads with economic feasibility, maintaining existing infrastructure, and upgrading road standards — accountable to the Regional Public Enterprises' Authority.
           </p>
         </div>
         <div className="space-y-6">
-          <div className="glass-card p-8">
+          <div id="vision" className="glass-card p-8 scroll-mt-28">
             <div className="flex items-center gap-3 mb-4">
               <Eye className="text-accent" size={24} />
               <h3 className="font-display font-semibold text-xl text-foreground">Our Vision</h3>
@@ -62,7 +65,7 @@ const About = () => (
     </AnimatedSection>
 
     {/* Objectives */}
-    <section className="section-padding relative overflow-hidden">
+    <section id="approach" className="section-padding relative overflow-hidden scroll-mt-24">
       <div className="absolute inset-0 bg-gradient-to-b from-secondary/30 to-background" />
       <div className="container-custom relative z-10">
         <AnimatedSection className="text-center mb-16">
@@ -91,7 +94,7 @@ const About = () => (
     </section>
 
     {/* Timeline */}
-    <section className="section-padding">
+    <section id="history" className="section-padding scroll-mt-24">
       <div className="container-custom">
         <AnimatedSection className="text-center mb-16">
           <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Our Journey</span>
@@ -125,7 +128,7 @@ const About = () => (
     </section>
 
     {/* Values */}
-    <section className="section-padding">
+    <section id="values" className="section-padding scroll-mt-24">
       <div className="container-custom">
         <AnimatedSection className="text-center mb-16">
           <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Core Values</span>
@@ -144,6 +147,116 @@ const About = () => (
             </AnimatedSection>
           ))}
         </div>
+      </div>
+    </section>
+
+
+    {/* Objectives & Duties */}
+    <section id="objectives" className="section-padding scroll-mt-24">
+      <div className="container-custom">
+        <AnimatedSection className="text-center mb-14">
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Mandate</span>
+          <h2 className="section-title mt-3">Objectives &amp; Duties</h2>
+        </AnimatedSection>
+        <div className="grid md:grid-cols-2 gap-6">
+          {[
+            "Construct, improve and maintain appropriate roads at regional and national level.",
+            "Produce and supply construction materials and tools required for road and other construction works.",
+            "Deliver building, urban infrastructure and industrial park works as a GC-1 general contractor.",
+            "Carry out road sector capacity building, including operator and professional training.",
+            "Operate profitably and sustainably as a public enterprise accountable to the RPEA.",
+            "Undertake any other related activity approved by the managing board.",
+          ].map((d, i) => (
+            <AnimatedSection key={i} delay={i * 0.06}>
+              <div className="glass-card p-6 flex gap-4 h-full">
+                <span className="font-display font-bold text-accent text-sm shrink-0">{String(i + 1).padStart(2, "0")}</span>
+                <p className="text-muted-foreground font-body text-sm leading-relaxed">{d}</p>
+              </div>
+            </AnimatedSection>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* Why Hibir */}
+    <section id="why-hibir" className="section-padding relative overflow-hidden scroll-mt-24">
+      <div className="absolute inset-0 bg-gradient-to-b from-secondary/30 to-background" aria-hidden />
+      <div className="container-custom relative z-10">
+        <AnimatedSection className="text-center mb-14">
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Why Hibir</span>
+          <h2 className="section-title mt-3">Why Clients Choose Us</h2>
+        </AnimatedSection>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { v: companyStats.contractorGrade, l: "Grade One general contractor licence" },
+            { v: `${companyStats.staff}`, l: "In-house professionals and operators" },
+            { v: `${companyStats.totalAssets}`, l: "Owned vehicles, plants and machinery" },
+            { v: "25B+", l: "Birr active contract portfolio" },
+          ].map((k, i) => (
+            <AnimatedSection key={i} delay={i * 0.08}>
+              <div className="glass-card p-7 h-full text-center">
+                <div className="text-3xl font-display font-bold text-gradient-gold">{k.v}</div>
+                <p className="text-muted-foreground text-sm font-body mt-2">{k.l}</p>
+              </div>
+            </AnimatedSection>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* Partnerships */}
+    <section id="partnerships" className="py-20 overflow-hidden scroll-mt-24">
+      <div className="container-custom">
+        <AnimatedSection className="text-center mb-12">
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Partnerships</span>
+          <h2 className="section-title mt-3">Clients &amp; Strategic Partners</h2>
+          <p className="text-muted-foreground font-body mt-4 max-w-2xl mx-auto">
+            {partners.length} national, regional and city-level institutions we deliver infrastructure with.
+          </p>
+        </AnimatedSection>
+      </div>
+      <PartnersMarquee />
+    </section>
+
+    {/* Legal Entities */}
+    <section id="legal-entities" className="section-padding scroll-mt-24">
+      <div className="container-custom">
+        <AnimatedSection className="text-center mb-14">
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Governance</span>
+          <h2 className="section-title mt-3">Legal Entities &amp; Registrations</h2>
+        </AnimatedSection>
+        <DocumentGallery
+          placeholderLabel="Legal Document"
+          documents={legalEntities.map((e) => ({
+            id: e.id,
+            title: e.title,
+            documentType: e.documentType,
+            description: e.description,
+            image: e.image,
+            meta: e.reference,
+          }))}
+        />
+      </div>
+    </section>
+
+    {/* Certifications & Awards */}
+    <section id="certifications" className="section-padding scroll-mt-24">
+      <div className="container-custom">
+        <AnimatedSection className="text-center mb-14">
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Recognition</span>
+          <h2 className="section-title mt-3">Certifications &amp; Awards</h2>
+        </AnimatedSection>
+        <DocumentGallery
+          placeholderLabel="Certificate"
+          documents={certificates.map((c) => ({
+            id: c.id,
+            title: c.title,
+            documentType: c.type,
+            description: c.description,
+            image: c.image,
+            meta: `${c.issuedBy} — ${c.issueDate}`,
+          }))}
+        />
       </div>
     </section>
 

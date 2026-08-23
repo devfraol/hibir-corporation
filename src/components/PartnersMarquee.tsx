@@ -19,7 +19,7 @@ const Row = ({ items, reverse, duration }: { items: Partner[]; reverse?: boolean
       style={{ animationDuration: `${duration}s`, animationDirection: reverse ? "reverse" : "normal" }}
     >
       {[...items, ...items].map((p, i) => (
-        <LogoTile key={`${p.id}-${i}`} p={p} />
+        <LogoTile key={`${p.short}-${i}`} p={p} />
       ))}
     </div>
     <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-background to-transparent" aria-hidden />

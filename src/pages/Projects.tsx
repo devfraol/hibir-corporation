@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageHero from "@/components/PageHero";
 import AnimatedSection from "@/components/AnimatedSection";
 import FeaturedProject from "@/components/projects/FeaturedProject";
 import { formatBirr, projects } from "@/data/projects";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import roadImg from "@/assets/road-construction.jpg";
 import bridgeImg from "@/assets/bridge-construction.jpg";
 import airportImg from "@/assets/airport-project.jpg";
@@ -14,8 +14,22 @@ import safetyImg from "@/assets/safety-workers.jpg";
 
 const filters = ["All", "Ongoing", "Completed"];
 
+const hashToFilter: Record<string, string> = {
+  "#completed": "Completed",
+  "#ongoing": "Ongoing",
+  "#suspended": "Suspended",
+  "#terminated": "Terminated",
+};
+
 const Projects = () => {
   const [filter, setFilter] = useState("All");
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    const f = hashToFilter[hash];
+    if (f) setFilter(f);
+  }, [hash]);
+
   const filtered = filter === "All" ? projects : projects.filter(p => p.status === filter);
 
   return (
@@ -40,12 +54,13 @@ const Projects = () => {
         </div>
       </section>
 
+      <div id="featured" className="scroll-mt-24" />
       <FeaturedProject project={projects.find((p) => p.featured) ?? projects[0]} />
 
       <section className="section-padding pt-0">
         <div className="container-custom">
           {/* Filters */}
-          <div className="flex justify-center gap-3 mb-14">
+          <div id="gallery" className="scroll-mt-28 flex flex-wrap justify-center gap-3 mb-14">
             {filters.map(f => (
               <button
                 key={f}
