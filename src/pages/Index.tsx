@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import {
   ArrowRight, HardHat, Truck, Users, ChevronDown,
   Shield, Award, CheckCircle, Wrench, Factory, Building2,
-  CarFront, Cog, TreePine, ChevronRight, GraduationCap
+  CarFront, Cog, ChevronRight, GraduationCap
 } from "lucide-react";
 import heroImg from "@/assets/hero-highway.jpg";
 import bridgeImg from "@/assets/bridge-construction.jpg";
@@ -46,16 +45,6 @@ const services = [
   { icon: <GraduationCap size={28} />, title: "Capacity Building", desc: "Road sector training programs for device operators and construction professionals." },
 ];
 
-const clientLogos = [
-  "Ethiopian Roads Authority (ERA)",
-  "ANRS Road & Transport Bureau",
-  "Bahir Dar City Administration",
-  "Gondar Town Administration",
-  "Dessie Town Administration",
-  "Ethiopian Sugar Corporation",
-  "ANRS Industry Parks Dev. Corp.",
-  "Woldia City Administration",
-];
 
 const Home = () => (
   <main>
