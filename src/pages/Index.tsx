@@ -19,6 +19,7 @@ import StatsSection from "@/components/home/StatsSection";
 import Timeline from "@/components/home/Timeline";
 import ProjectShowcase from "@/components/home/ProjectShowcase";
 import LatestNews from "@/components/home/LatestNews";
+import PartnersMarquee from "@/components/PartnersMarquee";
 
 const stagger = {
   hidden: {},
@@ -60,6 +61,21 @@ const Home = () => (
   <main>
     <Hero />
 
+    {/* PARTNERSHIPS — immediately after hero */}
+    <section id="partnerships" className="py-16 md:py-20 overflow-hidden border-b border-border/60 scroll-mt-24">
+      <div className="container-custom">
+        <AnimatedSection className="text-center mb-10">
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">
+            Clients & Strategic Partners
+          </span>
+          <h2 className="section-title mt-3 text-2xl md:text-3xl">
+            Trusted by 19 national and regional institutions
+          </h2>
+        </AnimatedSection>
+      </div>
+      <PartnersMarquee />
+    </section>
+
     <StatsSection />
 
     <Timeline />
@@ -74,7 +90,7 @@ const Home = () => (
             Hibir Construction Corporation is a government-owned construction enterprise headquartered in Bahir Dar, Ethiopia. Originally established as "Amhara Road Works Enterprise" by Proclamation No. 71/2010, the corporation was re-established by Proclamation No. 170/2018 and upgraded to corporation level by Proclamation No. 214/2024.
           </p>
           <p className="text-muted-foreground font-body leading-relaxed mb-8">
-            With 803 professionals, 242 units of machinery, and a portfolio exceeding 20.3 billion Birr, we are a key driver of Ethiopia's infrastructure development — accountable to the Regional Public Enterprises' Authority.
+            With 843 professionals, 282 units of vehicles, plants and machinery, and an active contract portfolio exceeding 25 billion Birr, we are a key driver of Ethiopia's infrastructure development — accountable to the Regional Public Enterprises' Authority.
           </p>
           <Link to="/about" className="btn-primary inline-flex items-center gap-2">
             Learn More <ChevronRight size={18} />
@@ -127,14 +143,14 @@ const Home = () => (
           <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Our Capacity</span>
           <h2 className="section-title mt-3 mb-6">Built for Scale</h2>
           <p className="text-muted-foreground font-body leading-relaxed mb-10">
-            The corporation has strategically built its capacity through gradual investment expansion — owning 242 units of vehicles, plants, and machinery operated by 803 skilled professionals across Ethiopia.
+            The corporation has strategically built its capacity through gradual investment expansion — owning 282 units of vehicles, plants, and machinery operated by 843 skilled professionals across Ethiopia.
           </p>
           <div className="grid grid-cols-2 gap-6">
             {[
-              { icon: <CarFront size={22} />, val: "146", label: "Vehicles", sub: "82 Light + 64 Heavy Duty" },
-              { icon: <Cog size={22} />, val: "89", label: "Machinery", sub: "39 Earth Moving + 50 Tyre" },
-              { icon: <Factory size={22} />, val: "7", label: "Plants", sub: "5 Crusher + 2 Asphalt" },
-              { icon: <Users size={22} />, val: "803", label: "Staff", sub: "63 Masters, 348 Bachelors" },
+              { icon: <CarFront size={22} />, val: "155", label: "Vehicles", sub: "Light & heavy duty fleet" },
+              { icon: <Cog size={22} />, val: "117", label: "Machinery", sub: "Earth moving & tyre machinery" },
+              { icon: <Factory size={22} />, val: "10", label: "Plants", sub: "Crusher, sand & asphalt plants" },
+              { icon: <Users size={22} />, val: "843", label: "Staff", sub: "Engineers, technicians & operators" },
             ].map((item, i) => (
               <div key={i} className="glass-card p-5 flex items-start gap-3">
                 <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center text-accent shrink-0">
@@ -204,32 +220,6 @@ const Home = () => (
       </div>
     </section>
 
-    {/* 8. CLIENTS / PARTNERS */}
-    <section className="py-20 overflow-hidden">
-      <div className="container-custom">
-        <AnimatedSection className="text-center mb-14">
-          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Major Clients & Strategic Partners</span>
-          <h2 className="section-title mt-3">Trusted By Leading Institutions</h2>
-        </AnimatedSection>
-        <div className="relative">
-          <motion.div
-            className="flex gap-6"
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
-          >
-            {[...clientLogos, ...clientLogos].map((name, i) => (
-              <div key={i} className="shrink-0 px-8 py-5 glass-card flex items-center justify-center min-w-[240px]">
-                <div className="flex items-center gap-3">
-                  <TreePine size={18} className="text-muted-foreground" />
-                  <span className="text-sm font-body font-medium text-muted-foreground whitespace-nowrap">{name}</span>
-                </div>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </div>
-    </section>
-
     {/* 9. AWARDS */}
     <section className="section-padding">
       <div className="container-custom">
@@ -270,7 +260,7 @@ const Home = () => (
             Let's Build the Future Together
           </h2>
           <p className="text-muted-foreground font-body text-lg max-w-2xl mx-auto mb-12">
-            Partner with Hibir Construction Corporation for reliable, high-quality infrastructure solutions backed by 803 professionals and 242 units of modern machinery.
+            Partner with Hibir Construction Corporation for reliable, high-quality infrastructure solutions backed by 843 professionals and 282 units of modern vehicles, plants and machinery.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link to="/contact" className="btn-accent inline-flex items-center gap-2">

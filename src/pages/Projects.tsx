@@ -12,7 +12,7 @@ import heroImg from "@/assets/hero-construction.jpg";
 import equipmentImg from "@/assets/equipment-fleet.jpg";
 import safetyImg from "@/assets/safety-workers.jpg";
 
-const filters = ["All", "Ongoing", "Completed", "Suspended", "Terminated"];
+const filters = ["All", "Ongoing", "Completed"];
 
 const hashToFilter: Record<string, string> = {
   "#completed": "Completed",
