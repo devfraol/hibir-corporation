@@ -10,12 +10,12 @@ const Footer = () => (
         {/* Brand */}
         <div className="lg:col-span-1">
           <div className="flex items-center gap-3 mb-6">
-            <div
-              className="w-11 h-11 rounded-xl flex items-center justify-center font-display font-bold text-lg"
-              style={{ background: "var(--gold-gradient)", color: "hsl(220 60% 8%)" }}
-            >
-              H
-            </div>
+            <img
+              src="/Hibir%20Logo.png"
+              alt=""
+              aria-hidden="true"
+              className="w-11 h-11 object-contain"
+            />
             <div>
               <span className="font-display font-bold text-lg block text-foreground">Hibir</span>
               <span className="text-muted-foreground text-[10px] tracking-[0.2em] uppercase font-body">Construction Corp.</span>

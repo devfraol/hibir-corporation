@@ -48,10 +48,10 @@ const Hero = () => {
 
   const ease = [0.22, 1, 0.36, 1] as const;
   const lines = [
-    { text: "Engineering", accent: false },
-    { text: "the connections", accent: false },
-    { text: "that move", accent: false },
-    { text: "Ethiopia forward", accent: true },
+    { text: "ENGINEERING", accent: false },
+    { text: "CONNECTIONS", accent: false },
+    { text: "THAT SHAPE TOMORROW", accent: false },
+    
   ];
 
   return (

@@ -130,13 +130,12 @@ const Navbar = () => {
       >
         <nav aria-label="Primary" className="container-custom px-4 md:px-8 flex items-center justify-between gap-4">
           <Link to="/" className="flex items-center gap-3 group shrink-0" aria-label="Hibir Construction Corporation — home">
-            <div
-              className="w-10 h-10 rounded-xl grid place-items-center font-display font-bold text-base transition-transform duration-500 group-hover:scale-105"
-              style={{ background: "var(--gold-gradient)", color: "hsl(var(--accent-foreground))", boxShadow: "var(--glow-gold)" }}
-              aria-hidden
-            >
-              H
-            </div>
+            <img
+              src="/Hibir%20Logo.png"
+              alt=""
+              aria-hidden="true"
+              className="w-10 h-10 object-contain transition-transform duration-500 group-hover:scale-105"
+            />
             <div className="leading-tight">
               <span className="text-foreground font-display font-bold text-base block">Hibir</span>
               <span className="text-muted-foreground text-[9px] tracking-[0.24em] uppercase font-body">Construction Corp.</span>
