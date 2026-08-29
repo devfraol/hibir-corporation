@@ -6,9 +6,20 @@ interface Props {
 }
 
 const LogoTile = ({ p }: { p: Partner }) => (
-  <div className="shrink-0 w-[240px] h-20 px-6 rounded-xl border border-border/60 bg-surface/60 backdrop-blur-sm flex flex-col items-center justify-center text-center opacity-70 grayscale hover:opacity-100 hover:grayscale-0 hover:border-accent/50 transition-all duration-500">
-    <span className="font-display font-bold text-sm text-foreground leading-tight">{p.short}</span>
-    <span className="mt-1 text-[10px] font-body text-muted-foreground leading-tight line-clamp-2">{p.name}</span>
+  <div className="shrink-0 w-[220px] h-20 px-4 rounded-xl border border-border/60 bg-surface/60 backdrop-blur-sm flex items-center justify-center opacity-80 grayscale hover:opacity-100 hover:grayscale-0 hover:border-accent/50 transition-all duration-500">
+    {p.logo ? (
+      <img
+        src={p.logo}
+        alt={p.name}
+        className="max-h-12 max-w-[180px] w-auto object-contain select-none"
+        loading="lazy"
+      />
+    ) : (
+      <div className="flex flex-col items-center justify-center text-center">
+        <span className="font-display font-bold text-sm text-foreground leading-tight">{p.short}</span>
+        <span className="mt-1 text-[10px] font-body text-muted-foreground leading-tight line-clamp-2">{p.name}</span>
+      </div>
+    )}
   </div>
 );
 

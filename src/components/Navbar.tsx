@@ -103,6 +103,10 @@ const Navbar = () => {
   const isActive = (to: string) =>
     to === "/" ? location.pathname === "/" : location.pathname.startsWith(to);
 
+  const navTextClass = scrolled ? "text-foreground" : "text-white/95";
+  const navMutedClass = scrolled ? "text-muted-foreground" : "text-white/70";
+  const navHoverTextClass = scrolled ? "hover:text-foreground" : "hover:text-white";
+
   const hoverOpen = (label: string) => {
     window.clearTimeout(closeTimer.current);
     setOpenMenu(label);
@@ -137,8 +141,10 @@ const Navbar = () => {
               className="w-10 h-10 object-contain transition-transform duration-500 group-hover:scale-105"
             />
             <div className="leading-tight">
-              <span className="text-foreground font-display font-bold text-base block">Hibir</span>
-              <span className="text-muted-foreground text-[9px] tracking-[0.24em] uppercase font-body">Construction Corp.</span>
+              <span className={`font-display font-bold text-base block ${navTextClass}`}>Hibir</span>
+              <span className={`text-[9px] tracking-[0.24em] uppercase font-body ${scrolled ? "text-muted-foreground" : "text-white/60"}`}>
+                Construction Corp.
+              </span>
             </div>
           </Link>
 
@@ -155,7 +161,7 @@ const Navbar = () => {
                     to={l.to}
                     aria-current={isActive(l.to) ? "page" : undefined}
                     className={`relative px-3 py-2 rounded-lg text-[13px] font-medium font-body transition-colors duration-300 ${
-                      isActive(l.to) ? "text-accent" : "text-muted-foreground hover:text-foreground"
+                      isActive(l.to) ? "text-accent" : `${navMutedClass} ${navHoverTextClass}`
                     }`}
                   >
                     {l.label}
@@ -174,7 +180,7 @@ const Navbar = () => {
                       aria-label={`${l.label} menu`}
                       aria-expanded={openMenu === l.label}
                       onClick={() => setOpenMenu((c) => (c === l.label ? null : l.label))}
-                      className="-ml-1.5 p-1 text-muted-foreground hover:text-foreground transition-colors"
+                      className={`-ml-1.5 p-1 transition-colors ${navMutedClass} ${navHoverTextClass}`}
                     >
                       <ChevronDown
                         size={13}

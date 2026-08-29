@@ -100,11 +100,17 @@ const rawPartners: Array<[string, string, string]> = [
   ["Dangila Town Administration", "Dangila", "City Administrations"],
 ];
 
+const partnerLogoPaths = Array.from({ length: 19 }, (_, i) => {
+  const fileNumber = String(i + 1).padStart(3, "0");
+  return new URL(`../assets/hibir-partner-logos/${fileNumber}.png`, import.meta.url).href;
+});
+
 export const partners: Partner[] = rawPartners.map(([name, short, category], i) => ({
   id: `partner-${i + 1}`,
   name,
   short,
   category,
+  logo: partnerLogoPaths[i],
   featured: i < 6,
   order: i + 1,
 }));
