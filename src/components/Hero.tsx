@@ -159,7 +159,7 @@ const Hero = () => {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.85, duration: 0.8, ease }}
-              className="mt-7 max-w-md text-sm md:text-[15px] leading-relaxed font-body on-media-muted"
+              className="mt-5 max-w-md text-sm md:text-[15px] leading-relaxed font-body on-media-muted"
             >
               Building roads, bridges and infrastructure that connect communities, enable economic
               activity and support Ethiopia's continued development.
