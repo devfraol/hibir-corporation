@@ -8,7 +8,7 @@ import heroImg from "@/assets/hero-highway.jpg";
 import bridgeImg from "@/assets/bridge-construction.jpg";
 import roadImg from "@/assets/road-construction.jpg";
 import airportImg from "@/assets/airport-project.jpg";
-import aboutImg from "@/assets/capacity-machinery.jpg";
+import aboutImg from "@/assets/WhoWeAre.png";
 import safetyImg from "@/assets/safety-quality.jpg";
 import ctaBg from "@/assets/cta-background.jpg";
 import Counter from "@/components/Counter";

@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import ScrollReveal from "@/components/ScrollReveal";
-import roadImg from "@/assets/road-construction.jpg";
-import machineryImg from "@/assets/capacity-machinery.jpg";
-import highwayImg from "@/assets/hero-highway.jpg";
+import roadImg from "@/assets/CompanyEvolution/photo-1.png";
+import machineryImg from "@/assets/CompanyEvolution/Photo-2.png";
+import highwayImg from "@/assets/CompanyEvolution/Photo-3.png";
 
 /** Company history exactly as recorded in the company profile. */
 const milestones = [
