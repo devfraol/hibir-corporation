@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 import heroPoster from "@/assets/hero-highway.jpg";
-import heroVideo from "@/assets/hero-infrastructure.mp4.asset.json";
+import heroVideo from "@/assets/video.mp4";
 
 /** Verified figures from the 2026 company profile. */
 const indicators = [
@@ -50,7 +50,8 @@ const Hero = () => {
   const lines = [
     { text: "ENGINEERING", accent: false },
     { text: "CONNECTIONS", accent: false },
-    { text: "THAT SHAPE TOMORROW", accent: false },
+    { text: "THAT SHAPE", accent: false },
+    { text: "TOMORROW", accent: false }
     
   ];
 
@@ -71,7 +72,7 @@ const Hero = () => {
         <video
           ref={videoRef}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${videoReady ? "opacity-100" : "opacity-0"}`}
-          src={heroVideo.url}
+          src={heroVideo}
           poster={heroPoster}
           autoPlay
           loop
@@ -140,7 +141,7 @@ const Hero = () => {
               </span>
             </motion.div>
 
-            <h1 className="hero-display on-media uppercase max-w-[16ch]">
+            <h1 className="hero-display on-media uppercase max-w-[12ch] leading-[0.92] tracking-[-0.05em] text-[2.3rem] sm:text-[2.9rem] md:text-[3.8rem] lg:text-[4.1rem] xl:text-[4.8rem] 2xl:text-[5.3rem]">
               {lines.map((l, i) => (
                 <motion.span
                   key={l.text}
