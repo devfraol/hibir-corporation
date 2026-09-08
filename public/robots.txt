@@ -12,3 +12,12 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /login
+Disallow: /preview
+Disallow: /*?utm_
+Disallow: /*?sort=
+Disallow: /*?filter=
+
+Sitemap: https://hibir-visions.lovable.app/sitemap.xml
