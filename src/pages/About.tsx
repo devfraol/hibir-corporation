@@ -6,6 +6,7 @@ import heroImg from "@/assets/hero-construction.jpg";
 import PartnersMarquee from "@/components/PartnersMarquee";
 import DocumentGallery from "@/components/DocumentGallery";
 import { certificates, companyStats, legalEntities, partners } from "@/data/company";
+import Seo from "@/components/Seo";
 
 const values = [
   { icon: <Users size={28} />, title: "Team Work", desc: "Collaborative effort across all departments and project sites." },
@@ -23,6 +24,12 @@ const timeline = [
 
 const About = () => (
   <main>
+    <Seo
+      title="About Hibir Construction Corporation | Ethiopia"
+      description="Hibir Construction Corporation is a government-owned GC-1 contractor in Bahir Dar, Amhara Regional State — established in 2010, re-established in 2018 and upgraded to corporation level in 2024."
+      path="/about"
+      breadcrumbs={[{ name: "Home", path: "/" }, { name: "About", path: "/about" }]}
+    />
     <PageHero title="About Us" subtitle="Ethiopia's premier government-owned construction corporation since 2010" image={heroImg} />
 
     {/* Overview + Vision/Mission */}

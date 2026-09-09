@@ -1,6 +1,7 @@
 import PageHero from "@/components/PageHero";
 import AnimatedSection from "@/components/AnimatedSection";
 import heroImg from "@/assets/hero-construction.jpg";
+import Seo from "@/components/Seo";
 
 const deputyCEOs = [
   {
@@ -40,6 +41,12 @@ const ceoDirectReports = [
 
 const Organization = () => (
   <main>
+    <Seo
+      title="Organization & Governance | Hibir Construction Corporation"
+      description="The governance structure of Hibir Construction Corporation — managing board, executive management and operating directorates, accountable to the Amhara Regional Public Enterprises' Authority."
+      path="/organization"
+      breadcrumbs={[{ name: "Home", path: "/" }, { name: "Organization", path: "/organization" }]}
+    />
     <PageHero title="Organization" subtitle="Our governance structure and organizational hierarchy" image={heroImg} />
 
     <section className="section-padding">
