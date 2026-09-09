@@ -7,6 +7,10 @@ import AnimatedSection from "@/components/AnimatedSection";
 import ProjectGallery from "@/components/projects/ProjectGallery";
 import { formatBirr, type Project } from "@/data/projects";
 import { getProjectBySlug, getRelatedProjects } from "@/services/projectService";
+import { getServicesForProjectCategory } from "@/data/services";
+import { newsArticles } from "@/data/news";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { absoluteUrl, SITE_URL } from "@/config/site";
 
 const ProjectDetail = () => {
   const { slug = "" } = useParams();
@@ -65,6 +69,16 @@ const ProjectDetail = () => {
     { label: "Start Date", value: project.startDate ?? "Not disclosed" },
     { label: "Completion Date", value: project.completionDate ?? (project.status === "Ongoing" ? "In progress" : "Not disclosed") },
   ];
+
+  const relatedServices = getServicesForProjectCategory(project.category);
+  const relatedNews = newsArticles
+    .filter(
+      (a) =>
+        a.status === "published" &&
+        (a.title.toLowerCase().includes(project.title.split("–")[0].toLowerCase().slice(0, 12)) ||
+          a.tags.some((t) => project.category.toLowerCase().includes(t.toLowerCase()))),
+    )
+    .slice(0, 3);
 
   const crumbs = [
     { name: "Home", path: "/" },
@@ -136,6 +150,10 @@ const ProjectDetail = () => {
           </div>
         </div>
       </section>
+
+      <div className="container-custom px-4 md:px-8 pt-8">
+        <Breadcrumbs crumbs={crumbs} />
+      </div>
 
       {/* OVERVIEW + INFORMATION */}
       <AnimatedSection className="section-padding">
@@ -217,6 +235,40 @@ const ProjectDetail = () => {
           </div>
         </AnimatedSection>
       )}
+
+      {/* RELATED SERVICES + NEWS */}
+      <AnimatedSection className="section-padding pt-0">
+        <div className="container-custom grid md:grid-cols-2 gap-10">
+          <div>
+            <h2 className="font-display font-bold text-xl text-foreground mb-4">Related Services</h2>
+            <div className="flex flex-wrap gap-3">
+              {relatedServices.map((s) => (
+                <Link
+                  key={s.id}
+                  to={s.canonicalUrl}
+                  className="rounded-full border border-border px-5 py-2 text-sm font-body text-muted-foreground hover:text-accent hover:border-accent/50 transition-colors"
+                >
+                  {s.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+          {relatedNews.length > 0 && (
+            <div>
+              <h2 className="font-display font-bold text-xl text-foreground mb-4">Latest Project Updates</h2>
+              <ul className="space-y-3">
+                {relatedNews.map((a) => (
+                  <li key={a.id}>
+                    <Link to={`/news/${a.slug}`} className="font-body text-sm text-muted-foreground hover:text-accent transition-colors">
+                      {a.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </AnimatedSection>
 
       {/* CTA */}
       <AnimatedSection className="section-padding pt-0">
