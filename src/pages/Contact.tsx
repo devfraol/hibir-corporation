@@ -4,6 +4,7 @@ import PageHero from "@/components/PageHero";
 import AnimatedSection from "@/components/AnimatedSection";
 import heroImg from "@/assets/hero-construction.jpg";
 import { useToast } from "@/hooks/use-toast";
+import Seo from "@/components/Seo";
 
 const Contact = () => {
   const { toast } = useToast();
@@ -17,6 +18,12 @@ const Contact = () => {
 
   return (
     <main>
+      <Seo
+        title="Contact Hibir Construction Corporation | Bahir Dar, Ethiopia"
+        description="Contact Hibir Construction Corporation at its head office near Bahir Dar University, Gish Abay Campus, Bahir Dar, Amhara Regional State — phone +251 582 20 4493."
+        path="/contact"
+        breadcrumbs={[{ name: "Home", path: "/" }, { name: "Contact", path: "/contact" }]}
+      />
       <PageHero title="Contact Us" subtitle="Get in touch with our team for project inquiries and partnerships" image={heroImg} />
 
       <section className="section-padding">
