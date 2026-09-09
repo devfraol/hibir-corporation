@@ -64,9 +64,10 @@ const News = () => {
   return (
     <main>
       <Seo
-        title="News & Insights | Hibir Construction Corporation"
+        title="Hibir Construction Corporation News & Updates"
         description="Updates, milestones and stories from Hibir Construction Corporation — projects, infrastructure, safety and corporate announcements."
         path="/news"
+        breadcrumbs={[{ name: "Home", path: "/" }, { name: "News", path: "/news" }]}
         jsonLd={jsonLd}
       />
 
