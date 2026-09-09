@@ -4,6 +4,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import type { NewsArticle, NewsBlock } from "@/types/news";
 import { formatNewsDate } from "@/services/newsService";
+import { projects } from "@/data/projects";
+import { services } from "@/data/services";
 
 const Block = ({ block }: { block: NewsBlock }) => {
   switch (block.type) {
@@ -45,6 +47,17 @@ const NewsDetail = ({ article }: { article: NewsArticle }) => {
     }
   };
 
+  const mentioned = projects.filter((p) => {
+    const key = p.title.split(/[–-]/)[0].trim().toLowerCase();
+    const haystack = `${article.title} ${article.excerpt}`.toLowerCase();
+    return key.length > 4 && haystack.includes(key);
+  }).slice(0, 3);
+
+  const relatedServices = services.filter((s) =>
+    s.newsTags.some((t) => article.tags.map((x) => x.toLowerCase()).includes(t)) ||
+    s.newsTags.includes(article.category.toLowerCase()),
+  ).slice(0, 3);
+
   const shares = [
     { label: "Share on X", icon: Twitter, href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(article.title)}` },
     { label: "Share on LinkedIn", icon: Linkedin, href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}` },
@@ -64,6 +77,12 @@ const NewsDetail = ({ article }: { article: NewsArticle }) => {
               <li aria-hidden><ChevronRight size={12} /></li>
               <li><Link to="/news" className="hover:text-accent transition-colors">News</Link></li>
               <li aria-hidden><ChevronRight size={12} /></li>
+              <li>
+                <Link to={`/news/category/${article.category.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`} className="hover:text-accent transition-colors">
+                  {article.category}
+                </Link>
+              </li>
+              <li aria-hidden><ChevronRight size={12} /></li>
               <li className="text-foreground truncate max-w-[14rem]" aria-current="page">{article.title}</li>
             </ol>
           </nav>
@@ -74,6 +93,13 @@ const NewsDetail = ({ article }: { article: NewsArticle }) => {
             </span>
             <time dateTime={article.publishedAt} className="text-[11px] font-body tracking-[0.18em] uppercase text-muted-foreground">
               {formatNewsDate(article.publishedAt)} · {article.readingMinutes} min read
+            </time>
+            {article.updatedAt && article.updatedAt.slice(0, 10) !== article.publishedAt.slice(0, 10) && (
+              <time dateTime={article.updatedAt} className="text-[11px] font-body tracking-[0.18em] uppercase text-muted-foreground">
+                Updated {formatNewsDate(article.updatedAt)}
+              </time>
+            )}
+            <time className="hidden">
             </time>
           </div>
 
@@ -142,6 +168,39 @@ const NewsDetail = ({ article }: { article: NewsArticle }) => {
                   #{t}
                 </span>
               ))}
+            </div>
+          )}
+
+          {(mentioned.length > 0 || relatedServices.length > 0) && (
+            <div className="mt-12 grid sm:grid-cols-2 gap-8">
+              {mentioned.length > 0 && (
+                <div>
+                  <h2 className="font-display font-bold text-lg text-foreground mb-3">Related Projects</h2>
+                  <ul className="space-y-2">
+                    {mentioned.map((p) => (
+                      <li key={p.id}>
+                        <Link to={`/projects/${p.slug}`} className="font-body text-sm text-accent hover:underline">
+                          View project: {p.title} →
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {relatedServices.length > 0 && (
+                <div>
+                  <h2 className="font-display font-bold text-lg text-foreground mb-3">Related Services</h2>
+                  <ul className="space-y-2">
+                    {relatedServices.map((s) => (
+                      <li key={s.id}>
+                        <Link to={s.canonicalUrl} className="font-body text-sm text-muted-foreground hover:text-accent transition-colors">
+                          {s.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           )}
 
