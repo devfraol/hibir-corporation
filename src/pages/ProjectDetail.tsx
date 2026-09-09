@@ -51,7 +51,7 @@ const ProjectDetail = () => {
     return (
       <main className="min-h-screen grid place-items-center px-6 text-center">
         <div>
-          <Seo title="Project not found | Hibir Construction Corporation" description="This project is not available." path={`/projects/${slug}`} />
+          <Seo title="Project not found | Hibir Construction Corporation" description="This project is not available." path={`/projects/${slug}`} noindex />
           <h1 className="font-display font-bold text-3xl text-foreground mb-4">Project not found</h1>
           <Link to="/projects" className="btn-accent text-sm">Back to Projects</Link>
         </div>

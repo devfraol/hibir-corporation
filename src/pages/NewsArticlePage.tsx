@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import Seo from "@/components/Seo";
+import { absoluteUrl } from "@/config/site";
 import NewsDetail from "@/components/news/NewsDetail";
 import RelatedNews from "@/components/news/RelatedNews";
 import { getNewsBySlug, getRelatedNews } from "@/services/newsService";
@@ -65,6 +66,13 @@ const NewsArticlePage = () => {
         image={article.featuredImage.url}
         type="article"
         publishedAt={article.publishedAt}
+        updatedAt={article.updatedAt}
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "News", path: "/news" },
+          { name: article.category, path: `/news/category/${article.category.toLowerCase().replace(/[^a-z0-9]+/g, "-")}` },
+          { name: article.title, path: `/news/${article.slug}` },
+        ]}
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "NewsArticle",
@@ -73,6 +81,8 @@ const NewsArticlePage = () => {
           datePublished: article.publishedAt,
           dateModified: article.updatedAt,
           articleSection: article.category,
+          image: article.featuredImage.url,
+          mainEntityOfPage: absoluteUrl(`/news/${article.slug}`),
           author: { "@type": "Organization", name: article.author.name },
           publisher: { "@type": "Organization", name: "Hibir Construction Corporation" },
         }}
