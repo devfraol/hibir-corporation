@@ -4,6 +4,7 @@ import PageHero from "@/components/PageHero";
 import AnimatedSection from "@/components/AnimatedSection";
 import Counter from "@/components/Counter";
 import equipmentImg from "@/assets/equipment-fleet.jpg";
+import Seo from "@/components/Seo";
 
 const machinery = [
   { id: "vehicles", icon: <CarFront size={28} />, label: "Vehicles", count: 155, desc: "Light and heavy duty vehicles including dump trucks, water tankers and fuel tankers" },
@@ -29,6 +30,12 @@ const staffByEducation = [
 
 const Resources = () => (
   <main>
+    <Seo
+      title="Resources & Capacity | Hibir Construction Corporation"
+      description="843 professionals and 282 vehicles, plants and machinery units — the human resources, fleet and plant capacity behind Hibir Construction Corporation's projects in Ethiopia."
+      path="/resources"
+      breadcrumbs={[{ name: "Home", path: "/" }, { name: "Resources", path: "/resources" }]}
+    />
     <PageHero title="Our Resources" subtitle="282 vehicles, plants and machinery units and 843 skilled professionals powering Ethiopia's development" image={equipmentImg} />
 
     {/* Stats */}

@@ -2,6 +2,7 @@ import { ShieldCheck, HardHat, Eye, Award, CheckCircle, AlertTriangle, Wrench, C
 import PageHero from "@/components/PageHero";
 import AnimatedSection from "@/components/AnimatedSection";
 import safetyImg from "@/assets/safety-workers.jpg";
+import Seo from "@/components/Seo";
 
 const safetyPoints = [
   { icon: <AlertTriangle size={24} />, title: "Zero Accidents Goal", desc: "Committed to zero accidents and zero man-hours lost across all construction sites." },
@@ -20,6 +21,12 @@ const qualityPoints = [
 
 const Safety = () => (
   <main>
+    <Seo
+      title="Safety & Quality | Hibir Construction Corporation"
+      description="Health, safety, environment and quality management at Hibir Construction Corporation — the standards applied on road, bridge and building sites across Ethiopia."
+      path="/safety"
+      breadcrumbs={[{ name: "Home", path: "/" }, { name: "Safety & Quality", path: "/safety" }]}
+    />
     <PageHero title="Safety & Quality" subtitle="Uncompromising commitment to safety and quality excellence in every project" image={safetyImg} />
 
     {/* Safety */}

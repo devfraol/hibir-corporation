@@ -6,6 +6,8 @@ import NewsGrid from "@/components/news/NewsGrid";
 import NewsPagination from "@/components/news/NewsPagination";
 import { getCategoryCounts, getFeaturedNews, getNews } from "@/services/newsService";
 import type { NewsArticle, NewsCategory } from "@/types/news";
+import { Link } from "react-router-dom";
+import { NEWS_CATEGORIES } from "@/types/news";
 
 const PAGE_SIZE = 6;
 
@@ -64,9 +66,10 @@ const News = () => {
   return (
     <main>
       <Seo
-        title="News & Insights | Hibir Construction Corporation"
+        title="Hibir Construction Corporation News & Updates"
         description="Updates, milestones and stories from Hibir Construction Corporation — projects, infrastructure, safety and corporate announcements."
         path="/news"
+        breadcrumbs={[{ name: "Home", path: "/" }, { name: "News", path: "/news" }]}
         jsonLd={jsonLd}
       />
 
@@ -125,6 +128,19 @@ const News = () => {
           )}
         </div>
       </section>
+      <nav aria-label="News categories" className="px-4 md:px-8 pb-24">
+        <div className="container-custom flex flex-wrap gap-3">
+          {NEWS_CATEGORIES.map((c) => (
+            <Link
+              key={c}
+              to={`/news/category/${c.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+              className="rounded-full border border-border px-5 py-2 text-sm font-body text-muted-foreground hover:text-accent hover:border-accent/50 transition-colors"
+            >
+              {c}
+            </Link>
+          ))}
+        </div>
+      </nav>
     </main>
   );
 };

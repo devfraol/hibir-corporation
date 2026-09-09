@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -24,8 +24,22 @@ import News from "./pages/News";
 import NewsArticlePage from "./pages/NewsArticlePage";
 import ProjectDetail from "./pages/ProjectDetail";
 import NotFound from "./pages/NotFound";
+import ServiceDetail from "./pages/ServiceDetail";
+import NewsCategoryPage from "./pages/NewsCategoryPage";
+import { resolveRedirect } from "@/config/redirects";
 
 const queryClient = new QueryClient();
+
+/** Centralised legacy-URL redirect handler (single source: config/redirects.ts). */
+const LegacyRedirects = () => {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  useEffect(() => {
+    const target = resolveRedirect(pathname);
+    if (target) navigate(target, { replace: true });
+  }, [pathname, navigate]);
+  return null;
+};
 
 const ScrollToTop = () => {
   const { pathname, hash } = useLocation();
@@ -52,12 +66,14 @@ const AnimatedRoutes = () => {
         <Route path="/" element={<PageTransition><Index /></PageTransition>} />
         <Route path="/about" element={<PageTransition><About /></PageTransition>} />
         <Route path="/services" element={<PageTransition><Services /></PageTransition>} />
+        <Route path="/services/:slug" element={<PageTransition><ServiceDetail /></PageTransition>} />
         <Route path="/projects" element={<PageTransition><Projects /></PageTransition>} />
         <Route path="/projects/:slug" element={<PageTransition><ProjectDetail /></PageTransition>} />
         <Route path="/resources" element={<PageTransition><Resources /></PageTransition>} />
         <Route path="/safety" element={<PageTransition><Safety /></PageTransition>} />
         <Route path="/organization" element={<PageTransition><Organization /></PageTransition>} />
         <Route path="/news" element={<PageTransition><News /></PageTransition>} />
+        <Route path="/news/category/:slug" element={<PageTransition><NewsCategoryPage /></PageTransition>} />
         <Route path="/news/:slug" element={<PageTransition><NewsArticlePage /></PageTransition>} />
         <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
@@ -76,6 +92,7 @@ const App = () => (
           <Loader />
           <BrowserRouter>
             <ScrollProgress />
+            <LegacyRedirects />
             <ScrollToTop />
             <Navbar />
             <AnimatedRoutes />

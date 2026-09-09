@@ -11,6 +11,7 @@ import airportImg from "@/assets/airport-project.jpg";
 import heroImg from "@/assets/hero-construction.jpg";
 import equipmentImg from "@/assets/equipment-fleet.jpg";
 import safetyImg from "@/assets/safety-workers.jpg";
+import Seo from "@/components/Seo";
 
 const filters = ["All", "Ongoing", "Completed"];
 
@@ -34,6 +35,12 @@ const Projects = () => {
 
   return (
     <main>
+      <Seo
+        title="Construction Projects in Ethiopia | Hibir Construction Corporation"
+        description="Road, bridge, cobblestone and urban infrastructure projects delivered by Hibir Construction Corporation across the Amhara Region and Ethiopia, with an active contract portfolio above 25 billion Birr."
+        path="/projects"
+        breadcrumbs={[{ name: "Home", path: "/" }, { name: "Projects", path: "/projects" }]}
+      />
       <PageHero title="Our Projects" subtitle="An active contract portfolio exceeding 25 billion Birr across Ethiopia's infrastructure landscape" image={heroImg} />
 
       {/* Summary Stats */}

@@ -19,6 +19,7 @@ import Timeline from "@/components/home/Timeline";
 import ProjectShowcase from "@/components/home/ProjectShowcase";
 import LatestNews from "@/components/home/LatestNews";
 import PartnersMarquee from "@/components/PartnersMarquee";
+import Seo from "@/components/Seo";
 
 const stagger = {
   hidden: {},
@@ -48,6 +49,11 @@ const services = [
 
 const Home = () => (
   <main>
+    <Seo
+      title="Hibir Construction Corporation | Construction & Infrastructure in Ethiopia"
+      description="Hibir Construction Corporation builds roads, bridges, buildings and urban infrastructure across Ethiopia. A GC-1 government-owned contractor based in Bahir Dar, Amhara Regional State."
+      path="/"
+    />
     <Hero />
 
     {/* PARTNERSHIPS — immediately after hero */}

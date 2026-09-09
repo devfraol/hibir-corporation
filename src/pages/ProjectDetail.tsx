@@ -7,6 +7,10 @@ import AnimatedSection from "@/components/AnimatedSection";
 import ProjectGallery from "@/components/projects/ProjectGallery";
 import { formatBirr, type Project } from "@/data/projects";
 import { getProjectBySlug, getRelatedProjects } from "@/services/projectService";
+import { getServicesForProjectCategory } from "@/data/services";
+import { newsArticles } from "@/data/news";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { absoluteUrl, SITE_URL } from "@/config/site";
 
 const ProjectDetail = () => {
   const { slug = "" } = useParams();
@@ -47,7 +51,7 @@ const ProjectDetail = () => {
     return (
       <main className="min-h-screen grid place-items-center px-6 text-center">
         <div>
-          <Seo title="Project not found | Hibir Construction Corporation" description="This project is not available." path={`/projects/${slug}`} />
+          <Seo title="Project not found | Hibir Construction Corporation" description="This project is not available." path={`/projects/${slug}`} noindex />
           <h1 className="font-display font-bold text-3xl text-foreground mb-4">Project not found</h1>
           <Link to="/projects" className="btn-accent text-sm">Back to Projects</Link>
         </div>
@@ -66,22 +70,46 @@ const ProjectDetail = () => {
     { label: "Completion Date", value: project.completionDate ?? (project.status === "Ongoing" ? "In progress" : "Not disclosed") },
   ];
 
+  const relatedServices = getServicesForProjectCategory(project.category);
+  const relatedNews = newsArticles
+    .filter(
+      (a) =>
+        a.status === "published" &&
+        (a.title.toLowerCase().includes(project.title.split("–")[0].toLowerCase().slice(0, 12)) ||
+          a.tags.some((t) => project.category.toLowerCase().includes(t.toLowerCase()))),
+    )
+    .slice(0, 3);
+
+  const crumbs = [
+    { name: "Home", path: "/" },
+    { name: "Projects", path: "/projects" },
+    { name: project.title, path: `/projects/${project.slug}` },
+  ];
+
+  const seoDescription = `${project.title} — ${project.category.toLowerCase()} project in ${project.location} for ${project.client}, delivered by Hibir Construction Corporation as ${project.contractorRole}. Contract value ${formatBirr(project.contractValue)}. Status: ${project.status}.`;
+
   return (
     <main>
       <Seo
         title={`${project.title} | Hibir Construction Corporation`}
-        description={project.description.slice(0, 155)}
+        description={seoDescription.slice(0, 300)}
         path={`/projects/${project.slug}`}
         image={project.featuredImage.url}
+        breadcrumbs={crumbs}
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "Project",
           name: project.title,
           description: project.description,
-          location: project.location,
-provider: { "@type": "Organization", name: "Hibir Construction Corporation" },
+          url: absoluteUrl(`/projects/${project.slug}`),
+          image: project.featuredImage.url,
+          location: { "@type": "Place", name: project.location },
+          agent: { "@id": `${SITE_URL}/#organization` },
+          sponsor: { "@type": "Organization", name: project.client },
         }}
       />
+
+
 
       {/* HERO */}
       <section className="relative h-[78svh] min-h-[520px] overflow-hidden">
@@ -122,6 +150,10 @@ provider: { "@type": "Organization", name: "Hibir Construction Corporation" },
           </div>
         </div>
       </section>
+
+      <div className="container-custom px-4 md:px-8 pt-8">
+        <Breadcrumbs crumbs={crumbs} />
+      </div>
 
       {/* OVERVIEW + INFORMATION */}
       <AnimatedSection className="section-padding">
@@ -203,6 +235,40 @@ provider: { "@type": "Organization", name: "Hibir Construction Corporation" },
           </div>
         </AnimatedSection>
       )}
+
+      {/* RELATED SERVICES + NEWS */}
+      <AnimatedSection className="section-padding pt-0">
+        <div className="container-custom grid md:grid-cols-2 gap-10">
+          <div>
+            <h2 className="font-display font-bold text-xl text-foreground mb-4">Related Services</h2>
+            <div className="flex flex-wrap gap-3">
+              {relatedServices.map((s) => (
+                <Link
+                  key={s.id}
+                  to={s.canonicalUrl}
+                  className="rounded-full border border-border px-5 py-2 text-sm font-body text-muted-foreground hover:text-accent hover:border-accent/50 transition-colors"
+                >
+                  {s.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+          {relatedNews.length > 0 && (
+            <div>
+              <h2 className="font-display font-bold text-xl text-foreground mb-4">Latest Project Updates</h2>
+              <ul className="space-y-3">
+                {relatedNews.map((a) => (
+                  <li key={a.id}>
+                    <Link to={`/news/${a.slug}`} className="font-body text-sm text-muted-foreground hover:text-accent transition-colors">
+                      {a.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </AnimatedSection>
 
       {/* CTA */}
       <AnimatedSection className="section-padding pt-0">
