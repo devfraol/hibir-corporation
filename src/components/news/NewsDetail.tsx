@@ -99,8 +99,6 @@ const NewsDetail = ({ article }: { article: NewsArticle }) => {
                 Updated {formatNewsDate(article.updatedAt)}
               </time>
             )}
-            <time className="hidden">
-            </time>
           </div>
 
           <motion.h1
