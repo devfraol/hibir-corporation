@@ -66,22 +66,36 @@ const ProjectDetail = () => {
     { label: "Completion Date", value: project.completionDate ?? (project.status === "Ongoing" ? "In progress" : "Not disclosed") },
   ];
 
+  const crumbs = [
+    { name: "Home", path: "/" },
+    { name: "Projects", path: "/projects" },
+    { name: project.title, path: `/projects/${project.slug}` },
+  ];
+
+  const seoDescription = `${project.title} — ${project.category.toLowerCase()} project in ${project.location} for ${project.client}, delivered by Hibir Construction Corporation as ${project.contractorRole}. Contract value ${formatBirr(project.contractValue)}. Status: ${project.status}.`;
+
   return (
     <main>
       <Seo
         title={`${project.title} | Hibir Construction Corporation`}
-        description={project.description.slice(0, 155)}
+        description={seoDescription.slice(0, 300)}
         path={`/projects/${project.slug}`}
         image={project.featuredImage.url}
+        breadcrumbs={crumbs}
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "Project",
           name: project.title,
           description: project.description,
-          location: project.location,
-provider: { "@type": "Organization", name: "Hibir Construction Corporation" },
+          url: absoluteUrl(`/projects/${project.slug}`),
+          image: project.featuredImage.url,
+          location: { "@type": "Place", name: project.location },
+          agent: { "@id": `${SITE_URL}/#organization` },
+          sponsor: { "@type": "Organization", name: project.client },
         }}
       />
+
+
 
       {/* HERO */}
       <section className="relative h-[78svh] min-h-[520px] overflow-hidden">
