@@ -6,7 +6,7 @@ The React/Vite application currently reads newsroom records from `src/data/news.
 
 ## Phase 1 Supabase foundation
 
-`src/lib/supabase.ts` creates a typed browser client on demand from `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`. It deliberately throws if the values are absent rather than embedding a fallback URL or key. `src/services/supabaseContentAdapters.ts` provides unused read adapters for published news and projects; the existing static services remain active until a later migration is approved.
+`src/lib/supabase.ts` creates one cached, typed browser client from `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`. It deliberately throws if the values are absent rather than embedding a fallback URL or key. `src/services/supabaseContentAdapters.ts` reads only published records. The existing services use these adapters when configured and populated, while retaining static data as a deliberate fallback until content migration is approved.
 
 The migration is `supabase/migrations/20260910000000_phase_1_backend_foundation.sql`. `src/types/database.ts` is the application database contract and should be regenerated from the Supabase CLI after deployed-schema changes.
 
@@ -37,10 +37,10 @@ No write policy is included in Phase 1: clients cannot create, edit, or delete c
 Copy `.env.example` locally and supply:
 
 - `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
 
-Only the browser-safe anonymous key belongs in Vite variables. Service-role credentials must never be exposed to the browser or committed. `.env`, `.env.local`, and related local variants are ignored by Git.
+Only the browser-safe publishable key belongs in Vite variables. Service-role credentials must never be exposed to the browser or committed. `.env`, `.env.local`, and related local variants are ignored by Git.
 
 ## Migration strategy and intentional deferrals
 
-Apply the migration to an empty or reviewed Supabase project first, provision administrators through trusted server-side tooling, then add validated content migration and backend-to-domain mappers. Static data, current routes, SEO, animations, visual design, sitemap generation, login UI, admin dashboard, CMS workflows, media migration, and contact-form delivery are intentionally unchanged in this phase.
+Apply the migration to an empty or reviewed Supabase project first, provision administrators through trusted server-side tooling, then add validated content migration. The sitemap remains static because Vite's build-time script cannot safely use browser credentials; Phase 2 should generate it from a trusted server-side source or Supabase export. The contact form remains a client-only success toast; persistence belongs to a later phase. Current routes, SEO, animations, visual design, login UI, admin dashboard, CMS workflows, media migration, and contact-form delivery are intentionally unchanged in this phase.
