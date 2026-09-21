@@ -2,7 +2,11 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/types/database";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabasePublishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+let client: SupabaseClient<Database> | undefined;
+
+/** True only when the browser-safe public project settings are available. */
+export const isSupabaseConfigured = Boolean(supabaseUrl && supabasePublishableKey);
 
 /**
  * Returns the browser-safe Supabase client when this deployment is configured.
@@ -12,17 +16,19 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
  * This keeps local/static previews working without shipping fallback credentials.
  */
 export const getSupabaseClient = (): SupabaseClient<Database> => {
-  if (!supabaseUrl || !supabaseAnonKey) {
+  if (!supabaseUrl || !supabasePublishableKey) {
     throw new Error(
-      "Supabase is not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY before using a Supabase adapter.",
+      "Supabase is not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY before using a Supabase adapter.",
     );
   }
 
-  return createClient<Database>(supabaseUrl, supabaseAnonKey, {
+  client ??= createClient<Database>(supabaseUrl, supabasePublishableKey, {
     auth: {
       persistSession: true,
       autoRefreshToken: true,
       detectSessionInUrl: true,
     },
   });
+
+  return client;
 };
