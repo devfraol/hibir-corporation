@@ -27,6 +27,12 @@ import NotFound from "./pages/NotFound";
 import ServiceDetail from "./pages/ServiceDetail";
 import NewsCategoryPage from "./pages/NewsCategoryPage";
 import { resolveRedirect } from "@/config/redirects";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { ProtectedAdminRoute } from "@/components/admin/ProtectedAdminRoute";
+import { AdminLayout } from "@/components/admin/AdminLayout";
+import AdminLogin from "@/pages/admin/AdminLogin";
+import AdminDashboard from "@/pages/admin/AdminDashboard";
+import AdminPlaceholder from "@/pages/admin/AdminPlaceholder";
 
 const queryClient = new QueryClient();
 
@@ -82,6 +88,30 @@ const AnimatedRoutes = () => {
   );
 };
 
+const PublicSite = () => <>
+  <ScrollProgress />
+  <LegacyRedirects />
+  <ScrollToTop />
+  <Navbar />
+  <AnimatedRoutes />
+  <Footer />
+</>;
+
+const ApplicationRoutes = () => <Routes>
+  <Route path="/admin/login" element={<AdminLogin />} />
+  <Route element={<ProtectedAdminRoute />}>
+    <Route path="/admin" element={<AdminLayout />}>
+      <Route index element={<AdminDashboard />} />
+      <Route path="news" element={<AdminPlaceholder />} />
+      <Route path="projects" element={<AdminPlaceholder />} />
+      <Route path="media" element={<AdminPlaceholder />} />
+      <Route path="company" element={<AdminPlaceholder />} />
+      <Route path="settings" element={<AdminPlaceholder />} />
+    </Route>
+  </Route>
+  <Route path="*" element={<PublicSite />} />
+</Routes>;
+
 const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
@@ -89,14 +119,11 @@ const App = () => (
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <Loader />
           <BrowserRouter>
-            <ScrollProgress />
-            <LegacyRedirects />
-            <ScrollToTop />
-            <Navbar />
-            <AnimatedRoutes />
-            <Footer />
+            <AuthProvider>
+              <Loader />
+              <ApplicationRoutes />
+            </AuthProvider>
           </BrowserRouter>
         </TooltipProvider>
       </ThemeProvider>
