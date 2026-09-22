@@ -1,7 +1,7 @@
 import { newsArticles } from "@/data/news";
-import { isSupabaseConfigured } from "@/lib/supabase";
+import { getSupabaseClient, isSupabaseConfigured } from "@/lib/supabase";
 import { fetchPublishedNewsRows } from "@/services/supabaseContentAdapters";
-import { NEWS_CATEGORIES, type NewsArticle, type NewsCategory, type NewsQuery, type Paginated } from "@/types/news";
+import { NEWS_CATEGORIES, type AdminNewsFilters, type CreateNewsInput, type NewsArticle, type NewsCategory, type NewsQuery, type Paginated, type UpdateNewsInput } from "@/types/news";
 import type { Database } from "@/types/database";
 
 /**
@@ -42,7 +42,67 @@ const toNewsArticle = (row: NewsRow): NewsArticle => ({
   status: row.status,
   featured: row.featured,
   readingMinutes: 1,
+  seoTitle: row.seo_title ?? undefined,
+  seoDescription: row.seo_description ?? undefined,
 });
+
+const requireSupabase = () => {
+  if (!isSupabaseConfigured) throw new Error("Supabase is not configured for administrator news management.");
+  return getSupabaseClient();
+};
+
+const toNewsPayload = (input: UpdateNewsInput) => ({
+  ...(input.title !== undefined && { title: input.title }),
+  ...(input.slug !== undefined && { slug: input.slug }),
+  ...(input.excerpt !== undefined && { excerpt: input.excerpt || null }),
+  ...(input.content !== undefined && { content: input.content }),
+  ...(input.category !== undefined && { category: input.category }),
+  ...(input.coverImage !== undefined && { cover_image: input.coverImage || null }),
+  ...(input.featured !== undefined && { featured: input.featured }),
+  ...(input.status !== undefined && { status: input.status }),
+  ...(input.publishedAt !== undefined && { published_at: input.publishedAt }),
+  ...(input.seoTitle !== undefined && { seo_title: input.seoTitle || null }),
+  ...(input.seoDescription !== undefined && { seo_description: input.seoDescription || null }),
+});
+
+/** Authenticated CMS reads. RLS controls whether the caller may see drafts. */
+export async function getAdminNews(filters: AdminNewsFilters = {}): Promise<NewsArticle[]> {
+  let query = requireSupabase().from("news_articles").select("*").order("updated_at", { ascending: false });
+  if (filters.status && filters.status !== "all") query = query.eq("status", filters.status);
+  if (filters.category && filters.category !== "all") query = query.eq("category", filters.category);
+  if (filters.featured !== undefined) query = query.eq("featured", filters.featured);
+  if (filters.search?.trim()) query = query.ilike("title", `%${filters.search.trim()}%`);
+  const { data, error } = await query;
+  if (error) throw error;
+  return data.map(toNewsArticle);
+}
+
+export async function getAdminNewsById(id: string): Promise<NewsArticle | null> {
+  const { data, error } = await requireSupabase().from("news_articles").select("*").eq("id", id).maybeSingle();
+  if (error) throw error;
+  return data ? toNewsArticle(data) : null;
+}
+
+export async function createNews(input: CreateNewsInput): Promise<NewsArticle> {
+  const { data, error } = await requireSupabase().from("news_articles").insert(toNewsPayload(input)).select("*").single();
+  if (error) throw error;
+  return toNewsArticle(data);
+}
+
+export async function updateNews(id: string, input: UpdateNewsInput): Promise<NewsArticle> {
+  const { data, error } = await requireSupabase().from("news_articles").update(toNewsPayload(input)).eq("id", id).select("*").single();
+  if (error) throw error;
+  return toNewsArticle(data);
+}
+
+export async function deleteNews(id: string): Promise<void> {
+  const { error } = await requireSupabase().from("news_articles").delete().eq("id", id);
+  if (error) throw error;
+}
+
+export const saveNewsDraft = (id: string, input: UpdateNewsInput) => updateNews(id, { ...input, status: "draft", publishedAt: null });
+export const archiveNews = (id: string) => updateNews(id, { status: "archived" });
+export const publishNews = (id: string) => updateNews(id, { status: "published", publishedAt: new Date().toISOString() });
 
 /**
  * Uses published Supabase records when configured and populated. Static records
