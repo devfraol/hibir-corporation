@@ -53,10 +53,12 @@ export interface NewsArticle {
 }
 
 export type NewsBlock =
-  | { type: "paragraph"; text: string }
-  | { type: "heading"; level: 2 | 3; text: string }
-  | { type: "list"; items: string[] }
-  | { type: "quote"; text: string; attribution?: string };
+  | { id?: string; type: "paragraph"; text: string }
+  | { id?: string; type: "heading"; level: 2 | 3; text: string }
+  | { id?: string; type: "list"; items: string[]; ordered?: boolean }
+  | { id?: string; type: "quote"; text: string; attribution?: string }
+  | { id?: string; type: "image"; url: string; alt: string; caption?: string }
+  | { id?: string; type: "link"; text: string; url: string };
 
 export interface NewsQuery {
   category?: NewsCategory | "All";

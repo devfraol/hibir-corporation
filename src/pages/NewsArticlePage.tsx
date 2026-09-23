@@ -60,8 +60,8 @@ const NewsArticlePage = () => {
   return (
     <main>
       <Seo
-        title={article.seoTitle ?? `${article.title} | Hibir Construction Corporation`}
-        description={article.seoDescription ?? article.excerpt}
+        title={article.seoTitle || `${article.title} | Hibir Construction Corporation`}
+        description={article.seoDescription || article.excerpt}
         path={`/news/${article.slug}`}
         image={article.featuredImage.url}
         type="article"

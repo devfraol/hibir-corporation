@@ -11,14 +11,20 @@ const Block = ({ block }: { block: NewsBlock }) => {
   switch (block.type) {
     case "heading":
       return block.level === 2 ? <h2>{block.text}</h2> : <h3>{block.text}</h3>;
-    case "list":
+    case "list": {
+      const List = block.ordered ? "ol" : "ul";
       return (
-        <ul>
+        <List>
           {block.items.map((item) => (
             <li key={item}>{item}</li>
           ))}
-        </ul>
+        </List>
       );
+    }
+    case "image":
+      return <figure><img src={block.url} alt={block.alt} loading="lazy" />{block.caption && <figcaption>{block.caption}</figcaption>}</figure>;
+    case "link":
+      return <p><a href={block.url} className="text-accent hover:underline" rel="noreferrer">{block.text || block.url}</a></p>;
     case "quote":
       return (
         <blockquote>
