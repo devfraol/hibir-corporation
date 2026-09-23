@@ -104,6 +104,20 @@ export const saveNewsDraft = (id: string, input: UpdateNewsInput) => updateNews(
 export const archiveNews = (id: string) => updateNews(id, { status: "archived" });
 export const publishNews = (id: string) => updateNews(id, { status: "published", publishedAt: new Date().toISOString() });
 
+/** Uploads public article imagery through the authenticated browser session. */
+export async function uploadNewsImage(articleId: string, file: File): Promise<string> {
+  const client = requireSupabase();
+  const extension = file.name.split(".").pop()?.toLowerCase() || "image";
+  const path = `news/${articleId}/${crypto.randomUUID()}.${extension}`;
+  const { error } = await client.storage.from("news-media").upload(path, file, {
+    contentType: file.type,
+    upsert: false,
+  });
+  if (error) throw error;
+  const { data } = client.storage.from("news-media").getPublicUrl(path);
+  return data.publicUrl;
+}
+
 /**
  * Uses published Supabase records when configured and populated. Static records
  * remain the deliberate fallback until the approved content import is complete.
