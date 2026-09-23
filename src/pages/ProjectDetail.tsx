@@ -8,7 +8,6 @@ import ProjectGallery from "@/components/projects/ProjectGallery";
 import { formatBirr, type Project } from "@/data/projects";
 import { getProjectBySlug, getRelatedProjects } from "@/services/projectService";
 import { getServicesForProjectCategory } from "@/data/services";
-import { newsArticles } from "@/data/news";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { absoluteUrl, SITE_URL } from "@/config/site";
 
@@ -71,15 +70,6 @@ const ProjectDetail = () => {
   ];
 
   const relatedServices = getServicesForProjectCategory(project.category);
-  const relatedNews = newsArticles
-    .filter(
-      (a) =>
-        a.status === "published" &&
-        (a.title.toLowerCase().includes(project.title.split("–")[0].toLowerCase().slice(0, 12)) ||
-          a.tags.some((t) => project.category.toLowerCase().includes(t.toLowerCase()))),
-    )
-    .slice(0, 3);
-
   const crumbs = [
     { name: "Home", path: "/" },
     { name: "Projects", path: "/projects" },
@@ -253,20 +243,7 @@ const ProjectDetail = () => {
               ))}
             </div>
           </div>
-          {relatedNews.length > 0 && (
-            <div>
-              <h2 className="font-display font-bold text-xl text-foreground mb-4">Latest Project Updates</h2>
-              <ul className="space-y-3">
-                {relatedNews.map((a) => (
-                  <li key={a.id}>
-                    <Link to={`/news/${a.slug}`} className="font-body text-sm text-muted-foreground hover:text-accent transition-colors">
-                      {a.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+
         </div>
       </AnimatedSection>
 

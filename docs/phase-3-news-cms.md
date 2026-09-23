@@ -51,3 +51,25 @@ The editor persists the Phase 3.1 SEO fields and provides a visual search-result
 ## Known limitations and Phase 3.3
 
 Upload progress is not displayed because the current Supabase browser upload API does not expose reliable progress callbacks. Public bucket objects cannot be automatically cleaned up until safe object ownership/reference tracking is introduced. Phase 3.3 should add a media library with ownership metadata, usage references, and carefully authorized cleanup.
+
+# Phase 3.3 — Production news, preview, and media library
+
+## Supabase-only public content
+
+Production public-news consumers now read `Supabase → newsService → UI` only. Static demo articles were removed, and an unconfigured or unavailable public client returns an empty collection rather than fabricated content. `/news` and category pages show a professional empty state; the home Latest News section hides when there are no published records. Draft and archived records remain excluded by the published adapter.
+
+The Vite sitemap deliberately contains only stable non-news routes. A browser-configured Supabase query is not safe or reliable in `prebuild`, so no article or category URLs are manufactured during builds. A future server-side/scheduled sitemap job can safely add published URLs.
+
+## Preview and rendering
+
+The editor preview renders `NewsDetail`, the same article-detail renderer used by `/news/:slug`, directly from local unsaved editor state. It is a dialog within the protected admin application, is labelled **PREVIEW — NOT PUBLISHED**, has no public URL or publishing side effect, and does not create indexable metadata. The shared renderer supports headings, paragraphs, images/captions, lists, quotes, and links.
+
+## Media library and policy
+
+`/admin/media` is a protected, non-destructive view of objects in the existing `news-media` bucket. It lists images, shows filename/date/size where Storage provides them, previews an image, and copies its public URL. The editor keeps its validated direct upload and URL fallback workflow. JPEG, PNG, and WebP are accepted up to 8 MB and use collision-resistant `news/{article-id}/{uuid}` paths (library uploads use the same `news/library` namespace).
+
+Migration `20260923100000_phase_3_3_news_media_library.sql` adds only administrator `SELECT` access for the library. Existing role-gated INSERT/UPDATE policies remain the write boundary; anonymous/public users receive no upload policy and no storage DELETE policy is introduced. No service-role credential is shipped in browser code. Media deletion remains intentionally unavailable: URLs can be shared across cover and content blocks, so safe reference tracking is required before cleanup.
+
+## Known limitations and next step
+
+The media library does not yet return a selected image into a particular editor field; administrators can copy the URL as the deliberate fallback. Storage-object metadata is provider-dependent, so date and file size may be unavailable. Phase 3.4 should add a context-aware picker callback and server-side/scheduled sitemap generation, then consider reference tracking before any deletion feature.

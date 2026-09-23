@@ -18,7 +18,8 @@ const NewsArticlePage = () => {
     let cancelled = false;
     setState("loading");
     (async () => {
-      const found = await getNewsBySlug(slug);
+      let found: NewsArticle | null;
+      try { found = await getNewsBySlug(slug); } catch { found = null; }
       if (cancelled) return;
       if (!found) {
         setState("missing");

@@ -7,8 +7,6 @@ import { resolve } from "path";
 import { SITE_URL } from "../src/config/site";
 import { services } from "../src/data/services";
 import { projects } from "../src/data/projects";
-import { newsArticles } from "../src/data/news";
-import { NEWS_CATEGORIES } from "../src/types/news";
 
 interface SitemapEntry {
   path: string;
@@ -45,22 +43,10 @@ const projectEntries: SitemapEntry[] = projects.map((p) => ({
   priority: "0.7",
 }));
 
-const newsEntries: SitemapEntry[] = newsArticles
-  .filter((a) => a.status === "published")
-  .map((a) => ({
-    path: `/news/${a.slug}`,
-    lastmod: (a.updatedAt ?? a.publishedAt)?.slice(0, 10),
-    changefreq: "monthly",
-    priority: "0.7",
-  }));
-
-const categoryEntries: SitemapEntry[] = NEWS_CATEGORIES.filter((c) =>
-  newsArticles.some((a) => a.status === "published" && a.category === c),
-).map((c) => ({
-  path: `/news/category/${categorySlug(c)}`,
-  changefreq: "weekly",
-  priority: "0.6",
-}));
+// News URLs are intentionally omitted from this build-time sitemap. The browser Supabase client
+// must not be used during Vite builds; deploy a server-side sitemap job for published news URLs.
+const newsEntries: SitemapEntry[] = [];
+const categoryEntries: SitemapEntry[] = [];
 
 const entries = [
   ...staticEntries,
