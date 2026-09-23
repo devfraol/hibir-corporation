@@ -20,4 +20,4 @@ Disallow: /*?utm_
 Disallow: /*?sort=
 Disallow: /*?filter=
 
-Sitemap: https://hibir-visions.lovable.app/sitemap.xml
+Sitemap: https://hibir-visions.lovable.app/api/sitemap.xml
