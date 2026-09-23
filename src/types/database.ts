@@ -20,9 +20,9 @@ export interface Database {
         Relationships: [];
       };
       news_articles: {
-        Row: Row<{ id: string; title: string; slug: string; excerpt: string | null; content: unknown; category: string | null; featured: boolean; status: ArticleStatus; cover_image: string | null; author_id: string | null; published_at: string | null; created_at: string; updated_at: string }>;
-        Insert: Insert<{ id: string; title: string; slug: string; excerpt?: string | null; content?: unknown; category?: string | null; featured?: boolean; status?: ArticleStatus; cover_image?: string | null; author_id?: string | null; published_at?: string | null; created_at?: string; updated_at?: string }>;
-        Update: Update<{ title: string; slug: string; excerpt: string | null; content: unknown; category: string | null; featured: boolean; status: ArticleStatus; cover_image: string | null; author_id: string | null; published_at: string | null; updated_at: string }>;
+        Row: Row<{ id: string; title: string; slug: string; excerpt: string | null; content: unknown; category: string | null; featured: boolean; status: ArticleStatus; cover_image: string | null; author_id: string | null; published_at: string | null; seo_title: string | null; seo_description: string | null; created_at: string; updated_at: string }>;
+        Insert: Insert<{ id: string; title: string; slug: string; excerpt?: string | null; content?: unknown; category?: string | null; featured?: boolean; status?: ArticleStatus; cover_image?: string | null; author_id?: string | null; published_at?: string | null; seo_title?: string | null; seo_description?: string | null; created_at?: string; updated_at?: string }>;
+        Update: Update<{ title: string; slug: string; excerpt: string | null; content: unknown; category: string | null; featured: boolean; status: ArticleStatus; cover_image: string | null; author_id: string | null; published_at: string | null; seo_title: string | null; seo_description: string | null; updated_at: string }>;
         Relationships: [];
       };
       projects: {

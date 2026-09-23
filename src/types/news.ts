@@ -10,7 +10,8 @@ export const NEWS_CATEGORIES = [
 
 export type NewsCategory = (typeof NEWS_CATEGORIES)[number];
 
-export type NewsStatus = "draft" | "scheduled" | "published" | "archived";
+/** The states supported by the persisted `article_status` database enum. */
+export type NewsStatus = "draft" | "published" | "archived";
 
 export interface NewsAuthor {
   id: string;
@@ -63,6 +64,30 @@ export interface NewsQuery {
   page?: number;
   pageSize?: number;
 }
+
+export interface AdminNewsFilters {
+  search?: string;
+  status?: NewsStatus | "all";
+  category?: NewsCategory | "all";
+  featured?: boolean;
+}
+
+/** Values an administrator may provide when creating a newsroom article. */
+export interface CreateNewsInput {
+  title: string;
+  slug: string;
+  excerpt?: string;
+  content?: NewsBlock[];
+  category?: NewsCategory;
+  coverImage?: string;
+  featured?: boolean;
+  status?: NewsStatus;
+  publishedAt?: string | null;
+  seoTitle?: string;
+  seoDescription?: string;
+}
+
+export type UpdateNewsInput = Partial<CreateNewsInput>;
 
 export interface Paginated<T> {
   items: T[];

@@ -33,6 +33,8 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import AdminLogin from "@/pages/admin/AdminLogin";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import AdminPlaceholder from "@/pages/admin/AdminPlaceholder";
+import AdminNews from "@/pages/admin/AdminNews";
+import AdminNewsEditor from "@/pages/admin/AdminNewsEditor";
 
 const queryClient = new QueryClient();
 
@@ -102,7 +104,9 @@ const ApplicationRoutes = () => <Routes>
   <Route element={<ProtectedAdminRoute />}>
     <Route path="/admin" element={<AdminLayout />}>
       <Route index element={<AdminDashboard />} />
-      <Route path="news" element={<AdminPlaceholder />} />
+      <Route path="news" element={<AdminNews />} />
+      <Route path="news/new" element={<AdminNewsEditor />} />
+      <Route path="news/:id/edit" element={<AdminNewsEditor />} />
       <Route path="projects" element={<AdminPlaceholder />} />
       <Route path="media" element={<AdminPlaceholder />} />
       <Route path="company" element={<AdminPlaceholder />} />
