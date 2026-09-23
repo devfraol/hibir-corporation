@@ -6,7 +6,6 @@ import AnimatedSection from "@/components/AnimatedSection";
 import NotFound from "@/pages/NotFound";
 import { getServiceBySlug, getServicesBySlugs } from "@/data/services";
 import { projects, formatBirr } from "@/data/projects";
-import { newsArticles } from "@/data/news";
 import { absoluteUrl, companyData, SITE_URL } from "@/config/site";
 
 const ServiceDetail = () => {
@@ -18,15 +17,6 @@ const ServiceDetail = () => {
   const relatedProjects = projects
     .filter((p) => (service.projectCategories as string[]).includes(p.category))
     .slice(0, 4);
-
-  const relatedNews = newsArticles
-    .filter(
-      (a) =>
-        a.status === "published" &&
-        (a.tags.some((t) => service.newsTags.includes(t.toLowerCase())) ||
-          service.newsTags.includes(a.category.toLowerCase())),
-    )
-    .slice(0, 3);
 
   const relatedServices = getServicesBySlugs([...service.relatedServices]);
 
@@ -138,25 +128,7 @@ const ServiceDetail = () => {
         </section>
       )}
 
-      {relatedNews.length > 0 && (
-        <section className="section-padding border-t border-border">
-          <div className="container-custom max-w-4xl">
-            <span className="label-eyebrow">Newsroom</span>
-            <h2 className="section-title mt-3 mb-8">Related News</h2>
-            <ul className="space-y-4">
-              {relatedNews.map((a) => (
-                <li key={a.id}>
-                  <Link to={`/news/${a.slug}`} className="group block rounded-xl border border-border p-5 hover:border-accent/50 transition-colors">
-                    <span className="text-[11px] font-body tracking-[0.16em] uppercase text-accent">{a.category}</span>
-                    <h3 className="font-display font-semibold text-foreground mt-2 group-hover:text-accent transition-colors">{a.title}</h3>
-                    <p className="text-sm font-body text-muted-foreground mt-2">{a.excerpt}</p>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-      )}
+
 
       <section className="section-padding border-t border-border">
         <div className="container-custom max-w-4xl">

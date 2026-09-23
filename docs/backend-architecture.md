@@ -2,7 +2,7 @@
 
 ## Current application
 
-The React/Vite application currently reads newsroom records from `src/data/news.ts` through `src/services/newsService.ts`, and project records from `src/data/projects.ts` through `src/services/projectService.ts`. Both services are asynchronous already. Static company and service data remains local. React Query is configured at the application root, routes remain client-side, SEO uses React Helmet Async, and the sitemap script reads the same static data before development and production builds. The contact form is currently a client-only success toast; it does not send data to a backend.
+The React/Vite application reads public newsroom records from Supabase through `src/services/newsService.ts`; it intentionally returns no articles rather than demo content when Supabase is unavailable or empty. Project records remain available through `src/services/projectService.ts`, while static company and service data remains local. React Query is configured at the application root, routes remain client-side, SEO uses React Helmet Async, and the build sitemap contains only stable routes because browser Supabase access is intentionally not used during builds. The contact form is currently a client-only success toast; it does not send data to a backend.
 
 ## Phase 1 Supabase foundation
 

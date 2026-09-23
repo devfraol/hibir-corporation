@@ -1,4 +1,3 @@
-import { newsArticles } from "@/data/news";
 import { getSupabaseClient, isSupabaseConfigured } from "@/lib/supabase";
 import { fetchPublishedNewsRows } from "@/services/supabaseContentAdapters";
 import { NEWS_CATEGORIES, type AdminNewsFilters, type CreateNewsInput, type NewsArticle, type NewsCategory, type NewsQuery, type Paginated, type UpdateNewsInput } from "@/types/news";
@@ -14,11 +13,6 @@ import type { Database } from "@/types/database";
 
 const DEFAULT_PAGE_SIZE = 6;
 type NewsRow = Database["public"]["Tables"]["news_articles"]["Row"];
-
-const published = () =>
-  newsArticles
-    .filter((a) => a.status === "published")
-    .sort((a, b) => +new Date(b.publishedAt) - +new Date(a.publishedAt));
 
 const isNewsCategory = (category: string | null): category is NewsCategory =>
   category !== null && NEWS_CATEGORIES.includes(category as NewsCategory);
@@ -118,21 +112,44 @@ export async function uploadNewsImage(articleId: string, file: File): Promise<st
   return data.publicUrl;
 }
 
-/**
- * Uses published Supabase records when configured and populated. Static records
- * remain the deliberate fallback until the approved content import is complete.
- */
+/** Public site reads are Supabase-only. Empty or unavailable content never falls back to demo records. */
 const getPublishedNews = async (): Promise<NewsArticle[]> => {
-  if (!isSupabaseConfigured) return published();
-
+  if (!isSupabaseConfigured) return [];
   try {
-    const rows = await fetchPublishedNewsRows();
-    return rows.length > 0 ? rows.map(toNewsArticle) : published();
+    return (await fetchPublishedNewsRows()).map(toNewsArticle);
   } catch (error) {
-    console.warn("Unable to load published news from Supabase; using static fallback.", error);
-    return published();
+    console.warn("Unable to load published news from Supabase.", error);
+    return [];
   }
 };
+
+export interface MediaAsset {
+  name: string;
+  path: string;
+  url: string;
+  createdAt?: string;
+  size?: number;
+}
+
+/** Lists only the existing news-media objects; no separate media records are required. */
+export async function getNewsMedia(): Promise<MediaAsset[]> {
+  const client = requireSupabase();
+  const { data, error } = await client.storage.from("news-media").list("news", { limit: 1000, sortBy: { column: "created_at", order: "desc" } });
+  if (error) throw error;
+  const assets: MediaAsset[] = [];
+  for (const folder of data) {
+    if (!folder.id) {
+      const { data: files, error: filesError } = await client.storage.from("news-media").list(`news/${folder.name}`, { limit: 1000, sortBy: { column: "created_at", order: "desc" } });
+      if (filesError) throw filesError;
+      for (const file of files) {
+        if (!file.id) continue;
+        const path = `news/${folder.name}/${file.name}`;
+        assets.push({ name: file.name, path, url: client.storage.from("news-media").getPublicUrl(path).data.publicUrl, createdAt: file.created_at, size: file.metadata?.size });
+      }
+    }
+  }
+  return assets;
+}
 
 const paginate = <T,>(items: T[], page: number, pageSize: number): Paginated<T> => ({
   items: items.slice(0, page * pageSize),

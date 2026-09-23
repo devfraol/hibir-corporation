@@ -120,7 +120,7 @@ const News = () => {
 
           <NewsGrid
             articles={latest}
-            emptyMessage="Try a different category or search term — new stories are published regularly."
+            emptyMessage={totalPublished === 0 ? "No news available at the moment." : "Try a different category or search term — new stories are published regularly."}
           />
 
           {total > 0 && (
