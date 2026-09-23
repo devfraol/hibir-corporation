@@ -126,9 +126,11 @@ const getPublishedNews = async (): Promise<NewsArticle[]> => {
 export interface MediaAsset {
   name: string;
   path: string;
-  url: string;
+  /** Public URL retained because existing articles persist media URLs. */
+  publicUrl: string;
   createdAt?: string;
   size?: number;
+  contentType?: string;
 }
 
 /** Lists only the existing news-media objects; no separate media records are required. */
@@ -144,11 +146,36 @@ export async function getNewsMedia(): Promise<MediaAsset[]> {
       for (const file of files) {
         if (!file.id) continue;
         const path = `news/${folder.name}/${file.name}`;
-        assets.push({ name: file.name, path, url: client.storage.from("news-media").getPublicUrl(path).data.publicUrl, createdAt: file.created_at, size: file.metadata?.size });
+        assets.push({ name: file.name, path, publicUrl: client.storage.from("news-media").getPublicUrl(path).data.publicUrl, createdAt: file.created_at, size: file.metadata?.size, contentType: file.metadata?.mimetype });
       }
     }
   }
   return assets;
+}
+
+export interface MediaUsage {
+  title: string;
+  slug: string;
+}
+
+const referencesAsset = (value: unknown, asset: MediaAsset) =>
+  typeof value === "string" && (value === asset.path || value === asset.publicUrl || value.includes(asset.path));
+
+/** Checks persisted news records, including drafts, before a storage object is removed. */
+export async function getNewsMediaUsage(asset: MediaAsset): Promise<MediaUsage[]> {
+  const { data, error } = await requireSupabase().from("news_articles").select("title, slug, cover_image, content");
+  if (error) throw error;
+  return data
+    .filter((article) => referencesAsset(article.cover_image, asset) || JSON.stringify(article.content).includes(asset.path) || JSON.stringify(article.content).includes(asset.publicUrl))
+    .map(({ title, slug }) => ({ title, slug }));
+}
+
+/** RLS permits this only to authenticated newsroom administrators. Call usage check first. */
+export async function deleteNewsMedia(asset: MediaAsset): Promise<void> {
+  const usage = await getNewsMediaUsage(asset);
+  if (usage.length) throw new Error(`This image is used by ${usage.map((article) => article.title).join(", ")}.`);
+  const { error } = await requireSupabase().storage.from("news-media").remove([asset.path]);
+  if (error) throw error;
 }
 
 const paginate = <T,>(items: T[], page: number, pageSize: number): Paginated<T> => ({

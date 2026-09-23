@@ -73,3 +73,21 @@ Migration `20260923100000_phase_3_3_news_media_library.sql` adds only administra
 ## Known limitations and next step
 
 The media library does not yet return a selected image into a particular editor field; administrators can copy the URL as the deliberate fallback. Storage-object metadata is provider-dependent, so date and file size may be unavailable. Phase 3.4 should add a context-aware picker callback and server-side/scheduled sitemap generation, then consider reference tracking before any deletion feature.
+
+## Phase 3.4: production hardening
+
+### Media selection and deletion
+
+`MediaPicker` is a reusable, single-select dialog used by the News Editor for cover images and image blocks. It lists authenticated `news-media` objects, supports filename search and upload, exposes upload date where Storage provides it, and returns the selected image without URL copy/paste. The stored article value remains the public URL for backward compatibility with existing articles.
+
+The Media Library checks every persisted `news_articles` record (drafts, published records, and archived records) before deletion. It compares both cover images and serialized image blocks with the Storage path and its public URL. Referenced files display the titles that use them and are never removed. Unreferenced media needs an explicit permanent-deletion confirmation. The Phase 3.4 additive migration grants `DELETE` only to authenticated active newsroom roles; anonymous upload and delete access remains unavailable.
+
+### Sitemap and robots
+
+`/api/sitemap.xml` is a Vercel serverless endpoint. It emits the public static routes and, when Vercel has server-only `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` configured, published News slug URLs only. It never runs during the Vite build; the build-time `public/sitemap.xml` remains a static fallback. `robots.txt` advertises the dynamic endpoint.
+
+Set `SITE_URL` (if the production domain changes), `SUPABASE_URL`, and `SUPABASE_SERVICE_ROLE_KEY` in Vercel server environment variables only. Never use `VITE_` for the service-role key. Run the Phase 3.4 migration before enabling deletion in production.
+
+### Remaining limitations
+
+Storage does not expose a dedicated asset database, so reference inspection is intentionally limited to News cover images and JSON content blocks. Other future CMS modules must participate in reference checks before sharing this bucket. The server sitemap safely serves static URLs if its server-only Supabase configuration is absent, but published News URLs then require those Vercel variables to be configured.
