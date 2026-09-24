@@ -8,6 +8,8 @@ import { PROJECT_CATEGORIES, type AdminProjectFilters, type CreateProjectInput, 
 type ProjectRow = Database["public"]["Tables"]["projects"]["Row"];
 type ProjectImageRow = Database["public"]["Tables"]["project_images"]["Row"];
 export interface AdminProject extends ProjectRow { images: ProjectImageRow[]; }
+export type ProjectGalleryImage = ProjectImageRow;
+export type ProjectGalleryImageInput = Pick<ProjectImageRow, "image_url" | "alt_text" | "caption">;
 
 const isProjectCategory = (category: string | null): category is ProjectCategory =>
   category !== null && PROJECT_CATEGORIES.some((projectCategory) => projectCategory === category);
@@ -113,6 +115,34 @@ export async function uploadProjectImage(projectId: string, file: File): Promise
   if (error) throw error;
   return client.storage.from("project-media").getPublicUrl(path).data.publicUrl;
 }
+
+/** Project-gallery relationship methods. Removing a row never removes its storage object. */
+export async function getProjectGallery(projectId: string): Promise<ProjectGalleryImage[]> {
+  const { data, error } = await getSupabaseClient().from("project_images").select("*").eq("project_id", projectId).order("sort_order");
+  if (error) throw error;
+  return data;
+}
+
+export async function addProjectImages(projectId: string, images: ProjectGalleryImageInput[]): Promise<ProjectGalleryImage[]> {
+  const unique = images.filter((image, index) => images.findIndex((candidate) => candidate.image_url === image.image_url) === index);
+  if (unique.length !== images.length) throw new Error("The same media asset cannot be added to a project gallery more than once.");
+  if (!unique.length) return [];
+  const existing = await getProjectGallery(projectId);
+  const existingUrls = new Set(existing.map((image) => image.image_url));
+  const duplicates = unique.filter((image) => existingUrls.has(image.image_url));
+  if (duplicates.length) throw new Error("One or more selected images are already in this project gallery.");
+  const { data, error } = await getSupabaseClient().from("project_images").insert(unique.map((image, index) => ({ ...image, project_id: projectId, sort_order: existing.length + index }))).select("*");
+  if (error) throw error;
+  return data;
+}
+export const addProjectImage = (projectId: string, image: ProjectGalleryImageInput) => addProjectImages(projectId, [image]);
+export async function updateProjectGalleryImage(id: string, input: Pick<ProjectGalleryImageInput, "alt_text" | "caption">): Promise<ProjectGalleryImage> {
+  const { data, error } = await getSupabaseClient().from("project_images").update(input).eq("id", id).select("*").single(); if (error) throw error; return data;
+}
+export async function reorderProjectGallery(projectId: string, imageIds: string[]): Promise<void> {
+  const { error } = await getSupabaseClient().rpc("set_project_image_order", { target_project_id: projectId, ordered_image_ids: imageIds }); if (error) throw error;
+}
+export async function removeProjectGalleryImage(id: string): Promise<void> { const { error } = await getSupabaseClient().from("project_images").delete().eq("id", id); if (error) throw error; }
 
 /** Lists only project-media objects for the authenticated project editor. */
 export async function getProjectMedia(): Promise<MediaAsset[]> {

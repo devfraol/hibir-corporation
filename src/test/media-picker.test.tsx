@@ -19,4 +19,15 @@ describe("MediaPicker", () => {
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
     expect(openChange).toHaveBeenCalledWith(false);
   });
+  it("keeps News single-select while allowing Projects to select multiple assets", async () => {
+    const second = { ...asset, name: "road.png", path: "projects/library/road.png" };
+    service.getNewsMedia.mockResolvedValue([asset, second]);
+    const selected = vi.fn();
+    render(<MediaPicker open onOpenChange={vi.fn()} onSelect={selected} multiple mediaLabel="project" />);
+    await screen.findByText("road.png");
+    fireEvent.click(screen.getByRole("button", { name: /bridge.webp/i }));
+    fireEvent.click(screen.getByRole("button", { name: /road.png/i }));
+    fireEvent.click(screen.getByRole("button", { name: "Add selected images" }));
+    expect(selected).toHaveBeenCalledWith([asset, second]);
+  });
 });
