@@ -39,6 +39,7 @@ import AdminProjectPreview from "@/pages/admin/AdminProjectPreview";
 import AdminNews from "@/pages/admin/AdminNews";
 import AdminNewsEditor from "@/pages/admin/AdminNewsEditor";
 import AdminMedia from "@/pages/admin/AdminMedia";
+import AdminCompany from "@/pages/admin/AdminCompany";
 
 const queryClient = new QueryClient();
 
@@ -117,7 +118,7 @@ const ApplicationRoutes = () => <Routes>
       <Route path="projects/:id/edit" element={<AdminProjectEditor />} />
       <Route path="projects/:id/preview" element={<AdminProjectPreview />} />
       <Route path="media" element={<AdminMedia />} />
-      <Route path="company" element={<AdminPlaceholder />} />
+      <Route path="company" element={<AdminCompany />} />
       <Route path="settings" element={<AdminPlaceholder />} />
     </Route>
   </Route>

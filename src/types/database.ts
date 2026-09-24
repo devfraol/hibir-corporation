@@ -6,6 +6,7 @@ export type AdminRole = "super_admin" | "admin" | "editor";
 export type ArticleStatus = "draft" | "published" | "archived";
 export type ProjectPublicationStatus = "draft" | "published" | "archived";
 export type ProjectExecutionStatus = "Ongoing" | "Completed" | "Suspended" | "Terminated";
+export type CompanyPublicationStatus = "draft" | "published" | "archived";
 
 type Row<T> = T;
 type Insert<T> = Partial<T>;
@@ -38,6 +39,14 @@ export interface Database {
         Update: Update<{ image_url: string; alt_text: string | null; caption: string | null; sort_order: number }>;
         Relationships: [];
       };
+      company_content: { Row: Row<{ id: string; content_key: string; overview: string; vision: string; mission: string; objectives: string[]; duties: string[]; approach: string[]; ownership_accountability: string | null; head_office: string | null; seo_title: string | null; seo_description: string | null; status: CompanyPublicationStatus; created_at: string; updated_at: string }>; Insert: Insert<Record<string, unknown>>; Update: Update<Record<string, unknown>>; Relationships: []; };
+      company_history: { Row: Row<{ id: string; year_label: string; title: string; description: string; sort_order: number; status: CompanyPublicationStatus; created_at: string; updated_at: string }>; Insert: Insert<Record<string, unknown>>; Update: Update<Record<string, unknown>>; Relationships: []; };
+      company_values: { Row: Row<{ id: string; title: string; description: string; icon_key: string | null; sort_order: number; active: boolean; created_at: string; updated_at: string }>; Insert: Insert<Record<string, unknown>>; Update: Update<Record<string, unknown>>; Relationships: []; };
+      company_statistics: { Row: Row<{ id: string; label: string; display_value: string; description: string | null; sort_order: number; active: boolean; created_at: string; updated_at: string }>; Insert: Insert<Record<string, unknown>>; Update: Update<Record<string, unknown>>; Relationships: []; };
+      company_partners: { Row: Row<{ id: string; name: string; short_name: string | null; category: string | null; logo_url: string | null; website: string | null; description: string | null; sort_order: number; active: boolean; created_at: string; updated_at: string }>; Insert: Insert<Record<string, unknown>>; Update: Update<Record<string, unknown>>; Relationships: []; };
+      company_legal_entities: { Row: Row<{ id: string; name: string; document_type: string | null; reference: string | null; description: string | null; image_url: string | null; sort_order: number; active: boolean; created_at: string; updated_at: string }>; Insert: Insert<Record<string, unknown>>; Update: Update<Record<string, unknown>>; Relationships: []; };
+      company_certifications: { Row: Row<{ id: string; name: string; certification_type: string | null; issuing_organization: string | null; issue_date: string | null; description: string | null; image_url: string | null; sort_order: number; active: boolean; created_at: string; updated_at: string }>; Insert: Insert<Record<string, unknown>>; Update: Update<Record<string, unknown>>; Relationships: []; };
+      company_organization: { Row: Row<{ id: string; name: string | null; position: string; department: string | null; biography: string | null; photo_url: string | null; parent_position: string | null; sort_order: number; active: boolean; created_at: string; updated_at: string }>; Insert: Insert<Record<string, unknown>>; Update: Update<Record<string, unknown>>; Relationships: []; };
       media: {
         Row: Row<{ id: string; file_name: string; file_url: string; file_type: string; storage_path: string; alt_text: string | null; caption: string | null; uploaded_by: string | null; created_at: string }>;
         Insert: Insert<{ id: string; file_name: string; file_url: string; file_type: string; storage_path: string; alt_text?: string | null; caption?: string | null; uploaded_by?: string | null; created_at?: string }>;
@@ -47,7 +56,7 @@ export interface Database {
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
-    Enums: { admin_role: AdminRole; article_status: ArticleStatus; project_publication_status: ProjectPublicationStatus; project_execution_status: ProjectExecutionStatus };
+    Enums: { admin_role: AdminRole; article_status: ArticleStatus; project_publication_status: ProjectPublicationStatus; project_execution_status: ProjectExecutionStatus; company_publication_status: CompanyPublicationStatus };
     CompositeTypes: Record<string, never>;
   };
 }
