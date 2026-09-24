@@ -1,3 +1,17 @@
+# Phase 4.3 — Project Gallery and Media Management
+
+## Gallery architecture and workflow
+
+`project_images` remains the gallery relationship: `id`, `project_id`, `image_url`, optional `alt_text` and `caption`, `sort_order`, and `created_at`. Images are URLs to public objects in `project-media`, rather than records in a generic media table. `projectService.ts` is the sole project data-access layer and provides load, add-one/add-many, metadata update, complete-order save, and relationship removal operations.
+
+The editor stages gallery changes alongside project fields. Its Save/Publish actions persist the project then gallery relationships, metadata, and a complete order. A gallery persistence error is reported explicitly rather than being presented as a complete save. Existing image URLs are blocked in the client service and by the additive `(project_id, image_url)` unique index. Removal deletes only `project_images`; it never deletes a storage object or media library item.
+
+The shared MediaPicker now has an optional multi-select mode. News continues to use its default single-select `news-media` callbacks; Projects passes the existing `project-media` callbacks. JPEG, PNG, and WebP validation and the 8 MB limit remain shared client-side validation. Storage policies remain admin-only under `has_admin_role()`.
+
+The public published-project adapter already reads ordered gallery rows through public RLS (only rows whose project is published). It maps saved alt text first, then the project title. The static `src/data/projects.ts` catalogue remains the fallback when Supabase is unavailable or has no published records. The authenticated preview uses the same stored gallery even before publication.
+
+Order changes have keyboard-accessible Move up/Move down controls (rather than drag-only UI). Gallery cards provide labelled remove, alt-text, and optional caption controls. Public gallery images lazy-load and retain the existing accessible viewer. Known limitation: files remain in public project-media after relationships are removed; reference-counted storage cleanup is deliberately deferred to a later phase.
+
 # Phase 4.2 — Premium Project Editor
 
 ## Editor and field mapping
