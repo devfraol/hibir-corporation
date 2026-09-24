@@ -166,7 +166,7 @@ const Hero = () => {
 
       {/* Front — content */}
       <div className="relative flex-1 flex items-center container-custom w-full px-5 md:px-8 pt-28 pb-10 lg:pt-32">
-        <motion.div style={{ y: contentY, opacity: contentOpacity }} className="max-w-2xl">
+        <motion.div style={{ y: contentY, opacity: contentOpacity }} className="max-w-4xl">
           <motion.div {...reveal(0.1, 12)} className="flex items-center gap-3 mb-6">
             <span className="h-px w-8 bg-accent" aria-hidden />
             <span className="text-[10px] md:text-[11px] font-body font-semibold tracking-[0.3em] uppercase on-media">
@@ -174,7 +174,7 @@ const Hero = () => {
             </span>
           </motion.div>
 
-          <h1 className="font-display font-bold uppercase on-media leading-[1.02] tracking-[-0.025em] text-[2.1rem] sm:text-[2.6rem] md:text-[3.2rem] lg:text-[3.6rem] xl:text-[4.1rem]">
+          <h1 className="font-display font-bold uppercase on-media leading-[1.02] tracking-[-0.025em] text-[2.1rem] sm:text-[2.6rem] md:text-[3.2rem] lg:text-[3.4rem] xl:text-[3.9rem]">
             <motion.span {...reveal(0.3, 24)} className="block">
               Engineering Connections
             </motion.span>
@@ -227,13 +227,16 @@ const Hero = () => {
         </motion.dl>
       </div>
 
+      {/* Soft transition into next section */}
+      <div className="absolute inset-x-0 bottom-0 h-16 hero-fade pointer-events-none" aria-hidden />
+
       {/* Scroll cue */}
       <motion.div
         style={{ opacity: contentOpacity }}
         className="absolute bottom-4 left-1/2 -translate-x-1/2 hidden md:flex items-center gap-2 z-10"
         aria-hidden
       >
-        <span className="text-[9px] font-body tracking-[0.3em] uppercase on-media-muted">Scroll to explore</span>
+        <span className="text-[9px] font-body tracking-[0.3em] uppercase text-muted-foreground">Scroll to explore</span>
         <motion.span
           animate={reduced ? undefined : { y: [0, 4, 0] }}
           transition={{ repeat: Infinity, duration: 2.6, ease: "easeInOut" }}
@@ -243,8 +246,6 @@ const Hero = () => {
         </motion.span>
       </motion.div>
 
-      {/* Soft transition into next section */}
-      <div className="absolute inset-x-0 bottom-0 h-24 hero-fade pointer-events-none" aria-hidden />
     </section>
   );
 };
