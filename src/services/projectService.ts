@@ -133,7 +133,8 @@ export async function updateProjectGalleryImage(id: string, input: Pick<ProjectG
   const { data, error } = await getSupabaseClient().from("project_images").update(input).eq("id", id).select("*").single(); if (error) throw error; return data;
 }
 export async function reorderProjectGallery(projectId: string, imageIds: string[]): Promise<void> {
-  const { error } = await getSupabaseClient().rpc("set_project_image_order", { target_project_id: projectId, ordered_image_ids: imageIds }); if (error) throw error;
+  const rpc = getSupabaseClient().rpc as unknown as (fn: string, args: { target_project_id: string; ordered_image_ids: string[] }) => Promise<{ error: Error | null }>;
+  const { error } = await rpc.call(getSupabaseClient(), "set_project_image_order", { target_project_id: projectId, ordered_image_ids: imageIds }); if (error) throw error;
 }
 export async function removeProjectGalleryImage(id: string): Promise<void> { const { error } = await getSupabaseClient().from("project_images").delete().eq("id", id); if (error) throw error; }
 
