@@ -277,7 +277,7 @@
     background: var(--media-overlay-side);
   }
   .hero-vignette {
-    background: radial-gradient(120% 90% at 60% 40%, transparent 45%, hsl(var(--background) / 0.55) 100%);
+    background: radial-gradient(120% 90% at 60% 40%, transparent 45%, hsla(222, 50%, 4%, 0.6) 100%);
   }
   .hero-bloom {
     background: radial-gradient(40% 35% at 80% 30%, hsl(var(--accent) / 0.12), transparent 70%);
@@ -286,7 +286,7 @@
     background: linear-gradient(180deg, transparent, hsl(var(--background)));
   }
   .hero-strip {
-    background: hsl(var(--background) / 0.35);
+    background: hsla(222, 50%, 4%, 0.4);
     border: 1px solid hsl(var(--on-media) / 0.14);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
