@@ -33,6 +33,8 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import AdminLogin from "@/pages/admin/AdminLogin";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import AdminPlaceholder from "@/pages/admin/AdminPlaceholder";
+import AdminProjects from "@/pages/admin/AdminProjects";
+import AdminProjectEditor from "@/pages/admin/AdminProjectEditor";
 import AdminNews from "@/pages/admin/AdminNews";
 import AdminNewsEditor from "@/pages/admin/AdminNewsEditor";
 import AdminMedia from "@/pages/admin/AdminMedia";
@@ -109,7 +111,9 @@ const ApplicationRoutes = () => <Routes>
       <Route path="news/new" element={<AdminNewsEditor />} />
       <Route path="news/:id/edit" element={<AdminNewsEditor />} />
       <Route path="news/:id/preview" element={<AdminNewsEditor />} />
-      <Route path="projects" element={<AdminPlaceholder />} />
+      <Route path="projects" element={<AdminProjects />} />
+      <Route path="projects/new" element={<AdminProjectEditor />} />
+      <Route path="projects/:id/edit" element={<AdminProjectEditor />} />
       <Route path="media" element={<AdminMedia />} />
       <Route path="company" element={<AdminPlaceholder />} />
       <Route path="settings" element={<AdminPlaceholder />} />
