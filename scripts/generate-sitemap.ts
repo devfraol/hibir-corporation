@@ -6,7 +6,6 @@ import { writeFileSync } from "fs";
 import { resolve } from "path";
 import { SITE_URL } from "../src/config/site";
 import { services } from "../src/data/services";
-import { projects } from "../src/data/projects";
 
 interface SitemapEntry {
   path: string;
@@ -36,13 +35,6 @@ const serviceEntries: SitemapEntry[] = services.map((s) => ({
   priority: "0.8",
 }));
 
-const projectEntries: SitemapEntry[] = projects.map((p) => ({
-  path: `/projects/${p.slug}`,
-  lastmod: p.updatedAt?.slice(0, 10),
-  changefreq: "monthly",
-  priority: "0.7",
-}));
-
 // News URLs are intentionally omitted from this build-time sitemap. The browser Supabase client
 // must not be used during Vite builds; deploy a server-side sitemap job for published news URLs.
 const newsEntries: SitemapEntry[] = [];
@@ -51,7 +43,6 @@ const categoryEntries: SitemapEntry[] = [];
 const entries = [
   ...staticEntries,
   ...serviceEntries,
-  ...projectEntries,
   ...newsEntries,
   ...categoryEntries,
 ];

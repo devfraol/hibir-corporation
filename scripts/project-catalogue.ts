@@ -7,47 +7,7 @@ import machineryImg from "@/assets/capacity-machinery.jpg";
 import roadImg from "@/assets/road-construction.jpg";
 import safetyImg from "@/assets/safety-workers.jpg";
 
-export type ProjectStatus = "Ongoing" | "Completed" | "Suspended" | "Terminated";
-export type ProjectCategory =
-  | "Asphalt Road"
-  | "Gravel Road"
-  | "Bridge"
-  | "Urban Infrastructure"
-  | "Cobblestone";
-
-export interface ProjectImage {
-  url: string;
-  alt: string;
-  caption?: string;
-}
-
-/** Backend-ready project model. All values are sourced from the company profile. */
-export interface Project {
-  id: string;
-  title: string;
-  slug: string;
-  description: string;
-  client: string;
-  consultant?: string;
-  location: string;
-  contractValue?: number;
-  status?: ProjectStatus;
-  contractorRole?: string;
-  startDate?: string;
-  contractDate?: string;
-  completionDate?: string;
-  featuredImage: ProjectImage;
-  gallery: ProjectImage[];
-  category: ProjectCategory;
-  featured: boolean;
-  createdAt: string;
-  updatedAt: string;
-  /** Legacy aliases kept for existing components. */
-  budget: number;
-  image: string;
-  seoTitle?: string;
-  seoDescription?: string;
-}
+import type { Project, ProjectCategory, ProjectStatus } from "@/types/project";
 
 export const PROJECT_STATUSES: ProjectStatus[] = ["Completed", "Ongoing", "Suspended", "Terminated"];
 
@@ -101,7 +61,7 @@ const seeds: Seed[] = [
 const describe = (s: Seed) =>
   `${s.title} is a ${s.category.toLowerCase()} contract executed by Hibir Construction Corporation for ${s.client} in ${s.location}. The contract value is recorded at ${s.budget.toLocaleString()} Birr and the project is currently ${s.status.toLowerCase()} under the corporation's GC-1 general contractor licence.`;
 
-export const projects: Project[] = seeds.map((s, i) => ({
+export const projectCatalogue: Project[] = seeds.map((s, i) => ({
   id: `prj-${String(i + 1).padStart(3, "0")}`,
   title: s.title,
   slug: slugify(s.title),
@@ -124,9 +84,3 @@ export const projects: Project[] = seeds.map((s, i) => ({
   image: s.image,
 }));
 
-export const formatBirr = (value: number | undefined) => {
-  if (value === undefined) return "Not disclosed";
-  if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(2)}B Birr`;
-  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(0)}M Birr`;
-  return `${value.toLocaleString()} Birr`;
-};

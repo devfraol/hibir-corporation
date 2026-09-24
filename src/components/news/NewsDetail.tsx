@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, ChevronRight, Link2, Linkedin, Twitter, Facebook, Check } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import type { NewsArticle, NewsBlock } from "@/types/news";
 import { formatNewsDate } from "@/services/newsService";
-import { projects } from "@/data/projects";
+import { getProjects } from "@/services/projectService";
+import type { Project } from "@/types/project";
 import { services } from "@/data/services";
 
 const Block = ({ block }: { block: NewsBlock }) => {
@@ -41,6 +42,8 @@ const Block = ({ block }: { block: NewsBlock }) => {
 
 const NewsDetail = ({ article }: { article: NewsArticle }) => {
   const [copied, setCopied] = useState(false);
+  const [projects, setProjects] = useState<Project[]>([]);
+  useEffect(() => { void getProjects().then(setProjects).catch(() => setProjects([])); }, []);
   const shareUrl = typeof window !== "undefined" ? window.location.href : `/news/${article.slug}`;
 
   const copyLink = async () => {

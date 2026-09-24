@@ -5,7 +5,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import Seo from "@/components/Seo";
 import AnimatedSection from "@/components/AnimatedSection";
 import ProjectGallery from "@/components/projects/ProjectGallery";
-import type { Project } from "@/data/projects";
+import type { Project } from "@/types/project";
 import { getProjectBySlug, getRelatedProjects } from "@/services/projectService";
 import { getServicesForProjectCategory } from "@/data/services";
 import Breadcrumbs from "@/components/Breadcrumbs";

@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
-import { formatBirr, type Project } from "@/data/projects";
+import { formatBirr } from "@/lib/formatBirr";
+import type { Project } from "@/types/project";
 
 const FeaturedProject = ({ project }: { project: Project }) => {
   const reduced = useReducedMotion();

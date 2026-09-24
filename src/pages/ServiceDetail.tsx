@@ -1,22 +1,25 @@
 import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import Seo from "@/components/Seo";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import AnimatedSection from "@/components/AnimatedSection";
 import NotFound from "@/pages/NotFound";
 import { getServiceBySlug, getServicesBySlugs } from "@/data/services";
-import { projects, formatBirr } from "@/data/projects";
+import { formatBirr } from "@/lib/formatBirr";
+import { getProjects } from "@/services/projectService";
+import type { Project } from "@/types/project";
 import { absoluteUrl, companyData, SITE_URL } from "@/config/site";
 
 const ServiceDetail = () => {
   const { slug = "" } = useParams();
   const service = getServiceBySlug(slug);
 
-  if (!service) return <NotFound />;
+  const [projects, setProjects] = useState<Project[]>([]);
 
-  const relatedProjects = projects
-    .filter((p) => (service.projectCategories as string[]).includes(p.category))
-    .slice(0, 4);
+  useEffect(() => { void getProjects().then(setProjects).catch(() => setProjects([])); }, []);
+  if (!service) return <NotFound />;
+  const relatedProjects = projects.filter((p) => (service.projectCategories as string[]).includes(p.category)).slice(0, 4);
 
   const relatedServices = getServicesBySlugs([...service.relatedServices]);
 

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { motion } from "framer-motion";
-import type { ProjectImage } from "@/data/projects";
+import type { ProjectImage } from "@/types/project";
 
 const ProjectGallery = ({ images }: { images: ProjectImage[] }) => {
   const [open, setOpen] = useState<number | null>(null);
