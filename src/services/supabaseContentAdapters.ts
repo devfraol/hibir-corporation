@@ -32,9 +32,11 @@ export const fetchPublishedProjectRows = async (): Promise<PublishedProjectRow[]
 
   if (projectsError) throw projectsError;
 
+  if (!projects.length) return [];
   const { data: images, error: imagesError } = await supabase
     .from("project_images")
     .select("*")
+    .in("project_id", projects.map((project) => project.id))
     .order("sort_order", { ascending: true });
 
   if (imagesError) throw imagesError;

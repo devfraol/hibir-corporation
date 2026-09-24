@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import PageHero from "@/components/PageHero";
 import AnimatedSection from "@/components/AnimatedSection";
 import FeaturedProject from "@/components/projects/FeaturedProject";
-import { formatBirr, projects as staticProjects, type Project } from "@/data/projects";
+import { formatBirr, type Project } from "@/data/projects";
 import { getProjects } from "@/services/projectService";
 import { Link, useLocation } from "react-router-dom";
 import roadImg from "@/assets/road-construction.jpg";
@@ -14,7 +14,7 @@ import equipmentImg from "@/assets/equipment-fleet.jpg";
 import safetyImg from "@/assets/safety-workers.jpg";
 import Seo from "@/components/Seo";
 
-const filters = ["All", "Ongoing", "Completed"];
+const filters = ["All", "Ongoing", "Completed", "Suspended", "Terminated"];
 
 const hashToFilter: Record<string, string> = {
   "#completed": "Completed",
@@ -25,15 +25,19 @@ const hashToFilter: Record<string, string> = {
 
 const Projects = () => {
   const [filter, setFilter] = useState("All");
-  // Keep the approved static catalogue visible during the temporary CMS migration.
-  const [projects, setProjects] = useState<Project[]>(staticProjects);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
   const { hash } = useLocation();
 
   useEffect(() => {
     const f = hashToFilter[hash];
     if (f) setFilter(f);
   }, [hash]);
-  useEffect(() => { void getProjects().then(setProjects); }, []);
+  useEffect(() => {
+    let cancelled = false;
+    void getProjects().then((items) => { if (!cancelled) setProjects(items); }).catch(() => { if (!cancelled) setProjects([]); }).finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
 
   const filtered = filter === "All" ? projects : projects.filter(p => p.status === filter);
 
@@ -66,7 +70,7 @@ const Projects = () => {
       </section>
 
       <div id="featured" className="scroll-mt-24" />
-      <FeaturedProject project={projects.find((p) => p.featured) ?? projects[0]} />
+      {!loading && projects.length > 0 && <FeaturedProject project={projects.find((p) => p.featured) ?? projects[0]} />}
 
       <section className="section-padding pt-0">
         <div className="container-custom">
@@ -96,11 +100,11 @@ const Projects = () => {
               transition={{ duration: 0.4 }}
               className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
-              {filtered.map((p, i) => (
+              {loading ? <div className="col-span-full surface-card p-10 text-center text-muted-foreground">Loading projects…</div> : filtered.map((p, i) => (
                 <AnimatedSection key={p.id} delay={i * 0.05}>
                   <Link to={`/projects/${p.slug}`} className="group glass-card rounded-2xl overflow-hidden block hover:border-accent/40 transition-colors">
                     <div className="relative overflow-hidden h-56">
-                      <img src={p.image} alt={p.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+                      <img src={p.image} alt={p.featuredImage.alt} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
                       <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       <span className={`absolute top-4 right-4 px-3 py-1.5 rounded-lg text-xs font-body font-semibold backdrop-blur-sm ${
                         p.status === "Completed" ? "bg-green-500/15 text-green-400 border border-green-500/20" : "bg-accent/15 text-accent border border-accent/20"
@@ -111,6 +115,8 @@ const Projects = () => {
                     <div className="p-6">
                       <h3 className="font-display font-semibold text-lg mb-3 text-foreground">{p.title}</h3>
                       <div className="space-y-2 text-sm font-body text-muted-foreground">
+                        <p><span className="font-medium text-foreground/80">Category:</span> {p.category}</p>
+                        <p><span className="font-medium text-foreground/80">Location:</span> {p.location || "Not disclosed"}</p>
                         <p><span className="font-medium text-foreground/80">Client:</span> {p.client}</p>
                         {p.contractValue !== undefined && <p><span className="font-medium text-foreground/80">Contract Value:</span> <span className="text-accent font-semibold">{formatBirr(p.contractValue)}</span></p>}
                       </div>
@@ -120,6 +126,7 @@ const Projects = () => {
               ))}
             </motion.div>
           </AnimatePresence>
+          {!loading && filtered.length === 0 && <p className="mt-8 text-center font-body text-muted-foreground">No projects match this execution status.</p>}
         </div>
       </section>
     </main>
