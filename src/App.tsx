@@ -35,6 +35,7 @@ import AdminDashboard from "@/pages/admin/AdminDashboard";
 import AdminPlaceholder from "@/pages/admin/AdminPlaceholder";
 import AdminProjects from "@/pages/admin/AdminProjects";
 import AdminProjectEditor from "@/pages/admin/AdminProjectEditor";
+import AdminProjectPreview from "@/pages/admin/AdminProjectPreview";
 import AdminNews from "@/pages/admin/AdminNews";
 import AdminNewsEditor from "@/pages/admin/AdminNewsEditor";
 import AdminMedia from "@/pages/admin/AdminMedia";
@@ -114,6 +115,7 @@ const ApplicationRoutes = () => <Routes>
       <Route path="projects" element={<AdminProjects />} />
       <Route path="projects/new" element={<AdminProjectEditor />} />
       <Route path="projects/:id/edit" element={<AdminProjectEditor />} />
+      <Route path="projects/:id/preview" element={<AdminProjectPreview />} />
       <Route path="media" element={<AdminMedia />} />
       <Route path="company" element={<AdminPlaceholder />} />
       <Route path="settings" element={<AdminPlaceholder />} />

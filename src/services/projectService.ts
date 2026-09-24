@@ -2,6 +2,7 @@ import { projects, type Project, type ProjectStatus } from "@/data/projects";
 import { getSupabaseClient, isSupabaseConfigured } from "@/lib/supabase";
 import { fetchPublishedProjectRows, type PublishedProjectRow } from "@/services/supabaseContentAdapters";
 import type { Database } from "@/types/database";
+import type { MediaAsset } from "@/services/newsService";
 import { PROJECT_CATEGORIES, type AdminProjectFilters, type CreateProjectInput, type ProjectCategory, type ProjectPublicationStatus, type UpdateProjectInput } from "@/types/projects";
 
 type ProjectRow = Database["public"]["Tables"]["projects"]["Row"];
@@ -40,6 +41,8 @@ const toProject = (row: PublishedProjectRow): Project => {
     updatedAt: row.updated_at,
     budget: 0,
     image: coverImage,
+    seoTitle: row.seo_title ?? undefined,
+    seoDescription: row.seo_description ?? undefined,
   };
 };
 
@@ -91,7 +94,44 @@ const toRow = (input: UpdateProjectInput) => ({
   ...(input.featured !== undefined && { featured: input.featured }), ...(input.status !== undefined && { status: input.status }),
   ...(input.projectStatus !== undefined && { project_status: input.projectStatus }), ...(input.contractDate !== undefined && { contract_date: input.contractDate || null }),
   ...(input.completionDate !== undefined && { completion_date: input.completionDate || null }),
+  ...(input.seoTitle !== undefined && { seo_title: input.seoTitle || null }), ...(input.seoDescription !== undefined && { seo_description: input.seoDescription || null }),
 });
+
+export async function isProjectSlugAvailable(slug: string, excludingId?: string): Promise<boolean> {
+  let query = getSupabaseClient().from("projects").select("id").eq("slug", slug);
+  if (excludingId) query = query.neq("id", excludingId);
+  const { data, error } = await query.maybeSingle();
+  if (error) throw error;
+  return !data;
+}
+
+export async function uploadProjectImage(projectId: string, file: File): Promise<string> {
+  const client = getSupabaseClient();
+  const extension = file.name.split(".").pop()?.toLowerCase() || "image";
+  const path = `projects/${projectId}/${crypto.randomUUID()}.${extension}`;
+  const { error } = await client.storage.from("project-media").upload(path, file, { contentType: file.type, upsert: false });
+  if (error) throw error;
+  return client.storage.from("project-media").getPublicUrl(path).data.publicUrl;
+}
+
+/** Lists only project-media objects for the authenticated project editor. */
+export async function getProjectMedia(): Promise<MediaAsset[]> {
+  const client = getSupabaseClient();
+  const { data: folders, error } = await client.storage.from("project-media").list("projects", { limit: 1000, sortBy: { column: "created_at", order: "desc" } });
+  if (error) throw error;
+  const assets: MediaAsset[] = [];
+  for (const folder of folders) {
+    if (folder.id) continue;
+    const { data: files, error: filesError } = await client.storage.from("project-media").list(`projects/${folder.name}`, { limit: 1000, sortBy: { column: "created_at", order: "desc" } });
+    if (filesError) throw filesError;
+    for (const file of files) {
+      if (!file.id) continue;
+      const path = `projects/${folder.name}/${file.name}`;
+      assets.push({ name: file.name, path, publicUrl: client.storage.from("project-media").getPublicUrl(path).data.publicUrl, createdAt: file.created_at, size: file.metadata?.size, contentType: file.metadata?.mimetype });
+    }
+  }
+  return assets;
+}
 
 export async function createProject(input: CreateProjectInput): Promise<AdminProject> {
   const { data, error } = await getSupabaseClient().from("projects").insert(toRow(input)).select("*").single();

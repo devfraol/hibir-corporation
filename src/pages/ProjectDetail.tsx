@@ -76,12 +76,12 @@ const ProjectDetail = () => {
     { name: project.title, path: `/projects/${project.slug}` },
   ];
 
-  const seoDescription = `${project.title} — ${project.category.toLowerCase()} project in ${project.location} for ${project.client}, delivered by Hibir Construction Corporation as ${project.contractorRole}. Contract value ${formatBirr(project.contractValue)}. Status: ${project.status}.`;
+  const seoDescription = project.seoDescription || project.description || `${project.title} — ${project.category.toLowerCase()} project in ${project.location}.`;
 
   return (
     <main>
       <Seo
-        title={`${project.title} | Hibir Construction Corporation`}
+        title={`${project.seoTitle || project.title} | Hibir Construction Corporation`}
         description={seoDescription.slice(0, 300)}
         path={`/projects/${project.slug}`}
         image={project.featuredImage.url}
