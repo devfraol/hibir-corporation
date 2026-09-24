@@ -1,23 +1,21 @@
-# Phase 4.1 — Projects CMS foundation
+# Phase 4.2 — Premium Project Editor
 
-## Model and flow
+## Editor and field mapping
 
-`projects.status` is the publication status (`draft`, `published`, or `archived`) and exclusively controls public visibility. The additive `projects.project_status` enum independently records execution lifecycle (`Ongoing`, `Completed`, `Suspended`, `Terminated`). Categories remain the established Asphalt Road, Gravel Road, Bridge, Urban Infrastructure, and Cobblestone values.
+The protected editor uses focused Information, Status, Timeline, Cover Image, Description, SEO, and Publishing sections. `projects.status` is the independent publication control (`draft`, `published`, `archived`); `projects.project_status` retains the execution state (`Ongoing`, `Completed`, `Suspended`, `Terminated`). Categories remain the existing approved category set. Client and consultant remain optional text fields, and contract/completion dates map directly to their existing date columns.
 
-Public reads flow through `projectService` → published Supabase rows → public pages. Until approved Hibir records are migrated, an empty or unavailable Supabase response explicitly falls back to `src/data/projects.ts`; that source is retained unchanged. CMS records never fabricate contract value or contractor role: those remain static-fallback-only values and are omitted in the public card where unavailable.
+Draft saves are intentionally permissive. Publishing requires title, URL-safe slug, description, category, and location. Client and cover image are deliberately optional because the public renderer already handles missing values and approved project records may not have them. Completion cannot precede contract date; completion is optional for ongoing projects. A manually edited slug is not overwritten and an authenticated uniqueness check runs before saving.
 
-Admin routes are `/admin/projects`, `/admin/projects/new`, and `/admin/projects/:id/edit`, inside the existing protected admin layout. The same `projectService` provides admin list, CRUD, draft, publish, and archive operations. RLS is the authorization boundary.
+## SEO, cover media, and preview
 
-## Images and media
+The additive Phase 4.2 migration adds optional `seo_title` and `seo_description`. Public detail SEO uses those values when present, otherwise title and description; the cover image is the OG image and the existing site default remains the fallback. The editor displays an informational search-result preview.
 
-`project_images` remains a child relationship and is returned by both public and admin service reads. The database cascade removes image **rows** with a deleted project. Storage objects in the public `project-media` bucket are intentionally not deleted automatically because safe reference tracking has not been implemented. Phase 4.1 supports a cover-image URL; gallery and upload/library management are Phase 4.3 work.
+Cover images use the existing shared `MediaPicker`, parameterized with project-only list/upload callbacks, so News remains on `news-media` and Projects uses only `project-media`. JPEG, PNG, and WebP use the shared 8 MB limit. Replacing/removing a cover clears only `projects.cover_image`; objects are intentionally retained until Phase 4.3 can implement reference-safe cleanup. Normal project updates never touch `project_images`.
 
-## Security and migration
+`/admin/projects/:id/preview` is inside the existing protected admin route, reads an authenticated admin record, is explicitly labelled **PREVIEW — NOT PUBLISHED**, and sets `noindex`. It does not publish or alter status. Public project reads still query `status = 'published'` only.
 
-The Phase 4.1 migration adds execution status and grants `super_admin`, `admin`, and `editor` project read/write access via `has_admin_role()`. Existing public policies still allow only published projects and images belonging to published projects. No public write policy or browser service-role key is added.
+## Transitional public data and next phase
 
-Apply the migration with the normal Supabase deployment workflow, then regenerate `src/types/database.ts` using the repository's Supabase CLI workflow before deployment. This repository type update mirrors that expected generated schema because deployment credentials are not present locally.
+Public reads remain Supabase published projects first, with `src/data/projects.ts` retained as the transitional fallback when Supabase is empty/unavailable. Draft and archived CMS rows never reach that fallback path. RLS remains the database authorization boundary via `has_admin_role()`; no service-role key or client role trust is introduced.
 
-## Limitations and Phase 4.2
-
-SEO title/description, canonical overrides, and OG-image fields are not in the project schema and should be introduced only in an approved additive Phase 4.2 migration. Contract values, contractor role, and start date also need explicit schema decisions. Phase 4.2 should approve/import the static Hibir dataset, verify fields and slugs, then remove the fallback only after production verification. Phase 4.3 should add safe project-media uploads and gallery editing.
+Apply `20260924010000_phase_4_2_project_editor.sql` through the normal Supabase migration workflow, then regenerate `src/types/database.ts` with the Supabase CLI in the deployment environment. Phase 4.3 should build gallery ordering/alt text/captions and reference-safe storage cleanup, without deleting the existing static catalogue until approved migration is complete.

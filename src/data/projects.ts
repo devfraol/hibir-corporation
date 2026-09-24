@@ -43,6 +43,8 @@ export interface Project {
   /** Legacy aliases kept for existing components. */
   budget: number;
   image: string;
+  seoTitle?: string;
+  seoDescription?: string;
 }
 
 export const PROJECT_STATUSES: ProjectStatus[] = ["Completed", "Ongoing", "Suspended", "Terminated"];
