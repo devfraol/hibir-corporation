@@ -5,6 +5,7 @@
 export type AdminRole = "super_admin" | "admin" | "editor";
 export type ArticleStatus = "draft" | "published" | "archived";
 export type ProjectPublicationStatus = "draft" | "published" | "archived";
+export type ProjectExecutionStatus = "Ongoing" | "Completed" | "Suspended" | "Terminated";
 
 type Row<T> = T;
 type Insert<T> = Partial<T>;
@@ -26,9 +27,9 @@ export interface Database {
         Relationships: [];
       };
       projects: {
-        Row: Row<{ id: string; title: string; slug: string; description: string | null; location: string | null; category: string | null; status: ProjectPublicationStatus; client: string | null; consultant: string | null; contract_date: string | null; completion_date: string | null; featured: boolean; cover_image: string | null; created_at: string; updated_at: string }>;
-        Insert: Insert<{ id: string; title: string; slug: string; description?: string | null; location?: string | null; category?: string | null; status?: ProjectPublicationStatus; client?: string | null; consultant?: string | null; contract_date?: string | null; completion_date?: string | null; featured?: boolean; cover_image?: string | null; created_at?: string; updated_at?: string }>;
-        Update: Update<{ title: string; slug: string; description: string | null; location: string |null; category: string | null; status: ProjectPublicationStatus; client: string | null; consultant: string | null; contract_date: string | null; completion_date: string | null; featured: boolean; cover_image: string | null; updated_at: string }>;
+        Row: Row<{ id: string; title: string; slug: string; description: string | null; location: string | null; category: string | null; status: ProjectPublicationStatus; project_status: ProjectExecutionStatus | null; client: string | null; consultant: string | null; contract_date: string | null; completion_date: string | null; featured: boolean; cover_image: string | null; created_at: string; updated_at: string }>;
+        Insert: Insert<{ id: string; title: string; slug: string; description?: string | null; location?: string | null; category?: string | null; status?: ProjectPublicationStatus; project_status?: ProjectExecutionStatus | null; client?: string | null; consultant?: string | null; contract_date?: string | null; completion_date?: string | null; featured?: boolean; cover_image?: string | null; created_at?: string; updated_at?: string }>;
+        Update: Update<{ title: string; slug: string; description: string | null; location: string |null; category: string | null; status: ProjectPublicationStatus; project_status: ProjectExecutionStatus | null; client: string | null; consultant: string | null; contract_date: string | null; completion_date: string | null; featured: boolean; cover_image: string | null; updated_at: string }>;
         Relationships: [];
       };
       project_images: {
@@ -46,7 +47,7 @@ export interface Database {
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
-    Enums: { admin_role: AdminRole; article_status: ArticleStatus; project_publication_status: ProjectPublicationStatus };
+    Enums: { admin_role: AdminRole; article_status: ArticleStatus; project_publication_status: ProjectPublicationStatus; project_execution_status: ProjectExecutionStatus };
     CompositeTypes: Record<string, never>;
   };
 }

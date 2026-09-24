@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import PageHero from "@/components/PageHero";
 import AnimatedSection from "@/components/AnimatedSection";
 import FeaturedProject from "@/components/projects/FeaturedProject";
-import { formatBirr, projects } from "@/data/projects";
+import { formatBirr, projects as staticProjects, type Project } from "@/data/projects";
+import { getProjects } from "@/services/projectService";
 import { Link, useLocation } from "react-router-dom";
 import roadImg from "@/assets/road-construction.jpg";
 import bridgeImg from "@/assets/bridge-construction.jpg";
@@ -24,12 +25,15 @@ const hashToFilter: Record<string, string> = {
 
 const Projects = () => {
   const [filter, setFilter] = useState("All");
+  // Keep the approved static catalogue visible during the temporary CMS migration.
+  const [projects, setProjects] = useState<Project[]>(staticProjects);
   const { hash } = useLocation();
 
   useEffect(() => {
     const f = hashToFilter[hash];
     if (f) setFilter(f);
   }, [hash]);
+  useEffect(() => { void getProjects().then(setProjects); }, []);
 
   const filtered = filter === "All" ? projects : projects.filter(p => p.status === filter);
 
@@ -101,14 +105,14 @@ const Projects = () => {
                       <span className={`absolute top-4 right-4 px-3 py-1.5 rounded-lg text-xs font-body font-semibold backdrop-blur-sm ${
                         p.status === "Completed" ? "bg-green-500/15 text-green-400 border border-green-500/20" : "bg-accent/15 text-accent border border-accent/20"
                       }`}>
-                        {p.status}
+                        {p.status ?? "Status not disclosed"}
                       </span>
                     </div>
                     <div className="p-6">
                       <h3 className="font-display font-semibold text-lg mb-3 text-foreground">{p.title}</h3>
                       <div className="space-y-2 text-sm font-body text-muted-foreground">
                         <p><span className="font-medium text-foreground/80">Client:</span> {p.client}</p>
-                        <p><span className="font-medium text-foreground/80">Contract Value:</span> <span className="text-accent font-semibold">{formatBirr(p.budget)}</span></p>
+                        {p.contractValue !== undefined && <p><span className="font-medium text-foreground/80">Contract Value:</span> <span className="text-accent font-semibold">{formatBirr(p.contractValue)}</span></p>}
                       </div>
                     </div>
                   </Link>
