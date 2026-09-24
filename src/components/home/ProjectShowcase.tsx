@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
-import { formatBirr, projects } from "@/data/projects";
+import { formatBirr } from "@/lib/formatBirr";
+import { getProjects } from "@/services/projectService";
+import type { Project } from "@/types/project";
 
-const featured = projects.slice(0, 6);
-
-const Panel = ({ project }: { project: (typeof featured)[number] }) => (
+const Panel = ({ project }: { project: Project }) => (
   <Link
     to={`/projects/${project.slug}`}
     className="group relative block shrink-0 w-[82vw] sm:w-[58vw] lg:w-[38vw] xl:w-[32vw] h-[62vh] max-h-[560px] rounded-3xl overflow-hidden border border-border transition-colors duration-500 hover:border-accent/60"
@@ -61,6 +61,9 @@ const ProjectShowcase = () => {
   const reduced = useReducedMotion();
   const [distance, setDistance] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [featured, setFeatured] = useState<Project[]>([]);
+
+  useEffect(() => { void getProjects().then((projects) => setFeatured(projects.filter((project) => project.featured).slice(0, 6))); }, []);
 
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 1024px)");

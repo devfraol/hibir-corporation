@@ -53,3 +53,39 @@ Project cards use URL-safe slugs and show category, location, optional client, e
 ## Known limitations and deployment
 
 Deploy the existing project and gallery migrations before publishing records. The fallback guard and dynamic sitemap require `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` only in the server/Vercel environment; the frontend continues to use the browser publishable key and RLS. When a configured CMS cannot reach the guard, a same-slug static detail fails closed rather than risk exposing stale content; deployments must configure the server credentials before creating same-slug draft/archived records. Static catalogue migration, static sitemap entries, and fallback removal are deliberately deferred to Phase 4.5.
+
+# Phase 4.5 — Catalogue migration and Supabase-only public projects
+
+## Audit and mapping
+
+The approved source catalogue was audited from `src/data/projects.ts` before removal. It contains **24** publicly rendered projects, 24 unique generated slugs, five categories (Asphalt Road, Gravel Road, Bridge, Urban Infrastructure, Cobblestone), and two execution statuses (Ongoing and Completed). There are no dates, consultants, SEO fields, captions, or publication flags in the source. Since every catalogue entry was publicly rendered, each is treated as an approved `published` record. One project is marked featured.
+
+| Source field | CMS field | Migration handling |
+| --- | --- | --- |
+| title, slug, client, location, category | same-named project columns | direct |
+| generated source description | description | preserved verbatim |
+| status | project_status | direct; publication status is independently `published` |
+| featured | featured | direct (false when absent) |
+| featured image | cover_image | uploaded to `project-media` then public URL stored |
+| gallery image order, alt text | project_images | ordered `sort_order`, source alt text preserved |
+| contract value/budget, contractor role, created/updated timestamps | none | not migrated; the schema has no approved destination |
+| dates, consultant, SEO title/description, captions | columns exist where applicable | null because the source has no values |
+
+All eight source images are local imported JPEG assets. The importer uploads each distinct asset once to `project-media/migration/phase-4-5/` using a server-side service-role environment, and assigns the resulting public URLs to cover/gallery relationships. It never invents captions or image claims.
+
+## Safe importer and production workflow
+
+`scripts/migrate-project-catalogue.mjs` is a one-time, repeatable importer; `scripts/project-catalogue.ts` is its migration-only source snapshot and is not included by the production application. The importer validates fields, slug uniqueness, enums, dates, local image mapping, and reports matching/unexpected CMS rows before writes. It uses slug identity, never deletes records, and **skips existing slugs for manual review**, so it cannot silently overwrite production edits or insert duplicate identities.
+
+1. Apply the existing Phase 4.1–4.3 Supabase schema migrations and configure only the server shell with `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`.
+2. Run `node scripts/migrate-project-catalogue.mjs --dry-run` and review the report, including unexpected CMS records.
+3. Run `node scripts/migrate-project-catalogue.mjs --apply` only after the dry-run is accepted.
+4. Re-run `node scripts/migrate-project-catalogue.mjs --dry-run` to verify 24 source records, CMS slug presence, image order, and any intentionally retained unrelated CMS records. Use the public sitemap and admin Projects screen to validate published visibility, filters, metadata, and editability.
+
+No production migration was executed from this repository because deployment credentials are intentionally absent. The local dry run reports 24 valid records, zero duplicate slugs, zero validation/image/date issues, and cannot compare the remote CMS without those server-only environment variables.
+
+## Fallback removal and limitations
+
+`src/data/projects.ts`, its public-service fallback branches, legacy same-slug availability guard, and build-time static project sitemap entries are removed. Public UI now flows only through `projectService.ts` → published Supabase projects → ordered `project_images` → `project-media`; project cards referenced by Home, Services, and News also use that service. The dynamic `/api/sitemap.xml` remains the authoritative project sitemap and excludes draft/archived rows by querying `status = 'published'`.
+
+Known limitation: actual remote insertion, per-project public URL/SEO/sitemap/admin-editor checks require the configured Supabase deployment and must be completed through the workflow above. The migration source intentionally retains only the migration snapshot under `scripts/`; it is not a production fallback.

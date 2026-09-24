@@ -1,4 +1,4 @@
-import type { ProjectCategory } from "@/data/projects";
+import type { ProjectCategory } from "@/types/project";
 import type { ProjectExecutionStatus, ProjectPublicationStatus } from "@/types/database";
 
 export const PROJECT_CATEGORIES: readonly ProjectCategory[] = ["Asphalt Road", "Gravel Road", "Bridge", "Urban Infrastructure", "Cobblestone"];

@@ -4,7 +4,7 @@ import heroImg from "@/assets/hero-construction.jpg";
 import equipmentImg from "@/assets/equipment-fleet.jpg";
 import airportImg from "@/assets/airport-project.jpg";
 import safetyImg from "@/assets/safety-workers.jpg";
-import type { ProjectCategory } from "@/data/projects";
+import type { ProjectCategory } from "@/types/project";
 
 /** Backend-ready service model with dedicated SEO fields. */
 export interface Service {
