@@ -1,4 +1,294 @@
-import { useQuery } from "@tanstack/react-query";
-import { Calendar, Eye, Target } from "lucide-react";
-import PageHero from "@/components/PageHero"; import AnimatedSection from "@/components/AnimatedSection"; import DocumentGallery from "@/components/DocumentGallery"; import PartnersMarquee from "@/components/PartnersMarquee"; import Seo from "@/components/Seo"; import heroImg from "@/assets/hero-construction.jpg"; import { getCompanyBundle } from "@/services/companyService";
-export default function About(){const {data,isLoading}=useQuery({queryKey:["company","bundle"],queryFn:getCompanyBundle});const c=data?.content; const jsonLd=c?{"@context":"https://schema.org","@type":"Organization",name:"Hibir Construction Corporation",description:c.overview,url:window.location.origin,address:{"@type":"PostalAddress",addressLocality:"Bahir Dar",addressRegion:"Amhara Regional State",addressCountry:"ET"}}:undefined;return <main><Seo title={c?.seoTitle??"About Hibir Construction Corporation"} description={c?.seoDescription??"Company content is being prepared."} path="/about" breadcrumbs={[{name:"Home",path:"/"},{name:"About",path:"/about"}]} jsonLd={jsonLd}/><PageHero title="About Us" subtitle="Hibir Construction Corporation" image={heroImg}/>{isLoading?<div className="container-custom section-padding"><div className="h-80 animate-pulse rounded-xl bg-muted"/></div>:!c?<div className="container-custom section-padding text-center text-muted-foreground">Company information is currently unavailable.</div>:<><AnimatedSection className="section-padding"><div className="container-custom grid gap-12 md:grid-cols-2"><div><span className="label-eyebrow">Company Overview</span><h2 className="section-title mt-3">Who We Are</h2><p className="mt-6 whitespace-pre-line leading-relaxed text-muted-foreground">{c.overview}</p></div><div className="space-y-5"><article className="glass-card p-7"><Eye className="text-accent"/><h2 className="mt-3 font-display text-xl">Our Vision</h2><p className="mt-3 italic text-muted-foreground">“{c.vision}”</p></article><article className="glass-card p-7"><Target className="text-accent"/><h2 className="mt-3 font-display text-xl">Our Mission</h2><p className="mt-3 italic text-muted-foreground">“{c.mission}”</p></article></div></div></AnimatedSection><section className="section-padding"><div className="container-custom"><h2 className="section-title text-center">Key Milestones</h2><div className="mx-auto mt-12 max-w-3xl space-y-6">{data.history.map(h=><div key={h.id} className="glass-card flex gap-5 p-6"><Calendar className="text-accent"/><div><b className="text-accent">{h.yearLabel}</b><h3 className="font-display text-lg">{h.title}</h3><p className="text-muted-foreground">{h.description}</p></div></div>)}</div></div></section><section className="section-padding"><div className="container-custom"><h2 className="section-title text-center">Core Values</h2><div className="mt-10 grid gap-5 md:grid-cols-5">{data.values.map(v=><article key={v.id} className="glass-card p-5"><h3 className="font-display">{v.title}</h3><p className="mt-2 text-sm text-muted-foreground">{v.description}</p></article>)}</div></div></section><section className="section-padding"><div className="container-custom grid gap-6 md:grid-cols-3">{[["Objectives",c.objectives],["Duties",c.duties],["Approach",c.approach]].map(([title,items])=><article className="glass-card p-7" key={String(title)}><h2 className="font-display text-xl">{title}</h2><ul className="mt-4 space-y-3 text-sm text-muted-foreground">{(items as string[]).map(x=><li key={x}>• {x}</li>)}</ul></article>)}</div></section><section className="py-20"><div className="container-custom"><h2 className="section-title text-center">Clients & Strategic Partners</h2></div><PartnersMarquee className="mt-10"/></section><section className="section-padding"><div className="container-custom"><h2 className="section-title text-center">Legal Entities & Registrations</h2><DocumentGallery placeholderLabel="Legal Document" documents={data.legalEntities.map(x=>({id:x.id,title:x.title,documentType:x.documentType??"Document",description:x.description,image:x.imageUrl,meta:x.reference??""}))}/></div></section><section className="section-padding"><div className="container-custom"><h2 className="section-title text-center">Certifications & Awards</h2><DocumentGallery placeholderLabel="Certificate" documents={data.certifications.map(x=>({id:x.id,title:x.title,documentType:x.certificationType??"Certificate",description:x.description,image:x.imageUrl,meta:[x.issuingOrganization,x.issueDate].filter(Boolean).join(" — ")}))}/></div></section></>}</main>}
+import { Target, Eye, Heart, Users, Shield, Star, Calendar, Zap } from "lucide-react";
+import { motion } from "framer-motion";
+import PageHero from "@/components/PageHero";
+import AnimatedSection from "@/components/AnimatedSection";
+import heroImg from "@/assets/hero-construction.jpg";
+import PartnersMarquee from "@/components/PartnersMarquee";
+import DocumentGallery from "@/components/DocumentGallery";
+import { certificates, companyStats, legalEntities, partners } from "@/data/company";
+import Seo from "@/components/Seo";
+
+const values = [
+  { icon: <Users size={28} />, title: "Team Work", desc: "Collaborative effort across all departments and project sites." },
+  { icon: <Target size={28} />, title: "Cost Effectiveness", desc: "Maximizing value while maintaining the highest quality standards." },
+  { icon: <Zap size={28} />, title: "Industriousness", desc: "Relentless commitment and hard work in every project we undertake." },
+  { icon: <Shield size={28} />, title: "Honesty", desc: "Transparent operations and ethical business practices at all levels." },
+  { icon: <Heart size={28} />, title: "Loyalty", desc: "Dedicated to our nation, clients, and employees with unwavering commitment." },
+];
+
+const timeline = [
+  { year: "2010", title: "Establishment", desc: "Founded as 'Amhara Road Works Enterprise' by Proclamation No. 71/2010 on January 26, 2010, with authorized capital of Birr 500 Million (115M cash + 186.7M in kind)." },
+  { year: "2018", title: "Re-establishment", desc: "Re-established by Proclamation No. 170/2018 on March 31, 2018 with recorded capital of Birr 929.3 Million (220.2M cash + 709M in kind)." },
+  { year: "2024", title: "Corporation Upgrade", desc: "Upgraded to corporation level by Proclamation No. 214/2024, renamed to 'Hibir Construction Corporation' with expanded mandate and resources." },
+];
+
+const About = () => (
+  <main>
+    <Seo
+      title="About Hibir Construction Corporation | Ethiopia"
+      description="Hibir Construction Corporation is a government-owned GC-1 contractor in Bahir Dar, Amhara Regional State — established in 2010, re-established in 2018 and upgraded to corporation level in 2024."
+      path="/about"
+      breadcrumbs={[{ name: "Home", path: "/" }, { name: "About", path: "/about" }]}
+    />
+    <PageHero title="About Us" subtitle="Ethiopia's premier government-owned construction corporation since 2010" image={heroImg} />
+
+    {/* Overview + Vision/Mission */}
+    <AnimatedSection id="overview" className="section-padding scroll-mt-24">
+      <div className="container-custom grid md:grid-cols-2 gap-16 items-start">
+        <div>
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Company Overview</span>
+          <h2 className="section-title mt-3 mb-6">Who We Are</h2>
+          <p className="text-muted-foreground font-body leading-relaxed mb-4">
+            Hibir Construction Corporation is a government-owned construction enterprise headquartered in Bahir Dar, Amhara Regional State, Ethiopia — near Bahir Dar University, Gish Abay Campus. The corporation is entirely owned and run by Ethiopian professionals.
+          </p>
+          <p className="text-muted-foreground font-body leading-relaxed mb-4">
+            With 843 employees, 282 units of vehicles, plants and machinery, and an active contract portfolio exceeding 25 billion Birr, we specialize in road construction, bridge building, asphalt production, and large-scale infrastructure development. Our average annual construction turnover exceeds 3.4 billion Birr.
+          </p>
+          <p className="text-muted-foreground font-body leading-relaxed">
+            The corporation supports national and regional development by constructing quality roads with economic feasibility, maintaining existing infrastructure, and upgrading road standards — accountable to the Regional Public Enterprises' Authority.
+          </p>
+        </div>
+        <div className="space-y-6">
+          <div id="vision" className="glass-card p-8 scroll-mt-28">
+            <div className="flex items-center gap-3 mb-4">
+              <Eye className="text-accent" size={24} />
+              <h3 className="font-display font-semibold text-xl text-foreground">Our Vision</h3>
+            </div>
+            <p className="text-muted-foreground font-body leading-relaxed italic">
+              "To be one of the best contractors in Africa's construction industry by 2030."
+            </p>
+          </div>
+          <div className="glass-card p-8">
+            <div className="flex items-center gap-3 mb-4">
+              <Target className="text-accent" size={24} />
+              <h3 className="font-display font-semibold text-xl text-foreground">Our Mission</h3>
+            </div>
+            <p className="text-muted-foreground font-body leading-relaxed italic">
+              "Building infrastructures with the desired quality, timely, and thereby creating a profitable corporation."
+            </p>
+          </div>
+        </div>
+      </div>
+    </AnimatedSection>
+
+    {/* Objectives */}
+    <section id="approach" className="section-padding relative overflow-hidden scroll-mt-24">
+      <div className="absolute inset-0 bg-gradient-to-b from-secondary/30 to-background" />
+      <div className="container-custom relative z-10">
+        <AnimatedSection className="text-center mb-16">
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Our Approach</span>
+          <h2 className="section-title mt-3">How We Work</h2>
+        </AnimatedSection>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { icon: <Target size={24} />, title: "Strict Scheduling", desc: "Rigorous project scheduling and planning for on-time delivery." },
+            { icon: <Users size={24} />, title: "Stakeholder Partnership", desc: "Partnering and good communication with all project stakeholders." },
+            { icon: <Eye size={24} />, title: "Monitoring & Evaluation", desc: "Strong and timely project monitoring and evaluation systems." },
+            { icon: <Shield size={24} />, title: "Contract Management", desc: "Professional contractual project management at every stage." },
+          ].map((item, i) => (
+            <AnimatedSection key={i} delay={i * 0.08}>
+              <div className="glass-card p-7 h-full text-center">
+                <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center text-accent mx-auto mb-5">
+                  {item.icon}
+                </div>
+                <h3 className="font-display font-semibold mb-2 text-foreground">{item.title}</h3>
+                <p className="text-muted-foreground text-sm font-body">{item.desc}</p>
+              </div>
+            </AnimatedSection>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* Timeline */}
+    <section id="history" className="section-padding scroll-mt-24">
+      <div className="container-custom">
+        <AnimatedSection className="text-center mb-16">
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Our Journey</span>
+          <h2 className="section-title mt-3">Key Milestones</h2>
+        </AnimatedSection>
+        <div className="relative max-w-3xl mx-auto">
+          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-border" />
+          {timeline.map((t, i) => (
+            <AnimatedSection key={i} delay={i * 0.15}>
+              <div className={`relative flex items-start gap-6 mb-12 ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}>
+                <div className={`hidden md:block flex-1 ${i % 2 === 0 ? "text-right pr-8" : "text-left pl-8"}`}>
+                  <h3 className="font-display font-bold text-lg text-foreground">{t.title}</h3>
+                  <p className="text-muted-foreground text-sm font-body mt-1">{t.desc}</p>
+                </div>
+                <div className="relative z-10 w-12 h-12 rounded-xl flex items-center justify-center shrink-0 font-display font-bold text-sm"
+                  style={{ background: "var(--gold-gradient)", color: "hsl(220 60% 8%)" }}>
+                  <Calendar size={18} />
+                </div>
+                <div className={`flex-1 ${i % 2 === 0 ? "pl-0 md:pl-8" : "pr-0 md:pr-8"}`}>
+                  <span className="text-accent font-display font-bold text-2xl">{t.year}</span>
+                  <div className="md:hidden mt-2">
+                    <h3 className="font-display font-bold text-lg text-foreground">{t.title}</h3>
+                    <p className="text-muted-foreground text-sm font-body mt-1">{t.desc}</p>
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* Values */}
+    <section id="values" className="section-padding scroll-mt-24">
+      <div className="container-custom">
+        <AnimatedSection className="text-center mb-16">
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Core Values</span>
+          <h2 className="section-title mt-3">What Drives Us</h2>
+        </AnimatedSection>
+        <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-6">
+          {values.map((v, i) => (
+            <AnimatedSection key={i} delay={i * 0.08}>
+              <div className="glass-card p-6 text-center h-full">
+                <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center text-accent mx-auto mb-4">
+                  {v.icon}
+                </div>
+                <h3 className="font-display font-semibold mb-2 text-foreground">{v.title}</h3>
+                <p className="text-muted-foreground text-sm font-body">{v.desc}</p>
+              </div>
+            </AnimatedSection>
+          ))}
+        </div>
+      </div>
+    </section>
+
+
+    {/* Objectives & Duties */}
+    <section id="objectives" className="section-padding scroll-mt-24">
+      <div className="container-custom">
+        <AnimatedSection className="text-center mb-14">
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Mandate</span>
+          <h2 className="section-title mt-3">Objectives &amp; Duties</h2>
+        </AnimatedSection>
+        <div className="grid md:grid-cols-2 gap-6">
+          {[
+            "Construct, improve and maintain appropriate roads at regional and national level.",
+            "Produce and supply construction materials and tools required for road and other construction works.",
+            "Deliver building, urban infrastructure and industrial park works as a GC-1 general contractor.",
+            "Carry out road sector capacity building, including operator and professional training.",
+            "Operate profitably and sustainably as a public enterprise accountable to the RPEA.",
+            "Undertake any other related activity approved by the managing board.",
+          ].map((d, i) => (
+            <AnimatedSection key={i} delay={i * 0.06}>
+              <div className="glass-card p-6 flex gap-4 h-full">
+                <span className="font-display font-bold text-accent text-sm shrink-0">{String(i + 1).padStart(2, "0")}</span>
+                <p className="text-muted-foreground font-body text-sm leading-relaxed">{d}</p>
+              </div>
+            </AnimatedSection>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* Why Hibir */}
+    <section id="why-hibir" className="section-padding relative overflow-hidden scroll-mt-24">
+      <div className="absolute inset-0 bg-gradient-to-b from-secondary/30 to-background" aria-hidden />
+      <div className="container-custom relative z-10">
+        <AnimatedSection className="text-center mb-14">
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Why Hibir</span>
+          <h2 className="section-title mt-3">Why Clients Choose Us</h2>
+        </AnimatedSection>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { v: companyStats.contractorGrade, l: "Grade One general contractor licence" },
+            { v: `${companyStats.staff}`, l: "In-house professionals and operators" },
+            { v: `${companyStats.totalAssets}`, l: "Owned vehicles, plants and machinery" },
+            { v: "25B+", l: "Birr active contract portfolio" },
+          ].map((k, i) => (
+            <AnimatedSection key={i} delay={i * 0.08}>
+              <div className="glass-card p-7 h-full text-center">
+                <div className="text-3xl font-display font-bold text-gradient-gold">{k.v}</div>
+                <p className="text-muted-foreground text-sm font-body mt-2">{k.l}</p>
+              </div>
+            </AnimatedSection>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* Partnerships */}
+    <section id="partnerships" className="py-20 overflow-hidden scroll-mt-24">
+      <div className="container-custom">
+        <AnimatedSection className="text-center mb-12">
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Partnerships</span>
+          <h2 className="section-title mt-3">Clients &amp; Strategic Partners</h2>
+          <p className="text-muted-foreground font-body mt-4 max-w-2xl mx-auto">
+            {partners.length} national, regional and city-level institutions we deliver infrastructure with.
+          </p>
+        </AnimatedSection>
+      </div>
+      <PartnersMarquee />
+    </section>
+
+    {/* Legal Entities */}
+    <section id="legal-entities" className="section-padding scroll-mt-24">
+      <div className="container-custom">
+        <AnimatedSection className="text-center mb-14">
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Governance</span>
+          <h2 className="section-title mt-3">Legal Entities &amp; Registrations</h2>
+        </AnimatedSection>
+        <DocumentGallery
+          placeholderLabel="Legal Document"
+          documents={legalEntities.map((e) => ({
+            id: e.id,
+            title: e.title,
+            documentType: e.documentType,
+            description: e.description,
+            image: e.image,
+            meta: e.reference,
+          }))}
+        />
+      </div>
+    </section>
+
+    {/* Certifications & Awards */}
+    <section id="certifications" className="section-padding scroll-mt-24">
+      <div className="container-custom">
+        <AnimatedSection className="text-center mb-14">
+          <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Recognition</span>
+          <h2 className="section-title mt-3">Certifications &amp; Awards</h2>
+        </AnimatedSection>
+        <DocumentGallery
+          placeholderLabel="Certificate"
+          documents={certificates.map((c) => ({
+            id: c.id,
+            title: c.title,
+            documentType: c.type,
+            description: c.description,
+            image: c.image,
+            meta: `${c.issuedBy} — ${c.issueDate}`,
+          }))}
+        />
+      </div>
+    </section>
+
+    {/* Registration Info */}
+    <AnimatedSection className="section-padding">
+      <div className="container-custom">
+        <div className="glass-card p-8 md:p-10">
+          <h3 className="font-display font-semibold text-xl mb-8 text-center text-foreground">Corporate Registration</h3>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { label: "Registration No.", value: "980/2008" },
+              { label: "TIN", value: "0013324621" },
+              { label: "VAT Registration", value: "3028900006" },
+              { label: "Contractor Grade", value: "GC-1 (Grade One)" },
+            ].map((item, i) => (
+              <div key={i} className="text-center">
+                <p className="text-muted-foreground text-xs font-body uppercase tracking-wider mb-1">{item.label}</p>
+                <p className="font-display font-bold text-foreground text-lg">{item.value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </AnimatedSection>
+  </main>
+);
+
+export default About;
