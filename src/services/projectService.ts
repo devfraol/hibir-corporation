@@ -1,4 +1,4 @@
-import { projects, type Project, type ProjectStatus } from "@/data/projects";
+import { projects as staticProjects, type Project, type ProjectStatus } from "@/data/projects";
 import { getSupabaseClient, isSupabaseConfigured } from "@/lib/supabase";
 import { fetchPublishedProjectRows, type PublishedProjectRow } from "@/services/supabaseContentAdapters";
 import type { Database } from "@/types/database";
@@ -28,12 +28,14 @@ const toProject = (row: PublishedProjectRow): Project => {
     slug: row.slug,
     description: row.description ?? "",
     client: row.client ?? "",
+    consultant: row.consultant ?? undefined,
     location: row.location ?? "",
     // Contract value and contractor role are static fallback-only fields. Do not
     // fabricate them for CMS records until their database columns are approved.
     status: row.project_status ?? undefined,
     contractValue: undefined,
     contractorRole: undefined,
+    contractDate: row.contract_date ?? undefined,
     completionDate: row.completion_date ?? undefined,
     featuredImage: { url: coverImage, alt: row.title },
     gallery,
@@ -48,15 +50,20 @@ const toProject = (row: PublishedProjectRow): Project => {
   };
 };
 
+/**
+ * The public catalogue uses one source at a time: published CMS rows when any
+ * exist, otherwise the approved static catalogue. We intentionally never merge
+ * them, avoiding duplicate cards during the Phase 4.4 migration.
+ */
 const getPublishedProjects = async (): Promise<Project[]> => {
-  if (!isSupabaseConfigured) return projects;
+  if (!isSupabaseConfigured) return staticProjects;
 
   try {
     const rows = await fetchPublishedProjectRows();
-    return rows.length > 0 ? rows.map(toProject) : projects;
+    return rows.length > 0 ? rows.map(toProject) : staticProjects;
   } catch (error) {
     console.warn("Unable to load published projects from Supabase; using static fallback.", error);
-    return projects;
+    return staticProjects;
   }
 };
 
@@ -191,7 +198,30 @@ export async function getFeaturedProject(): Promise<Project> {
 }
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
-  return (await getPublishedProjects()).find((p) => p.slug === slug) ?? null;
+  if (!isSupabaseConfigured) return staticProjects.find((project) => project.slug === slug) ?? null;
+
+  try {
+    const cmsRows = await fetchPublishedProjectRows();
+    // Published CMS is the entire public source as soon as it has any rows.
+    if (cmsRows.length) return cmsRows.map(toProject).find((project) => project.slug === slug) ?? null;
+  } catch (error) {
+    console.warn("Unable to load published project detail; attempting approved static fallback.", error);
+  }
+
+  if (!staticProjects.some((project) => project.slug === slug)) return null;
+
+  // A browser RLS query cannot distinguish a missing row from an unpublished
+  // row. The server-only availability endpoint returns only a block signal, not
+  // draft data, so a static record can never bypass an unpublished CMS slug.
+  try {
+    const response = await fetch(`/api/projects/${encodeURIComponent(slug)}/availability`);
+    if (!response.ok || (await response.json() as { blocked?: boolean }).blocked) return null;
+  } catch {
+    // Fail closed for a configured CMS: without the server-only guard we cannot
+    // prove that a legacy slug is not a draft or archived CMS record.
+    return null;
+  }
+  return staticProjects.find((project) => project.slug === slug) ?? null;
 }
 
 export async function getRelatedProjects(slug: string, limit = 3): Promise<Project[]> {

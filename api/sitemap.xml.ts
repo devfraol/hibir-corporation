@@ -17,6 +17,9 @@ export default async function sitemap(request: VercelRequest, response: VercelRe
     const { data, error } = await client.from("news_articles").select("slug, updated_at, published_at").eq("status", "published");
     if (error) console.error("Unable to load published news for sitemap", error.message);
     else data.forEach((article) => urls.set(`/news/${article.slug}`, article.updated_at || article.published_at));
+    const { data: projectRows, error: projectsError } = await client.from("projects").select("slug, updated_at").eq("status", "published");
+    if (projectsError) console.error("Unable to load published projects for sitemap", projectsError.message);
+    else projectRows.forEach((project) => urls.set(`/projects/${project.slug}`, project.updated_at));
   } else console.warn("Dynamic sitemap is serving static routes because server-only Supabase credentials are not configured.");
   const body = ["<?xml version=\"1.0\" encoding=\"UTF-8\"?>", '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">', ...[...urls.entries()].map(([path, lastmod]) => `  <url><loc>${escapeXml(`${siteUrl}${path}`)}</loc>${lastmod ? `<lastmod>${escapeXml(lastmod.slice(0, 10))}</lastmod>` : ""}</url>`), "</urlset>"].join("\n");
   response.setHeader("Content-Type", "application/xml; charset=utf-8");

@@ -33,3 +33,23 @@ Cover images use the existing shared `MediaPicker`, parameterized with project-o
 Public reads remain Supabase published projects first, with `src/data/projects.ts` retained as the transitional fallback when Supabase is empty/unavailable. Draft and archived CMS rows never reach that fallback path. RLS remains the database authorization boundary via `has_admin_role()`; no service-role key or client role trust is introduced.
 
 Apply `20260924010000_phase_4_2_project_editor.sql` through the normal Supabase migration workflow, then regenerate `src/types/database.ts` with the Supabase CLI in the deployment environment. Phase 4.3 should build gallery ordering/alt text/captions and reference-safe storage cleanup, without deleting the existing static catalogue until approved migration is complete.
+
+# Phase 4.4 — Public Projects and SEO
+
+## Public source and safe transition
+
+The public list and detail routes now obtain their project data only through `projectService.ts`. Published Supabase records are the primary catalogue; once at least one published record exists, the UI uses that CMS catalogue alone and never merges in static cards. `src/data/projects.ts` remains the explicit temporary fallback only when the CMS catalogue is empty, unconfigured, or unavailable. Phase 4.5 will migrate the approved static catalogue and remove this fallback.
+
+Public Supabase adapters always filter `projects.status = 'published'`; execution status is displayed as project information and never controls visibility. For a static slug, the server-only `/api/projects/:slug/availability` guard uses the existing service-role environment only to block a fallback if a matching CMS record is draft or archived. It returns no title, status, or other project data. This prevents an unpublished CMS record from being bypassed by a same-slug legacy card while preserving RLS for browser reads.
+
+## Public rendering and discovery
+
+Project cards use URL-safe slugs and show category, location, optional client, execution status, cover/first-gallery imagery, and featured state. Detail pages use the ordered Phase 4.3 gallery with stored captions and alt text (falling back to a meaningful project title); empty galleries are omitted. Related projects are deterministic: same category first, then the remaining published catalogue, excluding the current project.
+
+`Seo` provides the project title/description fallbacks (`seo_title`/`seo_description` before title/description), an absolute canonical URL via the existing `absoluteUrl` helper, Open Graph and Twitter large-image metadata, plus Project and BreadcrumbList JSON-LD. The image order is cover image, first gallery image, then the global SEO default. Visible accessible breadcrumbs mirror Home → Projects → Project title. Admin preview remains inside the protected admin route, labelled as a preview, and uses `noindex`; it is never added to discovery data.
+
+`api/sitemap.xml.ts` now independently adds only published CMS project slugs, using the same server-only Supabase resilience pattern as News. A failed projects query leaves the static sitemap valid. No robots.txt change was needed: public routes remain indexable and `/admin` remains disallowed.
+
+## Known limitations and deployment
+
+Deploy the existing project and gallery migrations before publishing records. The fallback guard and dynamic sitemap require `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` only in the server/Vercel environment; the frontend continues to use the browser publishable key and RLS. When a configured CMS cannot reach the guard, a same-slug static detail fails closed rather than risk exposing stale content; deployments must configure the server credentials before creating same-slug draft/archived records. Static catalogue migration, static sitemap entries, and fallback removal are deliberately deferred to Phase 4.5.

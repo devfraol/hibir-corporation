@@ -28,11 +28,13 @@ export interface Project {
   slug: string;
   description: string;
   client: string;
+  consultant?: string;
   location: string;
   contractValue?: number;
   status?: ProjectStatus;
   contractorRole?: string;
   startDate?: string;
+  contractDate?: string;
   completionDate?: string;
   featuredImage: ProjectImage;
   gallery: ProjectImage[];
