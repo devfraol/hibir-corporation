@@ -4,10 +4,13 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { formatNewsDate, getNews } from "@/services/newsService";
 import type { NewsArticle } from "@/types/news";
+import { useI18n } from "@/i18n";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
 const LatestNews = () => {
+  const { locale, path } = useI18n();
+  const isAm = locale === "am";
   const [articles, setArticles] = useState<NewsArticle[]>([]);
 
   useEffect(() => {
@@ -20,20 +23,22 @@ const LatestNews = () => {
     };
   }, []);
 
-  if (articles.length === 0) return null;
+  if (articles.length === 0 || (isAm && !articles.some((article) => article.titleAm && article.excerptAm))) return isAm ? <section className="section-padding" aria-labelledby="latest-news-heading"><div className="container-custom"><span className="label-eyebrow">የዜና ክፍል</span><h2 id="latest-news-heading" className="section-title mt-3">የቅርብ ጊዜ ዜናዎች</h2><p className="mt-6 text-muted-foreground font-body">በአማርኛ የጸደቁ ዜናዎች በቅርቡ ይቀርባሉ።</p></div></section> : null;
 
-  const [lead, ...rest] = articles;
+  const visibleArticles = isAm ? articles.filter((article) => article.titleAm && article.excerptAm) : articles;
+
+  const [lead, ...rest] = visibleArticles;
 
   return (
     <section className="section-padding" aria-labelledby="latest-news-heading">
       <div className="container-custom">
         <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
           <div>
-            <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">Newsroom</span>
-            <h2 id="latest-news-heading" className="section-title mt-3">Latest News</h2>
+            <span className="text-accent font-body font-semibold text-xs tracking-[0.2em] uppercase">{isAm ? "የዜና ክፍል" : "Newsroom"}</span>
+            <h2 id="latest-news-heading" className="section-title mt-3">{isAm ? "የቅርብ ጊዜ ዜናዎች" : "Latest News"}</h2>
           </div>
-          <Link to="/news" className="inline-flex items-center gap-2 text-xs font-body font-semibold tracking-[0.18em] uppercase text-accent hover:gap-3 transition-all">
-            View All News <ArrowRight size={15} />
+          <Link to={path("/news")} className="inline-flex items-center gap-2 text-xs font-body font-semibold tracking-[0.18em] uppercase text-accent hover:gap-3 transition-all">
+            {isAm ? "ሁሉንም ዜናዎች ይመልከቱ" : "View All News"} <ArrowRight size={15} />
           </Link>
         </div>
 
@@ -45,7 +50,7 @@ const LatestNews = () => {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.75, ease }}
           >
-            <Link to={`/news/${lead.slug}`} className="group block surface-card overflow-hidden h-full">
+            <Link to={path(`/news/${lead.slug}`)} className="group block surface-card overflow-hidden h-full">
               <div className="relative overflow-hidden aspect-[16/10]">
                 <motion.img
                   src={lead.featuredImage.url}
@@ -66,11 +71,11 @@ const LatestNews = () => {
                   {formatNewsDate(lead.publishedAt)}
                 </time>
                 <h3 className="font-display font-bold text-xl md:text-2xl mt-3 mb-3 text-foreground leading-snug group-hover:text-accent transition-colors">
-                  {lead.title}
+                  {isAm ? lead.titleAm : lead.title}
                 </h3>
-                <p className="text-muted-foreground font-body text-sm leading-relaxed line-clamp-3">{lead.excerpt}</p>
+                <p className="text-muted-foreground font-body text-sm leading-relaxed line-clamp-3">{isAm ? lead.excerptAm : lead.excerpt}</p>
                 <span className="mt-6 inline-flex items-center gap-2 text-accent text-xs font-body font-semibold tracking-[0.16em] uppercase">
-                  Read More <ArrowUpRight size={14} />
+                  {isAm ? "ተጨማሪ ያንብቡ" : "Read More"} <ArrowUpRight size={14} />
                 </span>
               </div>
             </Link>
@@ -86,7 +91,7 @@ const LatestNews = () => {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.65, delay: 0.12 + i * 0.12, ease }}
               >
-                <Link to={`/news/${a.slug}`} className="group grid sm:grid-cols-5 gap-5 surface-card overflow-hidden">
+                <Link to={path(`/news/${a.slug}`)} className="group grid sm:grid-cols-5 gap-5 surface-card overflow-hidden">
                   <div className="sm:col-span-2 overflow-hidden aspect-[16/11] sm:aspect-auto sm:h-full">
                     <img
                       src={a.featuredImage.url}
@@ -101,11 +106,11 @@ const LatestNews = () => {
                       <time dateTime={a.publishedAt} className="text-muted-foreground">{formatNewsDate(a.publishedAt)}</time>
                     </div>
                     <h3 className="font-display font-bold text-base md:text-lg mt-3 mb-2 text-foreground leading-snug group-hover:text-accent transition-colors">
-                      {a.title}
+                      {isAm ? a.titleAm : a.title}
                     </h3>
-                    <p className="text-muted-foreground font-body text-sm leading-relaxed line-clamp-2">{a.excerpt}</p>
+                    <p className="text-muted-foreground font-body text-sm leading-relaxed line-clamp-2">{isAm ? a.excerptAm : a.excerpt}</p>
                     <span className="mt-4 inline-flex items-center gap-2 text-accent text-[11px] font-body font-semibold tracking-[0.16em] uppercase">
-                      Read More <ArrowUpRight size={13} />
+                      {isAm ? "ተጨማሪ ያንብቡ" : "Read More"} <ArrowUpRight size={13} />
                     </span>
                   </div>
                 </Link>

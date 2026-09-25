@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useI18n } from "@/i18n";
+import { navLabel } from "@/i18n/content";
 
 interface NavLinkItem {
   to: string;
@@ -75,7 +76,7 @@ const links: NavLinkItem[] = [
 ];
 
 const Navbar = () => {
-  const { t, path } = useI18n();
+  const { t, path, locale } = useI18n();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
@@ -107,7 +108,7 @@ const Navbar = () => {
     const target = path(to).split("#")[0];
     return target === "/" || target === "/am" ? location.pathname === target : location.pathname.startsWith(target);
   };
-  const labelFor = (item: NavLinkItem) => t(`navigation.${item.label.toLowerCase().replace(" & quality", "").replace(" ", "")}`) === `navigation.${item.label.toLowerCase().replace(" & quality", "").replace(" ", "")}` ? item.label : t(`navigation.${item.label.toLowerCase().replace(" & quality", "").replace(" ", "")}`);
+  const labelFor = (item: NavLinkItem) => navLabel(locale, item.label);
 
   const navTextClass = scrolled ? "text-foreground" : "text-white/95";
   const navMutedClass = scrolled ? "text-muted-foreground" : "text-white/70";
@@ -149,7 +150,7 @@ const Navbar = () => {
             <div className="leading-tight">
               <span className={`font-display font-bold text-base block ${navTextClass}`}>Hibir</span>
               <span className={`text-[9px] tracking-[0.24em] uppercase font-body ${scrolled ? "text-muted-foreground" : "text-white/60"}`}>
-                Construction Corp.
+                {locale === "am" ? "ኮንስትራክሽን ኮርፖሬሽን" : "Construction Corp."}
               </span>
             </div>
           </Link>
@@ -182,7 +183,7 @@ const Navbar = () => {
                   {l.children && (
                     <button
                       type="button"
-                      aria-label={`${labelFor(l)} menu`}
+                      aria-label={locale === "am" ? `${labelFor(l)} ማውጫ` : `${labelFor(l)} menu`}
                       aria-expanded={openMenu === l.label}
                       onClick={() => setOpenMenu((c) => (c === l.label ? null : l.label))}
                       className={`-ml-1.5 p-1 transition-colors ${navMutedClass} ${navHoverTextClass}`}
@@ -211,7 +212,7 @@ const Navbar = () => {
                             to={path(c.to)}
                             className="block px-3 py-2 rounded-lg text-[13px] font-body text-muted-foreground hover:text-foreground hover:bg-surface transition-colors"
                           >
-                            {c.label}
+                            {navLabel(locale, c.label)}
                           </Link>
                         ))}
                       </div>
@@ -232,7 +233,7 @@ const Navbar = () => {
               type="button"
               onClick={() => setOpen(true)}
               className="xl:hidden w-10 h-10 rounded-xl grid place-items-center border border-border/70 text-foreground"
-              aria-label="Open menu"
+              aria-label={locale === "am" ? "ማውጫን ክፈት" : "Open menu"}
               aria-expanded={open}
             >
               <Menu size={18} />
@@ -253,7 +254,7 @@ const Navbar = () => {
             className="fixed inset-0 z-[60] xl:hidden bg-background/98 backdrop-blur-2xl"
             role="dialog"
             aria-modal="true"
-            aria-label="Site menu"
+            aria-label={locale === "am" ? "የድረ ገጽ ማውጫ" : "Site menu"}
           >
             <div className="relative h-full flex flex-col px-6 py-6 overflow-y-auto">
               <div className="flex items-center justify-between mb-8">
@@ -262,7 +263,7 @@ const Navbar = () => {
                   type="button"
                   onClick={() => setOpen(false)}
                   className="w-10 h-10 rounded-xl grid place-items-center border border-border text-foreground"
-                  aria-label="Close menu"
+                  aria-label={locale === "am" ? "ማውጫን ዝጋ" : "Close menu"}
                 >
                   <X size={18} />
                 </button>
@@ -292,7 +293,7 @@ const Navbar = () => {
                       {l.children && (
                         <button
                           type="button"
-                          aria-label={`Toggle ${l.label} sections`}
+                          aria-label={locale === "am" ? `${labelFor(l)} ክፍሎችን አሳይ` : `Toggle ${l.label} sections`}
                           aria-expanded={mobileOpen === l.label}
                           onClick={() => setMobileOpen((c) => (c === l.label ? null : l.label))}
                           className="w-9 h-9 grid place-items-center text-muted-foreground"
@@ -319,7 +320,7 @@ const Navbar = () => {
                                 to={path(c.to)}
                                 className="block py-2 text-sm font-body text-muted-foreground hover:text-accent transition-colors"
                               >
-                                {c.label}
+                                {navLabel(locale, c.label)}
                               </Link>
                             </li>
                           ))}

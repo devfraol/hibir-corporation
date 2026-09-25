@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { MapPin, Phone, Mail, Globe } from "lucide-react";
 import { services } from "@/data/services";
 import { useI18n } from "@/i18n";
+import { navLabel } from "@/i18n/content";
 
 const columns: { title: string; links: { to: string; label: string }[] }[] = [
   {
@@ -51,7 +52,9 @@ const columns: { title: string; links: { to: string; label: string }[] }[] = [
 ];
 
 const Footer = () => {
-  const { path } = useI18n();
+  const { path, locale } = useI18n();
+  const am = locale === "am";
+  const text = (en: string, amh: string) => am ? amh : en;
   return (
   <footer className="relative bg-background border-t border-border overflow-hidden">
     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-accent/3 rounded-full blur-[150px]" />
@@ -63,23 +66,22 @@ const Footer = () => {
           <div className="flex items-center gap-3 mb-6">
             <img src="/Hibir%20Logo.png" alt="" aria-hidden="true" className="w-11 h-11 object-contain" />
             <div>
-              <span className="font-display font-bold text-lg block text-foreground">Hibir</span>
+              <span className="font-display font-bold text-lg block text-foreground">{am ? "ሂቢር" : "Hibir"}</span>
               <span className="text-muted-foreground text-[10px] tracking-[0.2em] uppercase font-body">
-                Construction Corp.
+                {text("Construction Corp.", "ኮንስትራክሽን ኮርፖሬሽን")}
               </span>
             </div>
           </div>
           <p className="text-muted-foreground text-sm font-body leading-relaxed mb-4">
-            GC-1 rated government-owned corporation building Ethiopia's infrastructure with 843 professionals and 282
-            vehicles, plants and machinery units.
+            {text("GC-1 rated government-owned corporation building Ethiopia's infrastructure with 843 professionals and 282 vehicles, plants and machinery units.", "843 ባለሙያዎችና 282 ተሽከርካሪዎች፣ ፕላንቶችና ማሽነሪዎች ያሉት የGC-1 ደረጃ የመንግሥት ኮርፖሬሽን ነው።")}
           </p>
           <p className="text-muted-foreground text-xs font-body">Reg. No: 980/2008 · TIN: 0013324621</p>
         </div>
 
         {columns.map((col) => (
-          <div key={col.title}>
+          <div key={navLabel(locale, col.title)}>
             <h4 className="font-display font-semibold text-foreground mb-6 text-sm tracking-wider uppercase">
-              {col.title}
+              {navLabel(locale, col.title)}
             </h4>
             <ul className="flex flex-col gap-3">
               {col.links.map((l) => (
@@ -88,7 +90,7 @@ const Footer = () => {
                     to={path(l.to)}
                     className="text-muted-foreground text-sm font-body hover:text-accent transition-colors duration-300"
                   >
-                    {l.label}
+                    {navLabel(locale, l.label)}
                   </Link>
                 </li>
               ))}
@@ -101,7 +103,7 @@ const Footer = () => {
       <div className="mt-14 pt-10 border-t border-border grid sm:grid-cols-2 lg:grid-cols-4 gap-6 text-muted-foreground text-sm font-body">
         <div className="flex items-start gap-3">
           <MapPin size={16} className="mt-0.5 text-accent shrink-0" />
-          <span>Near Bahir Dar University, Gish Abay Campus, Bahir Dar, Amhara Regional State, Ethiopia</span>
+          <span>{text("Near Bahir Dar University, Gish Abay Campus, Bahir Dar, Amhara Regional State, Ethiopia", "ከባሕር ዳር ዩኒቨርሲቲ ጊሽ አባይ ካምፓስ አቅራቢያ፣ ባሕር ዳር፣ አማራ ክልል፣ ኢትዮጵያ")}</span>
         </div>
         <div className="flex items-start gap-3">
           <Phone size={16} className="mt-0.5 text-accent shrink-0" />
@@ -120,11 +122,11 @@ const Footer = () => {
       {/* Bottom */}
       <div className="border-t border-border mt-10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="text-muted-foreground/60 text-sm font-body">
-          © {new Date().getFullYear()} Hibir Construction Corporation. All rights reserved.
+          © {new Date().getFullYear()} {text("Hibir Construction Corporation. All rights reserved.", "ሂቢር ኮንስትራክሽን ኮርፖሬሽን። መብቱ በሕግ የተጠበቀ ነው።")}
         </p>
         <div className="flex gap-6 text-muted-foreground/60 text-xs font-body">
           <span>VAT: 3028900006</span>
-          <span>Contractor Grade: GC-1</span>
+          <span>{text("Contractor Grade", "የተቋራጭ ደረጃ")}: GC-1</span>
         </div>
       </div>
     </div>
