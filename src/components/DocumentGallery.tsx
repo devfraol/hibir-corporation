@@ -11,14 +11,17 @@ export interface GalleryDocument {
   meta?: string;
 }
 
+interface GalleryLabels { pending: string; view: string; close: string; previous: string; next: string; }
+
 interface Props {
   documents: GalleryDocument[];
   /** Label prefix used for placeholder previews, e.g. "Legal Entity Document". */
   placeholderLabel: string;
   columns?: 2 | 3;
+  labels?: GalleryLabels;
 }
 
-const Placeholder = ({ index, label }: { index: number; label: string }) => (
+const Placeholder = ({ index, label, pending = "Document preview pending" }: { index: number; label: string; pending?: string }) => (
   <div className="relative w-full aspect-[3/4] rounded-xl overflow-hidden border border-border/60 bg-surface flex flex-col items-center justify-center gap-3">
     <div className="absolute inset-0 opacity-[0.06] bg-[repeating-linear-gradient(0deg,currentColor_0_1px,transparent_1px_14px)] text-foreground" aria-hidden />
     <FileText className="text-accent/70" size={30} />
@@ -26,13 +29,13 @@ const Placeholder = ({ index, label }: { index: number; label: string }) => (
       {label} {String(index + 1).padStart(2, "0")}
     </span>
     <span className="relative text-[9px] font-body tracking-[0.18em] uppercase text-muted-foreground/60">
-      Document preview pending
+      {pending}
     </span>
   </div>
 );
 
 /** CMS-ready document gallery with lightbox. Replace `image` to swap placeholders for real scans. */
-const DocumentGallery = ({ documents, placeholderLabel, columns = 3 }: Props) => {
+const DocumentGallery = ({ documents, placeholderLabel, columns = 3, labels = { pending: "Document preview pending", view: "View Document", close: "Close document viewer", previous: "Previous document", next: "Next document" } }: Props) => {
   const [active, setActive] = useState<number | null>(null);
 
   const close = useCallback(() => setActive(null), []);
@@ -83,7 +86,7 @@ const DocumentGallery = ({ documents, placeholderLabel, columns = 3 }: Props) =>
                 className="w-full aspect-[3/4] object-cover rounded-xl border border-border/60"
               />
             ) : (
-              <Placeholder index={i} label={placeholderLabel} />
+              <Placeholder index={i} label={placeholderLabel} pending={labels.pending} />
             )}
             <div className="pt-4">
               <span className="text-[10px] font-body tracking-[0.2em] uppercase text-accent">
@@ -96,7 +99,7 @@ const DocumentGallery = ({ documents, placeholderLabel, columns = 3 }: Props) =>
                 {d.description}
               </p>
               <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-body font-semibold text-foreground group-hover:text-accent transition-colors">
-                View Document <ChevronRight size={14} />
+                {labels.view} <ChevronRight size={14} />
               </span>
             </div>
           </motion.button>
@@ -125,7 +128,7 @@ const DocumentGallery = ({ documents, placeholderLabel, columns = 3 }: Props) =>
               <button
                 type="button"
                 onClick={close}
-                aria-label="Close document viewer"
+                aria-label={labels.close}
                 className="w-10 h-10 rounded-xl grid place-items-center border border-border text-foreground shrink-0"
               >
                 <X size={18} />
@@ -139,7 +142,7 @@ const DocumentGallery = ({ documents, placeholderLabel, columns = 3 }: Props) =>
               <button
                 type="button"
                 onClick={() => step(-1)}
-                aria-label="Previous document"
+                aria-label={labels.previous}
                 className="hidden sm:grid w-11 h-11 rounded-full border border-border place-items-center text-foreground hover:border-accent"
               >
                 <ChevronLeft size={18} />
@@ -155,7 +158,7 @@ const DocumentGallery = ({ documents, placeholderLabel, columns = 3 }: Props) =>
                 {doc.image ? (
                   <img src={doc.image} alt={doc.title} className="w-full rounded-xl border border-border" />
                 ) : (
-                  <Placeholder index={active as number} label={placeholderLabel} />
+                  <Placeholder index={active as number} label={placeholderLabel} pending={labels.pending} />
                 )}
                 <p className="text-sm text-muted-foreground font-body mt-5 leading-relaxed">
                   {doc.description}
@@ -168,7 +171,7 @@ const DocumentGallery = ({ documents, placeholderLabel, columns = 3 }: Props) =>
               <button
                 type="button"
                 onClick={() => step(1)}
-                aria-label="Next document"
+                aria-label={labels.next}
                 className="hidden sm:grid w-11 h-11 rounded-full border border-border place-items-center text-foreground hover:border-accent"
               >
                 <ChevronRight size={18} />
@@ -176,13 +179,13 @@ const DocumentGallery = ({ documents, placeholderLabel, columns = 3 }: Props) =>
             </div>
 
             <div className="sm:hidden flex items-center justify-center gap-6 pb-6" onClick={(e) => e.stopPropagation()}>
-              <button type="button" onClick={() => step(-1)} aria-label="Previous document" className="w-11 h-11 rounded-full border border-border grid place-items-center text-foreground">
+              <button type="button" onClick={() => step(-1)} aria-label={labels.previous} className="w-11 h-11 rounded-full border border-border grid place-items-center text-foreground">
                 <ChevronLeft size={18} />
               </button>
               <span className="text-xs font-body text-muted-foreground">
                 {(active as number) + 1} / {documents.length}
               </span>
-              <button type="button" onClick={() => step(1)} aria-label="Next document" className="w-11 h-11 rounded-full border border-border grid place-items-center text-foreground">
+              <button type="button" onClick={() => step(1)} aria-label={labels.next} className="w-11 h-11 rounded-full border border-border grid place-items-center text-foreground">
                 <ChevronRight size={18} />
               </button>
             </div>
