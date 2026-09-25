@@ -39,6 +39,7 @@ import AdminProjectPreview from "@/pages/admin/AdminProjectPreview";
 import AdminNews from "@/pages/admin/AdminNews";
 import AdminNewsEditor from "@/pages/admin/AdminNewsEditor";
 import AdminMedia from "@/pages/admin/AdminMedia";
+import { I18nProvider } from "@/i18n";
 
 const queryClient = new QueryClient();
 
@@ -75,33 +76,33 @@ const AnimatedRoutes = () => {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<PageTransition><Index /></PageTransition>} />
-        <Route path="/about" element={<PageTransition><About /></PageTransition>} />
-        <Route path="/services" element={<PageTransition><Services /></PageTransition>} />
-        <Route path="/services/:slug" element={<PageTransition><ServiceDetail /></PageTransition>} />
-        <Route path="/projects" element={<PageTransition><Projects /></PageTransition>} />
-        <Route path="/projects/:slug" element={<PageTransition><ProjectDetail /></PageTransition>} />
-        <Route path="/resources" element={<PageTransition><Resources /></PageTransition>} />
-        <Route path="/safety" element={<PageTransition><Safety /></PageTransition>} />
-        <Route path="/organization" element={<PageTransition><Organization /></PageTransition>} />
-        <Route path="/news" element={<PageTransition><News /></PageTransition>} />
-        <Route path="/news/category/:slug" element={<PageTransition><NewsCategoryPage /></PageTransition>} />
-        <Route path="/news/:slug" element={<PageTransition><NewsArticlePage /></PageTransition>} />
-        <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
+        <Route path="/" element={<PageTransition><Index /></PageTransition>} /><Route path="/am" element={<PageTransition><Index /></PageTransition>} />
+        <Route path="/about" element={<PageTransition><About /></PageTransition>} /><Route path="/am/about" element={<PageTransition><About /></PageTransition>} />
+        <Route path="/services" element={<PageTransition><Services /></PageTransition>} /><Route path="/am/services" element={<PageTransition><Services /></PageTransition>} />
+        <Route path="/services/:slug" element={<PageTransition><ServiceDetail /></PageTransition>} /><Route path="/am/services/:slug" element={<PageTransition><ServiceDetail /></PageTransition>} />
+        <Route path="/projects" element={<PageTransition><Projects /></PageTransition>} /><Route path="/am/projects" element={<PageTransition><Projects /></PageTransition>} />
+        <Route path="/projects/:slug" element={<PageTransition><ProjectDetail /></PageTransition>} /><Route path="/am/projects/:slug" element={<PageTransition><ProjectDetail /></PageTransition>} />
+        <Route path="/resources" element={<PageTransition><Resources /></PageTransition>} /><Route path="/am/resources" element={<PageTransition><Resources /></PageTransition>} />
+        <Route path="/safety" element={<PageTransition><Safety /></PageTransition>} /><Route path="/am/safety" element={<PageTransition><Safety /></PageTransition>} />
+        <Route path="/organization" element={<PageTransition><Organization /></PageTransition>} /><Route path="/am/organization" element={<PageTransition><Organization /></PageTransition>} />
+        <Route path="/news" element={<PageTransition><News /></PageTransition>} /><Route path="/am/news" element={<PageTransition><News /></PageTransition>} />
+        <Route path="/news/category/:slug" element={<PageTransition><NewsCategoryPage /></PageTransition>} /><Route path="/am/news/category/:slug" element={<PageTransition><NewsCategoryPage /></PageTransition>} />
+        <Route path="/news/:slug" element={<PageTransition><NewsArticlePage /></PageTransition>} /><Route path="/am/news/:slug" element={<PageTransition><NewsArticlePage /></PageTransition>} />
+        <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} /><Route path="/am/contact" element={<PageTransition><Contact /></PageTransition>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
     </AnimatePresence>
   );
 };
 
-const PublicSite = () => <>
+const PublicSite = () => <I18nProvider>
   <ScrollProgress />
   <LegacyRedirects />
   <ScrollToTop />
   <Navbar />
   <AnimatedRoutes />
   <Footer />
-</>;
+</I18nProvider>;
 
 const ApplicationRoutes = () => <Routes>
   <Route path="/admin/login" element={<AdminLogin />} />

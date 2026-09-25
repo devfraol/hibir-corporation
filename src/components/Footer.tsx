@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { MapPin, Phone, Mail, Globe } from "lucide-react";
 import { services } from "@/data/services";
+import { useI18n } from "@/i18n";
 
 const columns: { title: string; links: { to: string; label: string }[] }[] = [
   {
@@ -49,7 +50,9 @@ const columns: { title: string; links: { to: string; label: string }[] }[] = [
   },
 ];
 
-const Footer = () => (
+const Footer = () => {
+  const { path } = useI18n();
+  return (
   <footer className="relative bg-background border-t border-border overflow-hidden">
     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-accent/3 rounded-full blur-[150px]" />
 
@@ -82,7 +85,7 @@ const Footer = () => (
               {col.links.map((l) => (
                 <li key={l.to + l.label}>
                   <Link
-                    to={l.to}
+                    to={path(l.to)}
                     className="text-muted-foreground text-sm font-body hover:text-accent transition-colors duration-300"
                   >
                     {l.label}
@@ -126,6 +129,7 @@ const Footer = () => (
       </div>
     </div>
   </footer>
-);
+  );
+};
 
 export default Footer;

@@ -2,6 +2,7 @@ import { getSupabaseClient, isSupabaseConfigured } from "@/lib/supabase";
 import { fetchPublishedNewsRows } from "@/services/supabaseContentAdapters";
 import { NEWS_CATEGORIES, type AdminNewsFilters, type CreateNewsInput, type NewsArticle, type NewsCategory, type NewsQuery, type Paginated, type UpdateNewsInput } from "@/types/news";
 import type { Database } from "@/types/database";
+import type { Locale } from "@/i18n";
 
 /**
  * Data-access layer for the newsroom.
@@ -19,6 +20,7 @@ const isNewsCategory = (category: string | null): category is NewsCategory =>
 
 const isNewsContent = (content: unknown): content is NewsArticle["content"] => Array.isArray(content);
 
+type LocalizedNewsRow = NewsRow & { title_am: string | null; excerpt_am: string | null; content_am: unknown; seo_title_am: string | null; seo_description_am: string | null };
 const toNewsArticle = (row: NewsRow): NewsArticle => ({
   id: row.id,
   title: row.title,
@@ -38,6 +40,11 @@ const toNewsArticle = (row: NewsRow): NewsArticle => ({
   readingMinutes: 1,
   seoTitle: row.seo_title ?? undefined,
   seoDescription: row.seo_description ?? undefined,
+  titleAm: (row as LocalizedNewsRow).title_am ?? undefined,
+  excerptAm: (row as LocalizedNewsRow).excerpt_am ?? undefined,
+  contentAm: isNewsContent((row as LocalizedNewsRow).content_am) ? (row as LocalizedNewsRow).content_am : undefined,
+  seoTitleAm: (row as LocalizedNewsRow).seo_title_am ?? undefined,
+  seoDescriptionAm: (row as LocalizedNewsRow).seo_description_am ?? undefined,
 });
 
 const requireSupabase = () => {
@@ -57,6 +64,11 @@ const toNewsPayload = (input: UpdateNewsInput) => ({
   ...(input.publishedAt !== undefined && { published_at: input.publishedAt }),
   ...(input.seoTitle !== undefined && { seo_title: input.seoTitle || null }),
   ...(input.seoDescription !== undefined && { seo_description: input.seoDescription || null }),
+  ...(input.titleAm !== undefined && { title_am: input.titleAm || null }),
+  ...(input.excerptAm !== undefined && { excerpt_am: input.excerptAm || null }),
+  ...(input.contentAm !== undefined && { content_am: input.contentAm }),
+  ...(input.seoTitleAm !== undefined && { seo_title_am: input.seoTitleAm || null }),
+  ...(input.seoDescriptionAm !== undefined && { seo_description_am: input.seoDescriptionAm || null }),
 });
 
 /** Authenticated CMS reads. RLS controls whether the caller may see drafts. */
@@ -186,11 +198,12 @@ const paginate = <T,>(items: T[], page: number, pageSize: number): Paginated<T> 
   totalPages: Math.max(1, Math.ceil(items.length / pageSize)),
 });
 
-export async function getNews(query: NewsQuery = {}): Promise<Paginated<NewsArticle>> {
+export async function getNews(query: NewsQuery = {}, locale: Locale = "en"): Promise<Paginated<NewsArticle>> {
   const { category = "All", search = "", page = 1, pageSize = DEFAULT_PAGE_SIZE } = query;
   const term = search.trim().toLowerCase();
 
   const items = (await getPublishedNews()).filter((a) => {
+    if (locale === "am" && !a.titleAm?.trim()) return false;
     const matchesCategory = category === "All" || a.category === category;
     const matchesSearch =
       !term ||
@@ -203,13 +216,13 @@ export async function getNews(query: NewsQuery = {}): Promise<Paginated<NewsArti
   return paginate(items, page, pageSize);
 }
 
-export async function getFeaturedNews(): Promise<NewsArticle | null> {
-  const all = await getPublishedNews();
+export async function getFeaturedNews(locale: Locale = "en"): Promise<NewsArticle | null> {
+  const all = (await getPublishedNews()).filter((article) => locale === "en" || Boolean(article.titleAm?.trim()));
   return all.find((a) => a.featured) ?? all[0] ?? null;
 }
 
-export async function getNewsBySlug(slug: string): Promise<NewsArticle | null> {
-  return (await getPublishedNews()).find((a) => a.slug === slug) ?? null;
+export async function getNewsBySlug(slug: string, locale: Locale = "en"): Promise<NewsArticle | null> {
+  return (await getPublishedNews()).find((a) => a.slug === slug && (locale === "en" || Boolean(a.titleAm?.trim()))) ?? null;
 }
 
 export async function getNewsByCategory(category: NewsCategory): Promise<NewsArticle[]> {
@@ -231,5 +244,5 @@ export async function getCategoryCounts(): Promise<Record<string, number>> {
   }, {});
 }
 
-export const formatNewsDate = (iso: string) =>
-  new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+export const formatNewsDate = (iso: string, locale: Locale = "en") =>
+  new Date(iso).toLocaleDateString(locale === "am" ? "am-ET" : "en-US", { year: "numeric", month: "long", day: "numeric" });

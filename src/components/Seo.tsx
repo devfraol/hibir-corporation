@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { absoluteUrl, breadcrumbSchema, seoConfig, type Crumb } from "@/config/site";
+import { localeFromPath, localizePath } from "@/i18n";
 
 interface SeoProps {
   title: string;
@@ -28,6 +29,9 @@ const Seo = ({
   jsonLd,
 }: SeoProps) => {
   const url = absoluteUrl(path);
+  const locale = localeFromPath(path);
+  const englishPath = localizePath(path, "en");
+  const amharicPath = localizePath(path, "am");
   const ogImage = absoluteUrl(image ?? seoConfig.defaultImage);
   const graphs = [
     ...(breadcrumbs && breadcrumbs.length > 1 ? [breadcrumbSchema(breadcrumbs)] : []),
@@ -36,17 +40,20 @@ const Seo = ({
 
   return (
     <Helmet>
-      <html lang={seoConfig.language} />
+      <html lang={locale} dir="ltr" />
       <title>{title}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />
+      <link rel="alternate" hrefLang="en" href={absoluteUrl(englishPath)} />
+      <link rel="alternate" hrefLang="am" href={absoluteUrl(amharicPath)} />
+      <link rel="alternate" hrefLang="x-default" href={absoluteUrl(englishPath)} />
       <meta
         name="robots"
         content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large, max-snippet:-1"}
       />
 
       <meta property="og:site_name" content={seoConfig.siteName} />
-      <meta property="og:locale" content={seoConfig.locale} />
+      <meta property="og:locale" content={locale === "am" ? "am_ET" : seoConfig.locale} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:url" content={url} />

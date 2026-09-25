@@ -8,4 +8,5 @@ export interface Project {
   contractValue?: number; status?: ProjectStatus; contractorRole?: string; startDate?: string; contractDate?: string; completionDate?: string;
   featuredImage: ProjectImage; gallery: ProjectImage[]; category: ProjectCategory; featured: boolean; createdAt: string; updatedAt: string;
   budget: number; image: string; seoTitle?: string; seoDescription?: string;
+  titleAm?: string; descriptionAm?: string; seoTitleAm?: string; seoDescriptionAm?: string;
 }
