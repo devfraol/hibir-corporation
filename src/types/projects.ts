@@ -10,6 +10,7 @@ export interface CreateProjectInput {
   title: string; slug: string; description?: string; client?: string; consultant?: string;
   location?: string; category?: ProjectCategory; coverImage?: string; featured: boolean;
   status: ProjectPublicationStatus; projectStatus?: ProjectExecutionStatus; contractDate?: string; completionDate?: string; seoTitle?: string; seoDescription?: string;
+  titleAm?: string; descriptionAm?: string; seoTitleAm?: string; seoDescriptionAm?: string;
 }
 export type UpdateProjectInput = Partial<CreateProjectInput>;
 export interface AdminProjectFilters { search?: string; status?: ProjectPublicationStatus | "all"; category?: ProjectCategory | "all"; featured?: "all" | "featured" | "not_featured"; projectStatus?: ProjectExecutionStatus | "all"; }

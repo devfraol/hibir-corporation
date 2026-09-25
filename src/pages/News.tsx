@@ -8,10 +8,12 @@ import { getCategoryCounts, getFeaturedNews, getNews } from "@/services/newsServ
 import type { NewsArticle, NewsCategory } from "@/types/news";
 import { Link } from "react-router-dom";
 import { NEWS_CATEGORIES } from "@/types/news";
+import { useI18n } from "@/i18n";
 
 const PAGE_SIZE = 6;
 
 const News = () => {
+  const { locale, path, t } = useI18n();
   const [featured, setFeatured] = useState<NewsArticle | null>(null);
   const [articles, setArticles] = useState<NewsArticle[]>([]);
   const [total, setTotal] = useState(0);
@@ -25,7 +27,7 @@ const News = () => {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const [f, c, all] = await Promise.all([getFeaturedNews(), getCategoryCounts(), getNews({ pageSize: 999 })]);
+      const [f, c, all] = await Promise.all([getFeaturedNews(locale), getCategoryCounts(), getNews({ pageSize: 999 }, locale)]);
       if (cancelled) return;
       setFeatured(f);
       setCounts(c);
@@ -34,13 +36,13 @@ const News = () => {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [locale]);
 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
     (async () => {
-      const res = await getNews({ category, search, page, pageSize: PAGE_SIZE });
+      const res = await getNews({ category, search, page, pageSize: PAGE_SIZE }, locale);
       if (cancelled) return;
       setArticles(res.items);
       setTotal(res.total);
@@ -49,7 +51,7 @@ const News = () => {
     return () => {
       cancelled = true;
     };
-  }, [category, search, page]);
+  }, [category, search, page, locale]);
 
   const latest = useMemo(
     () => (category === "All" && !search && featured ? articles.filter((a) => a.id !== featured.id) : articles),
@@ -66,10 +68,10 @@ const News = () => {
   return (
     <main>
       <Seo
-        title="Hibir Construction Corporation News & Updates"
-        description="Updates, milestones and stories from Hibir Construction Corporation — projects, infrastructure, safety and corporate announcements."
-        path="/news"
-        breadcrumbs={[{ name: "Home", path: "/" }, { name: "News", path: "/news" }]}
+        title={t("seo.newsTitle")}
+        description={t("seo.newsDescription")}
+        path={path("/news")}
+        breadcrumbs={[{ name: t("navigation.home"), path: path("/") }, { name: t("navigation.news"), path: path("/news") }]}
         jsonLd={jsonLd}
       />
 

@@ -50,6 +50,8 @@ export interface NewsArticle {
   readingMinutes: number;
   seoTitle?: string;
   seoDescription?: string;
+  /** Approved Amharic fields are optional; public Amharic listings omit records without them. */
+  titleAm?: string; excerptAm?: string; contentAm?: NewsBlock[]; seoTitleAm?: string; seoDescriptionAm?: string;
 }
 
 export type NewsBlock =
@@ -87,6 +89,7 @@ export interface CreateNewsInput {
   publishedAt?: string | null;
   seoTitle?: string;
   seoDescription?: string;
+  titleAm?: string; excerptAm?: string; contentAm?: NewsBlock[]; seoTitleAm?: string; seoDescriptionAm?: string;
 }
 
 export type UpdateNewsInput = Partial<CreateNewsInput>;

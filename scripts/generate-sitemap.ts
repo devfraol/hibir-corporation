@@ -42,7 +42,12 @@ const categoryEntries: SitemapEntry[] = [];
 
 const entries = [
   ...staticEntries,
+  // Static page UI has an Amharic representation. Dynamic CMS entries are
+  // intentionally generated only by the server-side sitemap endpoint once
+  // approved Amharic content exists.
+  ...staticEntries.map((entry) => ({ ...entry, path: entry.path === "/" ? "/am" : `/am${entry.path}` })),
   ...serviceEntries,
+  ...serviceEntries.map((entry) => ({ ...entry, path: `/am${entry.path}` })),
   ...newsEntries,
   ...categoryEntries,
 ];

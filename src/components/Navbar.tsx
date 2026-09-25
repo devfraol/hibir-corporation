@@ -3,6 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import ThemeToggle from "@/components/ThemeToggle";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { useI18n } from "@/i18n";
 
 interface NavLinkItem {
   to: string;
@@ -73,6 +75,7 @@ const links: NavLinkItem[] = [
 ];
 
 const Navbar = () => {
+  const { t, path } = useI18n();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
@@ -100,8 +103,11 @@ const Navbar = () => {
     };
   }, [open]);
 
-  const isActive = (to: string) =>
-    to === "/" ? location.pathname === "/" : location.pathname.startsWith(to);
+  const isActive = (to: string) => {
+    const target = path(to).split("#")[0];
+    return target === "/" || target === "/am" ? location.pathname === target : location.pathname.startsWith(target);
+  };
+  const labelFor = (item: NavLinkItem) => t(`navigation.${item.label.toLowerCase().replace(" & quality", "").replace(" ", "")}`) === `navigation.${item.label.toLowerCase().replace(" & quality", "").replace(" ", "")}` ? item.label : t(`navigation.${item.label.toLowerCase().replace(" & quality", "").replace(" ", "")}`);
 
   const navTextClass = scrolled ? "text-foreground" : "text-white/95";
   const navMutedClass = scrolled ? "text-muted-foreground" : "text-white/70";
@@ -121,7 +127,7 @@ const Navbar = () => {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[300] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-accent focus:text-accent-foreground focus:font-body focus:text-sm"
       >
-        Skip to content
+        {t("navigation.skip")}
       </a>
 
       <header
@@ -133,7 +139,7 @@ const Navbar = () => {
         style={scrolled ? { borderColor: "var(--glass-border)" } : undefined}
       >
         <nav aria-label="Primary" className="container-custom px-4 md:px-8 flex items-center justify-between gap-4">
-          <Link to="/" className="flex items-center gap-3 group shrink-0" aria-label="Hibir Construction Corporation — home">
+          <Link to={path("/")} className="flex items-center gap-3 group shrink-0" aria-label="Hibir Construction Corporation — home">
             <img
               src="/Hibir%20Logo.png"
               alt=""
@@ -153,18 +159,17 @@ const Navbar = () => {
               <div
                 key={l.to}
                 className="relative"
-                onMouseEnter={() => l.children && hoverOpen(l.label)}
-                onMouseLeave={() => l.children && hoverClose()}
+                onMouseEnter={() => l.children && hoverOpen(l.label)} onMouseLeave={() => l.children && hoverClose()}
               >
                 <div className="flex items-center">
                   <Link
-                    to={l.to}
+                    to={path(l.to)}
                     aria-current={isActive(l.to) ? "page" : undefined}
                     className={`relative px-3 py-2 rounded-lg text-[13px] font-medium font-body transition-colors duration-300 ${
                       isActive(l.to) ? "text-accent" : `${navMutedClass} ${navHoverTextClass}`
                     }`}
                   >
-                    {l.label}
+                    {labelFor(l)}
                     {isActive(l.to) && (
                       <motion.span
                         layoutId="nav-indicator"
@@ -177,7 +182,7 @@ const Navbar = () => {
                   {l.children && (
                     <button
                       type="button"
-                      aria-label={`${l.label} menu`}
+                      aria-label={`${labelFor(l)} menu`}
                       aria-expanded={openMenu === l.label}
                       onClick={() => setOpenMenu((c) => (c === l.label ? null : l.label))}
                       className={`-ml-1.5 p-1 transition-colors ${navMutedClass} ${navHoverTextClass}`}
@@ -203,7 +208,7 @@ const Navbar = () => {
                         {l.children.map((c) => (
                           <Link
                             key={c.to}
-                            to={c.to}
+                            to={path(c.to)}
                             className="block px-3 py-2 rounded-lg text-[13px] font-body text-muted-foreground hover:text-foreground hover:bg-surface transition-colors"
                           >
                             {c.label}
@@ -218,9 +223,10 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-2.5">
+            <LanguageSwitcher />
             <ThemeToggle />
-            <Link to="/contact" className="hidden xl:inline-flex btn-accent text-[13px] px-5 py-2.5">
-              Get in Touch
+            <Link to={path("/contact")} className="hidden xl:inline-flex btn-accent text-[13px] px-5 py-2.5">
+              {t("navigation.getInTouch")}
             </Link>
             <button
               type="button"
@@ -251,7 +257,7 @@ const Navbar = () => {
           >
             <div className="relative h-full flex flex-col px-6 py-6 overflow-y-auto">
               <div className="flex items-center justify-between mb-8">
-                <span className="font-display font-bold text-foreground text-base">Menu</span>
+                <span className="font-display font-bold text-foreground text-base">{t("navigation.menu")}</span>
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
@@ -273,7 +279,7 @@ const Navbar = () => {
                   >
                     <div className="flex items-center justify-between">
                       <Link
-                        to={l.to}
+                        to={path(l.to)}
                         className={`flex items-baseline gap-4 py-3 font-display font-bold text-xl transition-colors ${
                           isActive(l.to) ? "text-accent" : "text-foreground"
                         }`}
@@ -281,7 +287,7 @@ const Navbar = () => {
                         <span className="text-[10px] font-body tracking-widest text-muted-foreground">
                           {String(i + 1).padStart(2, "0")}
                         </span>
-                        {l.label}
+                        {labelFor(l)}
                       </Link>
                       {l.children && (
                         <button
@@ -310,7 +316,7 @@ const Navbar = () => {
                           {l.children.map((c) => (
                             <li key={c.to}>
                               <Link
-                                to={c.to}
+                                to={path(c.to)}
                                 className="block py-2 text-sm font-body text-muted-foreground hover:text-accent transition-colors"
                               >
                                 {c.label}
@@ -330,8 +336,8 @@ const Navbar = () => {
                 transition={{ delay: 0.42, duration: 0.4 }}
                 className="pt-8 flex items-center gap-3"
               >
-                <Link to="/contact" className="btn-accent flex-1 text-sm">
-                  Get in Touch <ArrowRight size={16} />
+                <Link to={path("/contact")} className="btn-accent flex-1 text-sm">
+                  {t("navigation.getInTouch")} <ArrowRight size={16} />
                 </Link>
                 <ThemeToggle />
               </motion.div>

@@ -3,6 +3,7 @@ import { getSupabaseClient } from "@/lib/supabase";
 import { fetchPublishedProjectRows, type PublishedProjectRow } from "@/services/supabaseContentAdapters";
 import type { Database } from "@/types/database";
 import type { MediaAsset } from "@/services/newsService";
+import type { Locale } from "@/i18n";
 import { PROJECT_CATEGORIES, type AdminProjectFilters, type CreateProjectInput, type ProjectCategory, type ProjectPublicationStatus, type UpdateProjectInput } from "@/types/projects";
 
 type ProjectRow = Database["public"]["Tables"]["projects"]["Row"];
@@ -14,6 +15,7 @@ export type ProjectGalleryImageInput = Pick<ProjectImageRow, "image_url" | "alt_
 const isProjectCategory = (category: string | null): category is ProjectCategory =>
   category !== null && PROJECT_CATEGORIES.some((projectCategory) => projectCategory === category);
 
+type LocalizedProjectRow = PublishedProjectRow & { title_am: string | null; description_am: string | null; seo_title_am: string | null; seo_description_am: string | null };
 const toProject = (row: PublishedProjectRow): Project => {
   const gallery = row.images.map((image) => ({
     url: image.image_url,
@@ -47,6 +49,10 @@ const toProject = (row: PublishedProjectRow): Project => {
     image: coverImage,
     seoTitle: row.seo_title ?? undefined,
     seoDescription: row.seo_description ?? undefined,
+    titleAm: (row as LocalizedProjectRow).title_am ?? undefined,
+    descriptionAm: (row as LocalizedProjectRow).description_am ?? undefined,
+    seoTitleAm: (row as LocalizedProjectRow).seo_title_am ?? undefined,
+    seoDescriptionAm: (row as LocalizedProjectRow).seo_description_am ?? undefined,
   };
 };
 
@@ -90,6 +96,8 @@ const toRow = (input: UpdateProjectInput) => ({
   ...(input.projectStatus !== undefined && { project_status: input.projectStatus }), ...(input.contractDate !== undefined && { contract_date: input.contractDate || null }),
   ...(input.completionDate !== undefined && { completion_date: input.completionDate || null }),
   ...(input.seoTitle !== undefined && { seo_title: input.seoTitle || null }), ...(input.seoDescription !== undefined && { seo_description: input.seoDescription || null }),
+  ...(input.titleAm !== undefined && { title_am: input.titleAm || null }), ...(input.descriptionAm !== undefined && { description_am: input.descriptionAm || null }),
+  ...(input.seoTitleAm !== undefined && { seo_title_am: input.seoTitleAm || null }), ...(input.seoDescriptionAm !== undefined && { seo_description_am: input.seoDescriptionAm || null }),
 });
 
 export async function isProjectSlugAvailable(slug: string, excludingId?: string): Promise<boolean> {
@@ -173,10 +181,11 @@ export const archiveProject = (id: string) => updateProject(id, { status: "archi
 export const saveProjectDraft = (id: string, input: UpdateProjectInput) => updateProject(id, { ...input, status: "draft" });
 
 /** Async data-access layer so the UI is ready for a real backend. */
-export async function getProjects(status?: ProjectStatus | "All"): Promise<Project[]> {
+export async function getProjects(status?: ProjectStatus | "All", locale: Locale = "en"): Promise<Project[]> {
   const all = await getPublishedProjects();
-  if (!status || status === "All") return all;
-  return all.filter((p) => p.status === status);
+  const localized = all.filter((project) => locale === "en" || Boolean(project.titleAm?.trim()));
+  if (!status || status === "All") return localized;
+  return localized.filter((p) => p.status === status);
 }
 
 export async function getFeaturedProject(): Promise<Project> {
@@ -184,9 +193,9 @@ export async function getFeaturedProject(): Promise<Project> {
   return all.find((p) => p.featured) ?? all[0];
 }
 
-export async function getProjectBySlug(slug: string): Promise<Project | null> {
+export async function getProjectBySlug(slug: string, locale: Locale = "en"): Promise<Project | null> {
   const rows = await fetchPublishedProjectRows();
-  return rows.map(toProject).find((project) => project.slug === slug) ?? null;
+  return rows.map(toProject).find((project) => project.slug === slug && (locale === "en" || Boolean(project.titleAm?.trim()))) ?? null;
 }
 
 export async function getRelatedProjects(slug: string, limit = 3): Promise<Project[]> {
