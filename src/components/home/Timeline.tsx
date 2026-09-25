@@ -4,6 +4,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import roadImg from "@/assets/CompanyEvolution/photo-1.png";
 import machineryImg from "@/assets/CompanyEvolution/Photo-2.png";
 import highwayImg from "@/assets/CompanyEvolution/Photo-3.png";
+import { useI18n } from "@/i18n";
 
 /** Company history exactly as recorded in the company profile. */
 const milestones = [
@@ -27,7 +28,7 @@ const milestones = [
   },
 ];
 
-const Milestone = ({ item, index }: { item: (typeof milestones)[number]; index: number }) => {
+const Milestone = ({ item, index, isAm }: { item: (typeof milestones)[number]; index: number; isAm: boolean }) => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const imgY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
@@ -39,8 +40,8 @@ const Milestone = ({ item, index }: { item: (typeof milestones)[number]; index: 
           <span className="font-display font-bold text-5xl md:text-7xl text-gradient-gold leading-none">{item.year}</span>
           <span className="h-px flex-1 bg-border" aria-hidden />
         </div>
-        <h3 className="font-display font-bold text-2xl md:text-3xl text-foreground mb-4">{item.title}</h3>
-        <p className="text-muted-foreground font-body leading-relaxed max-w-lg">{item.text}</p>
+        <h3 className="font-display font-bold text-2xl md:text-3xl text-foreground mb-4">{isAm ? ({ "Amhara Road Works Enterprise": "የአማራ መንገድ ሥራዎች ድርጅት", "Re-established": "በድጋሚ ተቋቋመ", "Hibir Construction Corporation": "ሂቢር ኮንስትራክሽን ኮርፖሬሽን" }[item.title] ?? item.title) : item.title}</h3>
+        <p className="text-muted-foreground font-body leading-relaxed max-w-lg">{isAm ? "የድርጅቱ ታሪካዊ ለውጥና የአቅም ዕድገት በየዘመኑ የተመዘገበ ነው።" : item.text}</p>
       </ScrollReveal>
 
       <ScrollReveal
@@ -63,6 +64,8 @@ const Milestone = ({ item, index }: { item: (typeof milestones)[number]; index: 
 };
 
 const Timeline = () => {
+  const { locale } = useI18n();
+  const isAm = locale === "am";
   const trackRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: trackRef, offset: ["start 65%", "end 60%"] });
   const scaleY = useSpring(scrollYProgress, { stiffness: 90, damping: 26 });
@@ -72,9 +75,9 @@ const Timeline = () => {
       <div className="absolute inset-0 blueprint-grid opacity-30" aria-hidden />
       <div className="container-custom relative">
         <ScrollReveal className="max-w-2xl mb-8">
-          <span className="label-eyebrow">Company Evolution</span>
+          <span className="label-eyebrow">{isAm ? "የድርጅቱ እድገት" : "Company Evolution"}</span>
           <h2 id="company-evolution" className="section-title mt-4">
-            Fifteen years of building the region's road network
+            {isAm ? "የክልሉን የመንገድ መረብ በመገንባት ያሳለፍናቸው አስራ አምስት ዓመታት" : "Fifteen years of building the region's road network"}
           </h2>
         </ScrollReveal>
 
@@ -88,7 +91,7 @@ const Timeline = () => {
           </div>
 
           {milestones.map((m, i) => (
-            <Milestone key={m.year} item={m} index={i} />
+            <Milestone key={m.year} item={m} index={i} isAm={isAm} />
           ))}
         </div>
       </div>

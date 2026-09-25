@@ -5,15 +5,18 @@ import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "fr
 import { formatBirr } from "@/lib/formatBirr";
 import { getProjects } from "@/services/projectService";
 import type { Project } from "@/types/project";
+import { useI18n } from "@/i18n";
 
-const Panel = ({ project }: { project: Project }) => (
+const Panel = ({ project }: { project: Project }) => {
+  const { locale, path } = useI18n(); const isAm = locale === "am";
+  return (
   <Link
-    to={`/projects/${project.slug}`}
+    to={path(`/projects/${project.slug}`)}
     className="group relative block shrink-0 w-[82vw] sm:w-[58vw] lg:w-[38vw] xl:w-[32vw] h-[62vh] max-h-[560px] rounded-3xl overflow-hidden border border-border transition-colors duration-500 hover:border-accent/60"
   >
     <img
       src={project.image}
-      alt={project.title}
+      alt={isAm ? (project.titleAm ?? project.title) : project.title}
       loading="lazy"
       className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-110"
     />
@@ -27,20 +30,20 @@ const Panel = ({ project }: { project: Project }) => (
             : "bg-accent/20 text-accent border-accent/40"
         }`}
       >
-        {project.status}
+        {isAm ? (project.status === "Completed" ? "ተጠናቋል" : "በሂደት ላይ") : project.status}
       </span>
 
-      <h3 className="font-display font-bold text-xl md:text-2xl on-media leading-snug mb-4">{project.title}</h3>
+      <h3 className="font-display font-bold text-xl md:text-2xl on-media leading-snug mb-4">{isAm ? (project.titleAm ?? project.title) : project.title}</h3>
 
       <div className="overflow-hidden">
         <div className="translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
           <dl className="space-y-1.5 text-xs font-body on-media-muted">
             <div className="flex gap-2">
-              <dt className="uppercase tracking-[0.14em] opacity-70">Client</dt>
+              <dt className="uppercase tracking-[0.14em] opacity-70">{isAm ? "ደንበኛ" : "Client"}</dt>
               <dd className="on-media">{project.client}</dd>
             </div>
             <div className="flex gap-2">
-              <dt className="uppercase tracking-[0.14em] opacity-70">Value</dt>
+              <dt className="uppercase tracking-[0.14em] opacity-70">{isAm ? "ዋጋ" : "Value"}</dt>
               <dd className="text-accent font-semibold">{formatBirr(project.budget)}</dd>
             </div>
           </dl>
@@ -48,14 +51,16 @@ const Panel = ({ project }: { project: Project }) => (
       </div>
 
       <span className="mt-5 inline-flex items-center gap-2 text-[11px] font-body font-bold tracking-[0.18em] uppercase text-accent">
-        Details
+        {isAm ? "ዝርዝሮች" : "Details"}
         <ArrowRight size={14} className="transition-transform duration-500 group-hover:translate-x-1.5" />
       </span>
     </div>
   </Link>
-);
+  );
+};
 
 const ProjectShowcase = () => {
+  const { locale, path } = useI18n(); const isAm = locale === "am";
   const sectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
@@ -92,13 +97,13 @@ const ProjectShowcase = () => {
   const header = (
     <div className="container-custom px-4 md:px-8 flex flex-wrap items-end justify-between gap-6 mb-10">
       <div>
-        <span className="label-eyebrow">Selected Works</span>
+        <span className="label-eyebrow">{isAm ? "የተመረጡ ሥራዎች" : "Selected Works"}</span>
         <h2 id="project-showcase" className="section-title mt-4 max-w-xl">
-          An active portfolio exceeding 25 billion Birr
+          {isAm ? "ከ25 ቢሊዮን ብር በላይ የሆነ ንቁ ፖርትፎሊዮ" : "An active portfolio exceeding 25 billion Birr"}
         </h2>
       </div>
-      <Link to="/projects" className="btn-outline-light text-sm px-6 py-3">
-        All projects <ArrowRight size={16} />
+      <Link to={path("/projects")} className="btn-outline-light text-sm px-6 py-3">
+        {isAm ? "ሁሉም ፕሮጀክቶች" : "All projects"} <ArrowRight size={16} />
       </Link>
     </div>
   );

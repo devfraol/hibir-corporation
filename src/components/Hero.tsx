@@ -13,6 +13,7 @@ import {
 import heroPoster from "@/assets/hero-highway.jpg";
 import heroVideo from "@/assets/video.mp4";
 import { companyStats } from "@/data/company";
+import { useI18n } from "@/i18n";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -22,6 +23,12 @@ const facts = [
   { value: `ETB ${Math.round(companyStats.activeContractValueBirr / 1e9)}B+`, label: "Active Project Contracts" },
   { value: companyStats.contractorGrade, label: "Contractor Classification" },
   { value: "Bahir Dar", label: "Head Office" },
+];
+const amFacts = [
+  { value: `${companyStats.staff}+`, label: "ሠራተኞች" },
+  { value: `ETB ${Math.round(companyStats.activeContractValueBirr / 1e9)}B+`, label: "ንቁ የፕሮጀክት ውሎች" },
+  { value: companyStats.contractorGrade, label: "የተቋራጭ ደረጃ" },
+  { value: "Bahir Dar", label: "ዋና መሥሪያ ቤት" },
 ];
 
 /** Thin line-drawn truss bridge used as a mid-depth layer. */
@@ -50,6 +57,9 @@ const HeroStructure = () => (
 );
 
 const Hero = () => {
+  const { locale, path } = useI18n();
+  const isAm = locale === "am";
+  const localizedFacts = isAm ? amFacts : facts;
   const ref = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const reduced = useReducedMotion();
@@ -106,7 +116,7 @@ const Hero = () => {
   return (
     <section
       ref={ref}
-      aria-label="Hibir Construction Corporation — engineering connections that shape tomorrow"
+      aria-label={isAm ? "ሂቢር ኮንስትራክሽን ኮርፖሬሽን — የነገን ትስስሮችን በምሕንድስና እንቀርጻለን" : "Hibir Construction Corporation — engineering connections that shape tomorrow"}
       className="relative min-h-[100svh] lg:min-h-[92vh] xl:min-h-[100svh] overflow-hidden flex flex-col"
       style={{ perspective: "1400px" }}
     >
@@ -121,7 +131,7 @@ const Hero = () => {
         >
           <img
             src={heroPoster}
-            alt="Newly constructed highway in Ethiopia with construction machinery on site"
+            alt={isAm ? "በኢትዮጵያ በግንባታ ላይ ያለ አዲስ የተሠራ አውራ መንገድ" : "Newly constructed highway in Ethiopia with construction machinery on site"}
             fetchPriority="high"
             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${videoReady ? "opacity-0" : "opacity-100"}`}
           />
@@ -170,16 +180,16 @@ const Hero = () => {
           <motion.div {...reveal(0.1, 12)} className="flex items-center gap-3 mb-6">
             <span className="h-px w-8 bg-accent" aria-hidden />
             <span className="text-[10px] md:text-[11px] font-body font-semibold tracking-[0.3em] uppercase on-media">
-              Hibir Construction Corporation
+              {isAm ? "ሂቢር ኮንስትራክሽን ኮርፖሬሽን" : "Hibir Construction Corporation"}
             </span>
           </motion.div>
 
           <h1 className="font-display font-bold uppercase on-media leading-[1.02] tracking-[-0.025em] text-[2.1rem] sm:text-[2.6rem] md:text-[3.2rem] lg:text-[3.4rem] xl:text-[3.9rem]">
             <motion.span {...reveal(0.3, 24)} className="block">
-              Engineering Connections
+              {isAm ? "የነገን ትስስሮች" : "Engineering Connections"}
             </motion.span>
             <motion.span {...reveal(0.45, 24)} className="block">
-              That Shape <span className="text-gradient-gold">Tomorrow</span>
+              {isAm ? <>በምሕንድስና <span className="text-gradient-gold">እንቀርጻለን</span></> : <>That Shape <span className="text-gradient-gold">Tomorrow</span></>}
             </motion.span>
           </h1>
 
@@ -187,19 +197,18 @@ const Hero = () => {
             {...reveal(0.7)}
             className="mt-6 max-w-lg text-[15px] md:text-base leading-relaxed font-body on-media-muted"
           >
-            Building roads, bridges and infrastructure that connect communities, enable economic
-            activity and support Ethiopia's continued development.
+            {isAm ? "ማህበረሰቦችን የሚያስተሳስሩ፣ ኢኮኖሚያዊ እንቅስቃሴን የሚያስችሉ እና የኢትዮጵያን ቀጣይ ልማት የሚደግፉ መንገዶችን፣ ድልድዮችንና መሠረተ ልማቶችን እንገነባለን።" : "Building roads, bridges and infrastructure that connect communities, enable economic activity and support Ethiopia's continued development."}
           </motion.p>
 
           <motion.div
             {...reveal(0.85)}
             className="mt-9 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4"
           >
-            <Link to="/projects" className="btn-accent text-sm w-full sm:w-auto">
-              Explore Our Projects <ArrowRight size={16} />
+            <Link to={path("/projects")} className="btn-accent text-sm w-full sm:w-auto">
+              {isAm ? "ፕሮጀክቶቻችንን ይመልከቱ" : "Explore Our Projects"} <ArrowRight size={16} />
             </Link>
-            <Link to="/about" className="btn-outline-media text-sm w-full sm:w-auto">
-              Discover Hibir
+            <Link to={path("/about")} className="btn-outline-media text-sm w-full sm:w-auto">
+              {isAm ? "ሂቢርን ይወቁ" : "Discover Hibir"}
             </Link>
           </motion.div>
         </motion.div>
@@ -211,7 +220,7 @@ const Hero = () => {
           {...reveal(1.15, 24)}
           className="hero-strip grid grid-cols-2 lg:grid-cols-4 rounded-2xl overflow-hidden"
         >
-          {facts.map((f) => (
+          {localizedFacts.map((f) => (
             <div key={f.label} className="hero-strip-cell px-5 py-4 md:px-7 md:py-5">
               <dt className="sr-only">{f.label}</dt>
               <dd>
@@ -236,7 +245,7 @@ const Hero = () => {
         className="absolute bottom-4 left-1/2 -translate-x-1/2 hidden md:flex items-center gap-2 z-10"
         aria-hidden
       >
-        <span className="text-[9px] font-body tracking-[0.3em] uppercase text-muted-foreground">Scroll to explore</span>
+        <span className="text-[9px] font-body tracking-[0.3em] uppercase text-muted-foreground">{isAm ? "ለመመልከት ያንሸራትቱ" : "Scroll to explore"}</span>
         <motion.span
           animate={reduced ? undefined : { y: [0, 4, 0] }}
           transition={{ repeat: Infinity, duration: 2.6, ease: "easeInOut" }}
