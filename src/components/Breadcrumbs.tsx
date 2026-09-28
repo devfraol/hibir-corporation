@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import type { Crumb } from "@/config/site";
+import { useI18n } from "@/i18n";
 
 /** Subtle visible breadcrumb trail. Pair with the same crumbs passed to <Seo />. */
 const Breadcrumbs = ({ crumbs, className = "" }: { crumbs: Crumb[]; className?: string }) => {
+  const { locale } = useI18n();
   if (crumbs.length < 2) return null;
   return (
-    <nav aria-label="Breadcrumb" className={className}>
+    <nav aria-label={locale === "am" ? "የዳሰሳ መንገድ" : "Breadcrumb"} className={className}>
       <ol className="flex flex-wrap items-center gap-2 text-[11px] font-body tracking-[0.16em] uppercase text-muted-foreground">
         {crumbs.map((c, i) => {
           const last = i === crumbs.length - 1;
