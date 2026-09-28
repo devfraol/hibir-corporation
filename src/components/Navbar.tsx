@@ -71,7 +71,14 @@ const links: NavLinkItem[] = [
     ],
   },
   { to: "/safety", label: "Safety & Quality" },
-  { to: "/news", label: "News" },
+  {
+    to: "/news",
+    label: "News",
+    children: [
+      { to: "/news", label: "Latest News" },
+      { to: "/vacancies", label: "Vacancies" },
+    ],
+  },
   { to: "/contact", label: "Contact" },
 ];
 
