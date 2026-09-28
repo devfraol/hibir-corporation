@@ -3,135 +3,28 @@ import { motion, AnimatePresence } from "framer-motion";
 import PageHero from "@/components/PageHero";
 import AnimatedSection from "@/components/AnimatedSection";
 import FeaturedProject from "@/components/projects/FeaturedProject";
-import { formatBirr } from "@/lib/formatBirr";
 import type { Project } from "@/types/project";
 import { getProjects } from "@/services/projectService";
 import { Link, useLocation } from "react-router-dom";
-import roadImg from "@/assets/road-construction.jpg";
-import bridgeImg from "@/assets/bridge-construction.jpg";
-import airportImg from "@/assets/airport-project.jpg";
 import heroImg from "@/assets/hero-construction.jpg";
-import equipmentImg from "@/assets/equipment-fleet.jpg";
-import safetyImg from "@/assets/safety-workers.jpg";
 import Seo from "@/components/Seo";
+import { useI18n } from "@/i18n";
+import { approvedLocalized } from "@/i18n/content";
 
-const filters = ["All", "Ongoing", "Completed", "Suspended", "Terminated"];
+const statuses = ["All", "Ongoing", "Completed", "Suspended", "Terminated"] as const;
+const hashToFilter: Record<string, string> = { "#completed": "Completed", "#ongoing": "Ongoing", "#suspended": "Suspended", "#terminated": "Terminated" };
+const amStatus: Record<string, string> = { All: "ሁሉም", Ongoing: "በሂደት ላይ", Completed: "የተጠናቀቀ", Suspended: "ለጊዜው የተቋረጠ", Terminated: "የተሰረዘ" };
+const amCategory: Record<string, string> = { "Asphalt Road": "የአስፋልት መንገድ", "Gravel Road": "የጠጠር መንገድ", Bridge: "ድልድይ", "Urban Infrastructure": "የከተማ መሠረተ ልማት", Cobblestone: "የኮብልስቶን መንገድ" };
 
-const hashToFilter: Record<string, string> = {
-  "#completed": "Completed",
-  "#ongoing": "Ongoing",
-  "#suspended": "Suspended",
-  "#terminated": "Terminated",
-};
-
-const Projects = () => {
-  const [filter, setFilter] = useState("All");
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-  const { hash } = useLocation();
-
-  useEffect(() => {
-    const f = hashToFilter[hash];
-    if (f) setFilter(f);
-  }, [hash]);
-  useEffect(() => {
-    let cancelled = false;
-    void getProjects().then((items) => { if (!cancelled) setProjects(items); }).catch(() => { if (!cancelled) setProjects([]); }).finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
-  }, []);
-
-  const filtered = filter === "All" ? projects : projects.filter(p => p.status === filter);
-
-  return (
-    <main>
-      <Seo
-        title="Construction Projects in Ethiopia | Hibir Construction Corporation"
-        description="Road, bridge, cobblestone and urban infrastructure projects delivered by Hibir Construction Corporation across the Amhara Region and Ethiopia, with an active contract portfolio above 25 billion Birr."
-        path="/projects"
-        breadcrumbs={[{ name: "Home", path: "/" }, { name: "Projects", path: "/projects" }]}
-      />
-      <PageHero title="Our Projects" subtitle="An active contract portfolio exceeding 25 billion Birr across Ethiopia's infrastructure landscape" image={heroImg} />
-
-      {/* Summary Stats */}
-      <section className="relative -mt-16 z-20 px-4 md:px-8 mb-12">
-        <div className="container-custom">
-          <div className="grid grid-cols-3 gap-4 md:gap-6">
-            {[
-              { label: "Active Contract Value", value: "25B+ Birr" },
-              { label: "Annual Turnover", value: "3.4B+ Birr" },
-              { label: "Total Projects", value: `${projects.length}+` },
-            ].map((s, i) => (
-              <div key={i} className="glass-card p-6 text-center">
-                <div className="text-2xl md:text-3xl font-display font-bold text-gradient-gold">{s.value}</div>
-                <div className="text-xs text-muted-foreground font-body mt-1">{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <div id="featured" className="scroll-mt-24" />
-      {!loading && projects.length > 0 && <FeaturedProject project={projects.find((p) => p.featured) ?? projects[0]} />}
-
-      <section className="section-padding pt-0">
-        <div className="container-custom">
-          {/* Filters */}
-          <div id="gallery" className="scroll-mt-28 flex flex-wrap justify-center gap-3 mb-14">
-            {filters.map(f => (
-              <button
-                key={f}
-                onClick={() => setFilter(f)}
-                className={`px-6 py-2.5 rounded-xl text-sm font-body font-medium transition-all duration-300 ${
-                  filter === f
-                    ? "bg-accent text-accent-foreground shadow-lg shadow-accent/20"
-                    : "glass-card text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {f} ({f === "All" ? projects.length : projects.filter(p => p.status === f).length})
-              </button>
-            ))}
-          </div>
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={filter}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-            >
-              {loading ? <div className="col-span-full surface-card p-10 text-center text-muted-foreground">Loading projects…</div> : filtered.map((p, i) => (
-                <AnimatedSection key={p.id} delay={i * 0.05}>
-                  <Link to={`/projects/${p.slug}`} className="group glass-card rounded-2xl overflow-hidden block hover:border-accent/40 transition-colors">
-                    <div className="relative overflow-hidden h-56">
-                      <img src={p.image} alt={p.featuredImage.alt} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      <span className={`absolute top-4 right-4 px-3 py-1.5 rounded-lg text-xs font-body font-semibold backdrop-blur-sm ${
-                        p.status === "Completed" ? "bg-green-500/15 text-green-400 border border-green-500/20" : "bg-accent/15 text-accent border border-accent/20"
-                      }`}>
-                        {p.status ?? "Status not disclosed"}
-                      </span>
-                    </div>
-                    <div className="p-6">
-                      <h3 className="font-display font-semibold text-lg mb-3 text-foreground">{p.title}</h3>
-                      <div className="space-y-2 text-sm font-body text-muted-foreground">
-                        <p><span className="font-medium text-foreground/80">Category:</span> {p.category}</p>
-                        <p><span className="font-medium text-foreground/80">Location:</span> {p.location || "Not disclosed"}</p>
-                        <p><span className="font-medium text-foreground/80">Client:</span> {p.client}</p>
-                        {p.contractValue !== undefined && <p><span className="font-medium text-foreground/80">Contract Value:</span> <span className="text-accent font-semibold">{formatBirr(p.contractValue)}</span></p>}
-                      </div>
-                    </div>
-                  </Link>
-                </AnimatedSection>
-              ))}
-            </motion.div>
-          </AnimatePresence>
-          {!loading && filtered.length === 0 && <p className="mt-8 text-center font-body text-muted-foreground">No projects match this execution status.</p>}
-        </div>
-      </section>
-    </main>
-  );
-};
-
-export default Projects;
+export default function Projects() {
+  const { locale, path } = useI18n(); const { hash } = useLocation();
+  const am = locale === "am";
+  const copy = am ? { title: "ፕሮጀክቶቻችን", subtitle: "በኢትዮጵያ የመሠረተ ልማት ዘርፍ ከ25 ቢሊዮን ብር በላይ ንቁ የውል ፖርትፎሊዮ", active: "ንቁ የውል ዋጋ", turnover: "ዓመታዊ ገቢ", total: "ጠቅላላ ፕሮጀክቶች", category: "ምድብ", location: "ቦታ", client: "ደንበኛ", notDisclosed: "አልተገለጸም", loading: "ፕሮጀክቶች በመጫን ላይ…", empty: "ከዚህ የአፈጻጸም ሁኔታ ጋር የሚዛመድ ፕሮጀክት አልተገኘም።", seoTitle: "የ Hibir Construction Corporation ፕሮጀክቶች", seoDescription: "በኢትዮጵያ የ Hibir Construction Corporation የመንገድ፣ የድልድይ እና የከተማ መሠረተ ልማት ፕሮጀክቶች።" } : { title: "Our Projects", subtitle: "An active contract portfolio exceeding 25 billion Birr across Ethiopia's infrastructure landscape", active: "Active Contract Value", turnover: "Annual Turnover", total: "Total Projects", category: "Category", location: "Location", client: "Client", notDisclosed: "Not disclosed", loading: "Loading projects…", empty: "No projects match this execution status.", seoTitle: "Construction Projects in Ethiopia | Hibir Construction Corporation", seoDescription: "Road, bridge, cobblestone and urban infrastructure projects delivered by Hibir Construction Corporation across Ethiopia." };
+  const [filter, setFilter] = useState<string>("All"); const [projects, setProjects] = useState<Project[]>([]); const [loading, setLoading] = useState(true);
+  useEffect(() => { const f = hashToFilter[hash]; if (f) setFilter(f); }, [hash]);
+  useEffect(() => { let cancelled = false; setLoading(true); void getProjects(undefined, locale).then((items) => { if (!cancelled) setProjects(items); }).catch(() => { if (!cancelled) setProjects([]); }).finally(() => { if (!cancelled) setLoading(false); }); return () => { cancelled = true; }; }, [locale]);
+  const filtered = filter === "All" ? projects : projects.filter((project) => project.status === filter);
+  const projectTitle = (project: Project) => approvedLocalized(locale, project.title, project.titleAm) ?? "—";
+  const description = (project: Project) => approvedLocalized(locale, project.description, project.descriptionAm) ?? "—";
+  return <main><Seo title={copy.seoTitle} description={copy.seoDescription} path={path("/projects")} breadcrumbs={[{ name: am ? "መነሻ" : "Home", path: path("/") }, { name: copy.title, path: path("/projects") }]} /><PageHero title={copy.title} subtitle={copy.subtitle} image={heroImg} /><section className="relative -mt-16 z-20 px-4 md:px-8 mb-12"><div className="container-custom"><div className="grid grid-cols-3 gap-4 md:gap-6">{[{ label: copy.active, value: "25B+ Birr" }, { label: copy.turnover, value: "3.4B+ Birr" }, { label: copy.total, value: `${projects.length}+` }].map((s) => <div key={s.label} className="glass-card p-6 text-center"><div className="text-2xl md:text-3xl font-display font-bold text-gradient-gold">{s.value}</div><div className="text-xs text-muted-foreground font-body mt-1">{s.label}</div></div>)}</div></div></section><div id="featured" className="scroll-mt-24" />{!loading && projects.length > 0 && <FeaturedProject project={projects.find((project) => project.featured) ?? projects[0]} />}<section className="section-padding pt-0"><div className="container-custom"><div id="gallery" className="scroll-mt-28 flex flex-wrap justify-center gap-3 mb-14">{statuses.map((status) => <button key={status} onClick={() => setFilter(status)} className={`px-6 py-2.5 rounded-xl text-sm font-body font-medium transition-all duration-300 ${filter === status ? "bg-accent text-accent-foreground shadow-lg shadow-accent/20" : "glass-card text-muted-foreground hover:text-foreground"}`}>{am ? amStatus[status] : status} ({status === "All" ? projects.length : projects.filter((p) => p.status === status).length})</button>)}</div><AnimatePresence mode="wait"><motion.div key={filter} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">{loading ? <div className="col-span-full surface-card p-10 text-center text-muted-foreground">{copy.loading}</div> : filtered.map((project, i) => <AnimatedSection key={project.id} delay={i * 0.05}><Link to={path(`/projects/${project.slug}`)} className="group glass-card rounded-2xl overflow-hidden block hover:border-accent/40 transition-colors"><div className="relative overflow-hidden h-56"><img src={project.image} alt={project.featuredImage.alt} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" /><span className="absolute top-4 right-4 px-3 py-1.5 rounded-lg text-xs font-body font-semibold backdrop-blur-sm bg-accent/15 text-accent border border-accent/20">{project.status ? (am ? amStatus[project.status] : project.status) : copy.notDisclosed}</span></div><div className="p-6"><h3 className="font-display font-semibold text-lg mb-3 text-foreground">{projectTitle(project)}</h3><div className="space-y-2 text-sm font-body text-muted-foreground"><p><span className="font-medium text-foreground/80">{copy.category}:</span> {am ? amCategory[project.category] : project.category}</p><p><span className="font-medium text-foreground/80">{copy.location}:</span> {project.location || copy.notDisclosed}</p><p><span className="font-medium text-foreground/80">{copy.client}:</span> {project.client || copy.notDisclosed}</p></div></div></Link></AnimatedSection>)}</motion.div></AnimatePresence>{!loading && filtered.length === 0 && <p className="mt-8 text-center font-body text-muted-foreground">{copy.empty}</p>}</div></section></main>;
+}

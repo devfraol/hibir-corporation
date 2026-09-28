@@ -188,8 +188,8 @@ export async function getProjects(status?: ProjectStatus | "All", locale: Locale
   return localized.filter((p) => p.status === status);
 }
 
-export async function getFeaturedProject(): Promise<Project> {
-  const all = await getPublishedProjects();
+export async function getFeaturedProject(locale: Locale = "en"): Promise<Project | undefined> {
+  const all = (await getPublishedProjects()).filter((project) => locale === "en" || Boolean(project.titleAm?.trim()));
   return all.find((p) => p.featured) ?? all[0];
 }
 
@@ -198,10 +198,10 @@ export async function getProjectBySlug(slug: string, locale: Locale = "en"): Pro
   return rows.map(toProject).find((project) => project.slug === slug && (locale === "en" || Boolean(project.titleAm?.trim()))) ?? null;
 }
 
-export async function getRelatedProjects(slug: string, limit = 3): Promise<Project[]> {
-  const current = await getProjectBySlug(slug);
+export async function getRelatedProjects(slug: string, limit = 3, locale: Locale = "en"): Promise<Project[]> {
+  const current = await getProjectBySlug(slug, locale);
   if (!current) return [];
-  const rest = (await getPublishedProjects()).filter((p) => p.slug !== slug);
+  const rest = (await getProjects(undefined, locale)).filter((p) => p.slug !== slug);
   const sameCategory = rest.filter((p) => p.category === current.category);
   return [...sameCategory, ...rest.filter((p) => p.category !== current.category)].slice(0, limit);
 }
