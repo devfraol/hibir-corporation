@@ -5,8 +5,22 @@ import equipmentImg from "@/assets/equipment-fleet.jpg";
 import airportImg from "@/assets/airport-project.jpg";
 import safetyImg from "@/assets/safety-workers.jpg";
 import type { ProjectCategory } from "@/types/project";
+import type { Locale } from "@/i18n";
 
 /** Backend-ready service model with dedicated SEO fields. */
+export interface ServiceAmharicContent {
+  /** Publisher-approved Amharic content only; never populated by automatic translation. */
+  name: string;
+  shortDescription: string;
+  description: string;
+  heroImageAlt: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  h1: string;
+  sections: { heading: string; body: string }[];
+  capabilities: string[];
+}
+
 export interface Service {
   id: string;
   name: string;
@@ -28,6 +42,8 @@ export interface Service {
   newsTags: string[];
   relatedServices: string[];
   order: number;
+  /** Optional approved localized counterpart. Missing content is deliberately not replaced with English. */
+  amharic?: ServiceAmharicContent;
 }
 
 const raw: Omit<Service, "canonicalUrl" | "order">[] = [
@@ -345,6 +361,23 @@ export const services: Service[] = raw.map((s, i) => ({
 }));
 
 export const getServiceBySlug = (slug: string) => services.find((s) => s.slug === slug) ?? null;
+
+/**
+ * Select a service for the active language. Amharic services are visible only
+ * after their complete, approved localized content has been supplied.
+ */
+export const getLocalizedServiceBySlug = (slug: string, locale: Locale): Service | null => {
+  const service = getServiceBySlug(slug);
+  return service && (locale === "en" || service.amharic) ? service : null;
+};
+
+export const getLocalizedServices = (locale: Locale) =>
+  locale === "en" ? services : services.filter((service) => Boolean(service.amharic));
+
+export const serviceContent = (service: Service, locale: Locale): Service => {
+  if (locale === "am" && service.amharic) return { ...service, ...service.amharic, amharic: undefined };
+  return service;
+};
 
 export const getServicesBySlugs = (slugs: string[]) =>
   slugs.map((s) => getServiceBySlug(s)).filter((s): s is Service => !!s);

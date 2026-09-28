@@ -5,7 +5,7 @@
 import { writeFileSync } from "fs";
 import { resolve } from "path";
 import { SITE_URL } from "../src/config/site";
-import { services } from "../src/data/services";
+import { getLocalizedServices, services } from "../src/data/services";
 
 interface SitemapEntry {
   path: string;
@@ -47,7 +47,7 @@ const entries = [
   // approved Amharic content exists.
   ...staticEntries.map((entry) => ({ ...entry, path: entry.path === "/" ? "/am" : `/am${entry.path}` })),
   ...serviceEntries,
-  ...serviceEntries.map((entry) => ({ ...entry, path: `/am${entry.path}` })),
+  ...getLocalizedServices("am").map((service) => ({ path: `/am${service.canonicalUrl}`, changefreq: "monthly" as const, priority: "0.8" })),
   ...newsEntries,
   ...categoryEntries,
 ];
