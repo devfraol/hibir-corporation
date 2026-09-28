@@ -28,3 +28,12 @@ it("does not turn preview data into a published record", () => {
   expect(preview.status).toBe("draft");
   expect(validateEditorialInput(preview, false)).toEqual({});
 });
+
+describe("publication date validation", () => {
+  it("requires an explicit publication date before publishing", () => {
+    expect(validateEditorialInput({ title: "News", slug: "news", category: "Company News", excerpt: "Excerpt", content: [{ type: "paragraph", text: "Body" }], coverImage: "/cover.jpg" }, true).publishedAt).toMatch(/publication date/i);
+  });
+  it("accepts the date-only publication timestamp stored by the editor", () => {
+    expect(validateEditorialInput({ title: "News", slug: "news", category: "Company News", excerpt: "Excerpt", content: [{ type: "paragraph", text: "Body" }], coverImage: "/cover.jpg", publishedAt: "2023-03-15T00:00:00.000Z" }, true).publishedAt).toBeUndefined();
+  });
+});
