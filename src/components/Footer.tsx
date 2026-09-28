@@ -43,6 +43,7 @@ const columns: { title: string; links: { to: string; label: string }[] }[] = [
     title: "News",
     links: [
       { to: "/news", label: "Latest News" },
+      { to: "/vacancies", label: "Vacancies" },
       { to: "/news/category/company-news", label: "Company News" },
       { to: "/news/category/projects", label: "Project News" },
       { to: "/news/category/infrastructure", label: "Infrastructure" },

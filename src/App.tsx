@@ -26,6 +26,8 @@ import ProjectDetail from "./pages/ProjectDetail";
 import NotFound from "./pages/NotFound";
 import ServiceDetail from "./pages/ServiceDetail";
 import NewsCategoryPage from "./pages/NewsCategoryPage";
+import Vacancies from "./pages/Vacancies";
+import VacancyDetail from "./pages/VacancyDetail";
 import { resolveRedirect } from "@/config/redirects";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedAdminRoute } from "@/components/admin/ProtectedAdminRoute";
@@ -88,6 +90,8 @@ const AnimatedRoutes = () => {
         <Route path="/news" element={<PageTransition><News /></PageTransition>} /><Route path="/am/news" element={<PageTransition><News /></PageTransition>} />
         <Route path="/news/category/:slug" element={<PageTransition><NewsCategoryPage /></PageTransition>} /><Route path="/am/news/category/:slug" element={<PageTransition><NewsCategoryPage /></PageTransition>} />
         <Route path="/news/:slug" element={<PageTransition><NewsArticlePage /></PageTransition>} /><Route path="/am/news/:slug" element={<PageTransition><NewsArticlePage /></PageTransition>} />
+        <Route path="/vacancies" element={<PageTransition><Vacancies /></PageTransition>} /><Route path="/am/vacancies" element={<PageTransition><Vacancies /></PageTransition>} />
+        <Route path="/vacancies/:slug" element={<PageTransition><VacancyDetail /></PageTransition>} /><Route path="/am/vacancies/:slug" element={<PageTransition><VacancyDetail /></PageTransition>} />
         <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} /><Route path="/am/contact" element={<PageTransition><Contact /></PageTransition>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
