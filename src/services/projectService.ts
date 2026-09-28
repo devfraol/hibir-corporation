@@ -32,6 +32,8 @@ const toProject = (row: PublishedProjectRow): Project => {
     client: row.client ?? "",
     consultant: row.consultant ?? undefined,
     location: row.location ?? "",
+    length: row.length ?? undefined,
+    pavementType: row.pavement_type ?? undefined,
     // Contract value and contractor role are static fallback-only fields. Do not
     // fabricate them for CMS records until their database columns are approved.
     status: row.project_status ?? undefined,
@@ -91,6 +93,7 @@ const toRow = (input: UpdateProjectInput) => ({
   ...(input.title !== undefined && { title: input.title }), ...(input.slug !== undefined && { slug: input.slug }),
   ...(input.description !== undefined && { description: input.description || null }), ...(input.client !== undefined && { client: input.client || null }),
   ...(input.consultant !== undefined && { consultant: input.consultant || null }), ...(input.location !== undefined && { location: input.location || null }),
+  ...(input.length !== undefined && { length: input.length || null }), ...(input.pavementType !== undefined && { pavement_type: input.pavementType || null }),
   ...(input.category !== undefined && { category: input.category }), ...(input.coverImage !== undefined && { cover_image: input.coverImage || null }),
   ...(input.featured !== undefined && { featured: input.featured }), ...(input.status !== undefined && { status: input.status }),
   ...(input.projectStatus !== undefined && { project_status: input.projectStatus }), ...(input.contractDate !== undefined && { contract_date: input.contractDate || null }),

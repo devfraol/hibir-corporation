@@ -73,7 +73,7 @@ const toNewsPayload = (input: UpdateNewsInput) => ({
 
 /** Authenticated CMS reads. RLS controls whether the caller may see drafts. */
 export async function getAdminNews(filters: AdminNewsFilters = {}): Promise<NewsArticle[]> {
-  let query = requireSupabase().from("news_articles").select("*").order("updated_at", { ascending: false });
+  let query = requireSupabase().from("news_articles").select("*").order("published_at", { ascending: false, nullsFirst: false }).order("created_at", { ascending: false });
   if (filters.status && filters.status !== "all") query = query.eq("status", filters.status);
   if (filters.category && filters.category !== "all") query = query.eq("category", filters.category);
   if (filters.featured !== undefined) query = query.eq("featured", filters.featured);
@@ -108,7 +108,7 @@ export async function deleteNews(id: string): Promise<void> {
 
 export const saveNewsDraft = (id: string, input: UpdateNewsInput) => updateNews(id, { ...input, status: "draft", publishedAt: null });
 export const archiveNews = (id: string) => updateNews(id, { status: "archived" });
-export const publishNews = (id: string) => updateNews(id, { status: "published", publishedAt: new Date().toISOString() });
+export const publishNews = (id: string) => updateNews(id, { status: "published" });
 
 /** Uploads public article imagery through the authenticated browser session. */
 export async function uploadNewsImage(articleId: string, file: File): Promise<string> {

@@ -8,7 +8,7 @@ export type { ProjectCategory, ProjectExecutionStatus, ProjectPublicationStatus 
 
 export interface CreateProjectInput {
   title: string; slug: string; description?: string; client?: string; consultant?: string;
-  location?: string; category?: ProjectCategory; coverImage?: string; featured: boolean;
+  location?: string; length?: string; pavementType?: string; category?: ProjectCategory; coverImage?: string; featured: boolean;
   status: ProjectPublicationStatus; projectStatus?: ProjectExecutionStatus; contractDate?: string; completionDate?: string; seoTitle?: string; seoDescription?: string;
   titleAm?: string; descriptionAm?: string; seoTitleAm?: string; seoDescriptionAm?: string;
 }

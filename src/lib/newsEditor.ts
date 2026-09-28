@@ -29,9 +29,11 @@ export const validateImageFile = (file: File) => {
   return null;
 };
 
-export type EditorialErrors = Partial<Record<"title" | "slug" | "category" | "content" | "coverImage" | "seoTitle" | "seoDescription", string>>;
+export type EditorialErrors = Partial<Record<"title" | "slug" | "category" | "content" | "coverImage" | "seoTitle" | "seoDescription" | "publishedAt", string>>;
 export const validateEditorialInput = (input: CreateNewsInput, publish: boolean): EditorialErrors => {
   const errors: EditorialErrors = {};
+  if (publish && !input.publishedAt) errors.publishedAt = "A publication date is required before publishing.";
+  if (input.publishedAt && !/^\d{4}-\d{2}-\d{2}T00:00:00\.000Z$/.test(input.publishedAt)) errors.publishedAt = "Choose a valid publication date.";
   if (publish && !input.title.trim()) errors.title = "A title is required before publishing.";
   if (publish && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(input.slug)) errors.slug = "Use a lowercase, URL-safe slug.";
   if (publish && !input.category) errors.category = "Select a category before publishing.";
