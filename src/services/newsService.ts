@@ -1,3 +1,4 @@
+import type { NewsBlock } from "@/types/news";
 import { getSupabaseClient, isSupabaseConfigured } from "@/lib/supabase";
 import { fetchPublishedNewsRows } from "@/services/supabaseContentAdapters";
 import { NEWS_CATEGORIES, type AdminNewsFilters, type CreateNewsInput, type NewsArticle, type NewsCategory, type NewsQuery, type Paginated, type UpdateNewsInput } from "@/types/news";
@@ -42,7 +43,7 @@ const toNewsArticle = (row: NewsRow): NewsArticle => ({
   seoDescription: row.seo_description ?? undefined,
   titleAm: (row as LocalizedNewsRow).title_am ?? undefined,
   excerptAm: (row as LocalizedNewsRow).excerpt_am ?? undefined,
-  contentAm: isNewsContent((row as LocalizedNewsRow).content_am) ? (row as LocalizedNewsRow).content_am : undefined,
+  contentAm: isNewsContent((row as LocalizedNewsRow).content_am) ? ((row as LocalizedNewsRow).content_am as NewsBlock[]) : undefined,
   seoTitleAm: (row as LocalizedNewsRow).seo_title_am ?? undefined,
   seoDescriptionAm: (row as LocalizedNewsRow).seo_description_am ?? undefined,
 });

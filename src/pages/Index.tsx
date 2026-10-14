@@ -1,39 +1,198 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Building2, CheckCircle, Factory, HardHat, Shield, Truck, Wrench } from "lucide-react";
-import aboutImg from "@/assets/WhoWeAre.png";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import safetyImg from "@/assets/safety-quality.jpg";
 import ctaBg from "@/assets/cta-background.jpg";
 import AnimatedSection from "@/components/AnimatedSection";
 import Hero from "@/components/Hero";
-import StatsSection from "@/components/home/StatsSection";
-import Timeline from "@/components/home/Timeline";
 import ProjectShowcase from "@/components/home/ProjectShowcase";
 import LatestNews from "@/components/home/LatestNews";
 import PartnersMarquee from "@/components/PartnersMarquee";
 import Seo from "@/components/Seo";
 import { useI18n } from "@/i18n";
+import { navLabel } from "@/i18n/content";
+import { companyStats } from "@/data/company";
+import { services } from "@/data/services";
 
-const services = [
-  [HardHat, "Road Construction", "Design and construction of highways, urban roads, and rural access roads across Ethiopia's diverse terrain.", "የመንገድ ግንባታ", "በኢትዮጵያ የተለያዩ መልከዓ ምድሮች ላይ የአውራ መንገድ፣ የከተማና የገጠር መዳረሻ መንገዶችን እንነድፋለን እንገነባለን።"],
-  [Building2, "Asphalt & Infrastructure", "Full-service asphalt production and laying from our own plants for durable road surfaces.", "አስፋልትና መሠረተ ልማት", "ዘላቂ የመንገድ ንጣፍ ለማቅረብ በራሳችን ፕላንቶች አስፋልት እናመርታለን እናስፋለን።"],
-  [Truck, "Bridge Construction", "Engineering and construction of reinforced concrete bridges, culverts, and drainage structures.", "የድልድይ ግንባታ", "የተጠናከሩ የኮንክሪት ድልድዮችን፣ ካልቨርቶችንና የፍሳሽ መዋቅሮችን በምሕንድስና እንገነባለን።"],
-  [Wrench, "Road Maintenance", "Comprehensive rehabilitation and upgrading of existing road networks to extend service life.", "የመንገድ ጥገና", "የነባር የመንገድ መረቦችን የአገልግሎት ዕድሜ ለማራዘም እናሻሽላለን እናድሳለን።"],
-  [Factory, "Material Production", "Production and supply of crushed aggregate, asphalt, and concrete from our own plants and quarries.", "የቁሳቁስ ምርት", "ከራሳችን ፕላንቶችና ቋራዎች የተፈጨ ድንጋይ፣ አስፋልትና ኮንክሪት እናመርታለን እናቀርባለን።"],
-];
+const n = (v: number) => v.toLocaleString("en-US");
 
 export default function Home() {
-  const { locale, path } = useI18n(); const am = locale === "am";
-  const text = (en: string, amh: string) => am ? amh : en;
-  return <main id="main-content">
-    <Seo path={am ? "/am" : "/"} title={text("Hibir Construction Corporation | Construction & Infrastructure in Ethiopia", "ሂቢር ኮንስትራክሽን ኮርፖሬሽን | በኢትዮጵያ የግንባታና መሠረተ ልማት መሪ")} description={text("Hibir Construction Corporation builds roads, bridges, buildings and urban infrastructure across Ethiopia.", "ሂቢር ኮንስትራክሽን ኮርፖሬሽን በኢትዮጵያ መንገዶችን፣ ድልድዮችን፣ ሕንፃዎችንና የከተማ መሠረተ ልማቶችን ይገነባል።")} />
-    <Hero />
-    <section id="partnerships" className="py-16 md:py-20 overflow-hidden border-b border-border/60"><div className="container-custom"><AnimatedSection className="text-center mb-10"><span className="label-eyebrow">{text("Clients & Strategic Partners", "ደንበኞችና ስትራቴጂካዊ አጋሮች")}</span><h2 className="section-title mt-3 text-2xl md:text-3xl">{text("Trusted by 19 national and regional institutions", "19 ብሔራዊና ክልላዊ ተቋማት የሚተማመኑብን")}</h2></AnimatedSection></div><PartnersMarquee /></section>
-    <StatsSection /><Timeline />
-    <AnimatedSection className="section-padding"><div className="container-custom grid md:grid-cols-2 gap-12 lg:gap-20 items-center"><div><span className="label-eyebrow">{text("Who We Are", "እኛ ማን ነን")}</span><h2 className="section-title mt-3 mb-6">{text("Ethiopia's Leading Construction Corporation", "የኢትዮጵያ ቀዳሚ የግንባታ ኮርፖሬሽን")}</h2><p className="text-muted-foreground font-body leading-relaxed mb-4">{text('Hibir Construction Corporation is a government-owned construction enterprise headquartered in Bahir Dar, Ethiopia. Originally established as "Amhara Road Works Enterprise" by Proclamation No. 71/2010, the corporation was re-established by Proclamation No. 170/2018 and upgraded to corporation level by Proclamation No. 214/2024.', 'ሂቢር ኮንስትራክሽን ኮርፖሬሽን ዋና መሥሪያ ቤቱ በባሕር ዳር የሚገኝ የመንግሥት የግንባታ ድርጅት ነው። በአዋጅ ቁጥር 71/2010 የተቋቋመው የአማራ መንገድ ሥራዎች ድርጅት በአዋጅ ቁጥር 170/2018 እንደገና ተቋቁሞ በአዋጅ ቁጥር 214/2024 ወደ ኮርፖሬሽን ደረጃ አድጓል።')}</p><p className="text-muted-foreground font-body leading-relaxed mb-8">{text("With 843 professionals, 282 units of vehicles, plants and machinery, and an active contract portfolio exceeding 25 billion Birr, we are a key driver of Ethiopia's infrastructure development.", "843 ባለሙያዎች፣ 282 ተሽከርካሪዎች፣ ፕላንቶችና ማሽነሪዎች እንዲሁም ከ25 ቢሊዮን ብር በላይ የሆነ ንቁ የውል ፖርትፎሊዮ በመያዝ ለኢትዮጵያ መሠረተ ልማት ዕድገት ቁልፍ አስተዋጽኦ እናደርጋለን።")}</p><Link to={path("/about")} className="btn-primary inline-flex items-center gap-2">{text("Learn More", "ተጨማሪ ይወቁ")} <ArrowRight size={18}/></Link></div><img src={aboutImg} alt={text("Construction machinery", "የግንባታ ማሽነሪዎች")} className="rounded-2xl w-full shadow-2xl" loading="lazy" /></div></AnimatedSection>
-    <section className="section-padding"><div className="container-custom"><AnimatedSection className="text-center mb-16"><span className="label-eyebrow">{text("Our Services", "አገልግሎቶቻችን")}</span><h2 className="section-title mt-3">{text("What We Build", "የምንገነባው")}</h2></AnimatedSection><div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">{services.map(([Icon,en,desc,amh,amDesc]) => <div key={en as string} className="glass-card p-8"><Icon size={28} className="text-accent mb-6"/><h3 className="font-display font-semibold text-lg mb-3">{text(en as string, amh as string)}</h3><p className="text-muted-foreground font-body text-sm leading-relaxed">{text(desc as string, amDesc as string)}</p></div>)}</div><div className="text-center mt-14"><Link to={path("/services")} className="btn-primary inline-flex items-center gap-2">{text("All Services", "ሁሉም አገልግሎቶች")} <ArrowRight size={18}/></Link></div></div></section>
-    <ProjectShowcase />
-    <section className="section-padding relative overflow-hidden"><div className="container-custom"><AnimatedSection className="text-center mb-16"><span className="label-eyebrow">{text("Our Standards", "መለኪያዎቻችን")}</span><h2 className="section-title mt-3">{text("Safety & Quality", "ደህንነትና ጥራት")}</h2></AnimatedSection><div className="grid md:grid-cols-2 gap-8">{[[Shield,"Safety First","ደህንነት ቅድሚያ","The corporation follows scientific HSE procedures to ensure a safe workplace.","ኮርፖሬሽኑ ደህንነቱ የተጠበቀ የሥራ ቦታ ለማረጋገጥ ሳይንሳዊ የHSE ሂደቶችን ይከተላል።"],[CheckCircle,"Quality Assurance","የጥራት ማረጋገጫ","Rigorous quality control is maintained through planned supervision and management reviews.","ጥብቅ የጥራት ቁጥጥር በታቀደ ቁጥጥርና በአስተዳደር ግምገማ ይጠበቃል።"]].map(([Icon,en,amh,desc,amDesc]) => <div key={en as string} className="glass-card p-10"><Icon size={36} className="text-accent mb-5"/><h3 className="text-xl font-display font-semibold mb-4">{text(en as string, amh as string)}</h3><p className="text-muted-foreground font-body">{text(desc as string, amDesc as string)}</p></div>)}</div></div></section>
-    <LatestNews />
-    <section className="relative py-28 overflow-hidden"><img src={ctaBg} alt="" className="absolute inset-0 w-full h-full object-cover"/><div className="absolute inset-0 bg-background/90"/><div className="relative z-10 container-custom text-center"><h2 className="text-3xl md:text-5xl font-bold font-display mb-5">{text("Let's Build the Future Together", "የወደፊቱን በአንድነት እንገንባ")}</h2><p className="text-muted-foreground font-body text-lg max-w-2xl mx-auto mb-12">{text("Partner with Hibir Construction Corporation for reliable, high-quality infrastructure solutions.", "ለአስተማማኝና ጥራታቸውን ለጠበቁ የመሠረተ ልማት መፍትሔዎች ከሂቢር ኮንስትራክሽን ኮርፖሬሽን ጋር ይተባበሩ።")}</p><Link to={path("/contact")} className="btn-accent inline-flex gap-2">{text("Get in Touch", "ያግኙን")} <ArrowRight size={18}/></Link></div></section>
-  </main>;
+  const { locale, path } = useI18n();
+  const am = locale === "am";
+  const text = (en: string, amh: string) => (am ? amh : en);
+  const s = companyStats;
+
+  const milestones = [
+    ["2010", text("Proclamation No. 71/2010", "አዋጅ ቁጥር 71/2010"), text("Established as Amhara Road Works Enterprise", "የአማራ መንገድ ሥራዎች ድርጅት ተቋቋመ")],
+    ["2018", text("Proclamation No. 170/2018", "አዋጅ ቁጥር 170/2018"), text("Re-established", "እንደገና ተቋቋመ")],
+    ["2024", text("Proclamation No. 214/2024", "አዋጅ ቁጥር 214/2024"), text("Elevated to corporation status", "ወደ ኮርፖሬሽን ደረጃ አደገ")],
+  ];
+
+  const capabilities = services.slice(0, 5);
+
+  return (
+    <main id="main-content">
+      <Seo
+        path={am ? "/am" : "/"}
+        title={text("Hibir Construction Corporation | Roads, Bridges & Infrastructure in Ethiopia", "ሂቢር ኮንስትራክሽን ኮርፖሬሽን | በኢትዮጵያ የግንባታና መሠረተ ልማት")}
+        description={text(
+          "Government-owned GC-1 contractor headquartered in Bahir Dar, building roads, bridges, buildings and urban infrastructure with 843 staff and 282 vehicles, plants and machinery.",
+          "ሂቢር ኮንስትራክሽን ኮርፖሬሽን በኢትዮጵያ መንገዶችን፣ ድልድዮችን፣ ሕንፃዎችንና የከተማ መሠረተ ልማቶችን ይገነባል።",
+        )}
+      />
+      <Hero />
+
+      {/* 2 — Corporate introduction */}
+      <section aria-labelledby="intro-heading" className="section-padding border-b border-border">
+        <div className="container-custom grid gap-14 lg:grid-cols-12">
+          <AnimatedSection className="lg:col-span-7">
+            <span className="label-eyebrow">{text("Who We Are", "እኛ ማን ነን")}</span>
+            <h2 id="intro-heading" className="section-title mt-4 max-w-2xl">
+              {text("A public enterprise built to deliver the region's infrastructure", "የክልሉን መሠረተ ልማት ለማቅረብ የተቋቋመ የመንግሥት ድርጅት")}
+            </h2>
+            <p className="mt-8 text-lg text-foreground/85 font-body leading-relaxed max-w-2xl">
+              {text(
+                "Hibir Construction Corporation is a government-owned enterprise accountable to the Amhara Regional Public Enterprises Authority, with its head office in Bahir Dar, Amhara Regional State.",
+                "ሂቢር ኮንስትራክሽን ኮርፖሬሽን ለአማራ ክልል የመንግሥት የልማት ድርጅቶች ባለሥልጣን ተጠሪ የሆነና ዋና መሥሪያ ቤቱ በባሕር ዳር የሚገኝ የመንግሥት ድርጅት ነው።",
+              )}
+            </p>
+            <Link to={path("/about")} className="mt-10 inline-flex items-center gap-2 text-sm font-body font-semibold uppercase tracking-[0.18em] text-accent hover:gap-3 transition-all">
+              {text("About Hibir", "ስለ ሂቢር")} <ArrowRight size={16} aria-hidden />
+            </Link>
+          </AnimatedSection>
+          <AnimatedSection className="lg:col-span-5">
+            <ol className="border-l border-border">
+              {milestones.map(([year, law, what]) => (
+                <li key={year} className="relative pl-8 pb-10 last:pb-0">
+                  <span className="absolute -left-[5px] top-2 h-2.5 w-2.5 rounded-full bg-accent" aria-hidden />
+                  <p className="font-display text-3xl font-bold text-foreground">{year}</p>
+                  <p className="mt-1 text-xs font-body uppercase tracking-[0.16em] text-accent">{law}</p>
+                  <p className="mt-2 font-body text-muted-foreground">{what}</p>
+                </li>
+              ))}
+            </ol>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* 3 — Corporate scale */}
+      <section id="at-a-glance" aria-labelledby="scale-heading" className="section-padding scroll-mt-24">
+        <div className="container-custom">
+          <AnimatedSection className="max-w-3xl mb-14">
+            <span className="label-eyebrow">{text("Corporate Scale", "የድርጅቱ አቅም")}</span>
+            <h2 id="scale-heading" className="section-title mt-4">{text("The capacity behind our work", "ከሥራችን ጀርባ ያለው አቅም")}</h2>
+          </AnimatedSection>
+          <dl className="grid gap-px bg-border border border-border sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              [n(s.staff), text("Staff", "ሠራተኞች"), ""],
+              [n(s.totalAssets), text("Vehicles, plants & machinery", "ተሽከርካሪዎች፣ ፕላንቶችና ማሽነሪዎች"), text(`${s.vehicles} vehicles · ${s.plants} plants · ${s.machinery} machinery`, `${s.vehicles} ተሽከርካሪዎች · ${s.plants} ፕላንቶች · ${s.machinery} ማሽነሪዎች`)],
+              [s.contractorGrade, text("Contractor classification", "የተቋራጭ ደረጃ"), ""],
+              ["ETB 3.4B+", text("Annual turnover", "ዓመታዊ ገቢ"), ""],
+              ["ETB 25B+", text("Active project contracts", "ንቁ የፕሮጀክት ውሎች"), ""],
+              ["ETB 929M+", text("Recorded capital", "የተመዘገበ ካፒታል"), ""],
+            ].map(([value, label, detail]) => (
+              <div key={label} className="bg-background p-8 md:p-10 flex flex-col">
+                <dt className="order-2 mt-3 text-sm font-body uppercase tracking-[0.14em] text-muted-foreground">{label}</dt>
+                <dd className="order-1 font-display text-4xl md:text-5xl font-bold text-foreground">{value}</dd>
+                {detail && <dd className="order-3 mt-2 text-sm font-body text-accent">{detail}</dd>}
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      {/* 4 — Capabilities */}
+      <section aria-labelledby="capabilities-heading" className="section-padding bg-surface">
+        <div className="container-custom">
+          <div className="flex flex-wrap items-end justify-between gap-6 mb-14">
+            <AnimatedSection className="max-w-2xl">
+              <span className="label-eyebrow">{text("Capabilities", "አገልግሎቶቻችን")}</span>
+              <h2 id="capabilities-heading" className="section-title mt-4">{text("What we build", "የምንገነባው")}</h2>
+            </AnimatedSection>
+            <Link to={path("/services")} className="inline-flex items-center gap-2 text-sm font-body font-semibold uppercase tracking-[0.18em] text-accent hover:gap-3 transition-all">
+              {text("All services", "ሁሉም አገልግሎቶች")} <ArrowRight size={16} aria-hidden />
+            </Link>
+          </div>
+          <div className="grid gap-6 lg:grid-cols-12">
+            {capabilities.map((svc, i) => (
+              <Link
+                key={svc.slug}
+                to={path(`/services/${svc.slug}`)}
+                className={`group relative overflow-hidden bg-background border border-border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${i === 0 ? "lg:col-span-7 lg:row-span-2" : i < 3 ? "lg:col-span-5" : "lg:col-span-6"}`}
+              >
+                <div className={`overflow-hidden ${i === 0 ? "aspect-[4/3] lg:aspect-auto lg:h-[420px]" : "aspect-[16/9]"}`}>
+                  <img src={svc.heroImage} alt={svc.heroImageAlt} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 motion-reduce:transition-none" />
+                </div>
+                <div className="p-6 md:p-8">
+                  <div className="flex items-start justify-between gap-4">
+                    <h3 className="font-display text-xl md:text-2xl font-bold text-foreground">{navLabel(locale, svc.name)}</h3>
+                    <ArrowUpRight size={20} className="shrink-0 text-accent transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+                  </div>
+                  {!am && <p className="mt-3 text-sm font-body text-muted-foreground leading-relaxed line-clamp-3">{svc.shortDescription}</p>}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5 — Featured projects (live published data) */}
+      <ProjectShowcase />
+
+      {/* Clients & partners */}
+      <section id="partnerships" aria-labelledby="partners-heading" className="py-16 md:py-20 overflow-hidden border-y border-border">
+        <div className="container-custom mb-10">
+          <span className="label-eyebrow">{text("Clients & Strategic Partners", "ደንበኞችና ስትራቴጂካዊ አጋሮች")}</span>
+          <h2 id="partners-heading" className="section-title mt-3 text-2xl md:text-3xl">{text("Working with national and regional institutions", "ከብሔራዊና ክልላዊ ተቋማት ጋር በመሥራት")}</h2>
+        </div>
+        <PartnersMarquee />
+      </section>
+
+      {/* 6 — Quality, safety, responsibility */}
+      <section aria-labelledby="quality-heading" className="section-padding">
+        <div className="container-custom grid gap-12 lg:grid-cols-2 lg:items-center">
+          <AnimatedSection>
+            <img src={safetyImg} alt={text("Hibir site team wearing protective equipment", "የመከላከያ መሣሪያ የለበሱ የሂቢር ሠራተኞች")} loading="lazy" className="w-full aspect-[4/3] object-cover" />
+          </AnimatedSection>
+          <AnimatedSection>
+            <span className="label-eyebrow">{text("Our Standards", "መለኪያዎቻችን")}</span>
+            <h2 id="quality-heading" className="section-title mt-4">{text("Quality, safety and responsible delivery", "ጥራት፣ ደህንነትና ኃላፊነት የተሞላበት አፈጻጸም")}</h2>
+            <dl className="mt-10 divide-y divide-border border-y border-border">
+              {[
+                [text("Safety", "ደህንነት"), text("The corporation follows scientific HSE procedures to ensure a safe workplace.", "ኮርፖሬሽኑ ደህንነቱ የተጠበቀ የሥራ ቦታ ለማረጋገጥ ሳይንሳዊ የHSE ሂደቶችን ይከተላል።")],
+                [text("Quality", "ጥራት"), text("Quality control is maintained through planned supervision and management reviews.", "የጥራት ቁጥጥር በታቀደ ቁጥጥርና በአስተዳደር ግምገማ ይጠበቃል።")],
+                [text("Mission", "ተልዕኮ"), text("Building infrastructures with the desired quality, on time.", "የሚፈለገውን ጥራት የጠበቀ መሠረተ ልማት በወቅቱ መገንባት።")],
+              ].map(([k, v]) => (
+                <div key={k} className="grid gap-2 py-6 sm:grid-cols-[140px_1fr]">
+                  <dt className="font-display font-semibold text-foreground">{k}</dt>
+                  <dd className="font-body text-muted-foreground">{v}</dd>
+                </div>
+              ))}
+            </dl>
+            <Link to={path("/safety")} className="mt-8 inline-flex items-center gap-2 text-sm font-body font-semibold uppercase tracking-[0.18em] text-accent hover:gap-3 transition-all">
+              {text("Safety & Quality", "ደህንነትና ጥራት")} <ArrowRight size={16} aria-hidden />
+            </Link>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* 7 — Latest news (published only) */}
+      <LatestNews />
+
+      {/* 8 — Closing CTA */}
+      <section className="relative py-24 md:py-32 overflow-hidden">
+        <img src={ctaBg} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-background/90" aria-hidden />
+        <div className="relative container-custom grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div className="max-w-2xl">
+            <h2 className="section-title">{text("Discuss your next infrastructure project with Hibir", "ቀጣዩን የመሠረተ ልማት ፕሮጀክትዎን ከሂቢር ጋር ይወያዩ")}</h2>
+            <p className="mt-5 text-muted-foreground font-body">{text("Contact our Bahir Dar head office or explore the projects we have delivered.", "የባሕር ዳር ዋና መሥሪያ ቤታችንን ያግኙ ወይም ያከናወንናቸውን ፕሮጀክቶች ይመልከቱ።")}</p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link to={path("/contact")} className="btn-accent inline-flex items-center justify-center gap-2">{text("Contact Us", "ያግኙን")} <ArrowRight size={18} aria-hidden /></Link>
+            <Link to={path("/projects")} className="btn-primary inline-flex items-center justify-center gap-2">{text("View Projects", "ፕሮጀክቶችን ይመልከቱ")}</Link>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
 }
