@@ -34,6 +34,7 @@ const Hero = () => {
         className="absolute inset-0 w-full h-full object-cover"
       />
       <div className="absolute inset-0 hero-overlay-side" aria-hidden />
+      <div className="absolute inset-0 hero-vignette" aria-hidden />
       <div className="absolute inset-x-0 bottom-0 h-16 hero-fade pointer-events-none" aria-hidden />
 
       <div className="relative container-custom w-full px-5 md:px-8 pt-32 pb-16 md:pt-40 md:pb-20">
