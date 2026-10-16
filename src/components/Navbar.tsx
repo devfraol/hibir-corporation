@@ -300,7 +300,7 @@ const Navbar = () => {
               </div>
 
               <ul className="flex flex-col gap-1 flex-1">
-                {links.map((l, i) => (
+                {[{ to: "/", label: "Home" } as NavLinkItem, ...links].map((l, i) => (
                   <motion.li
                     key={l.to}
                     initial={reduced ? false : { opacity: 0, x: -24 }}
