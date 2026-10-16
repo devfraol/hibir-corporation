@@ -6,6 +6,8 @@ import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useI18n } from "@/i18n";
 import { navLabel } from "@/i18n/content";
+import { companyData } from "@/config/site";
+import { Mail, Phone, MapPin } from "lucide-react";
 
 interface NavLinkItem {
   to: string;
@@ -14,7 +16,6 @@ interface NavLinkItem {
 }
 
 const links: NavLinkItem[] = [
-  { to: "/", label: "Home" },
   {
     to: "/about",
     label: "About",
@@ -26,6 +27,7 @@ const links: NavLinkItem[] = [
       { to: "/about#approach", label: "Our Approach" },
       { to: "/about#why-hibir", label: "Why Choose Us" },
       { to: "/organization", label: "Leadership / Organization" },
+      { to: "/safety", label: "Safety & Quality" },
       { to: "/about#partnerships", label: "Partnerships" },
       { to: "/about#legal-entities", label: "Legal Entities" },
       { to: "/about#certifications", label: "Certifications & Awards" },
@@ -35,6 +37,7 @@ const links: NavLinkItem[] = [
     to: "/services",
     label: "Services",
     children: [
+      { to: "/services", label: "All Services" },
       { to: "/services/road-construction", label: "Road Construction" },
       { to: "/services/bridge-construction", label: "Bridge Construction" },
       { to: "/services/urban-infrastructure", label: "Urban Infrastructure" },
@@ -70,7 +73,6 @@ const links: NavLinkItem[] = [
       { to: "/resources#construction-experience", label: "Construction Experience" },
     ],
   },
-  { to: "/safety", label: "Safety & Quality" },
   {
     to: "/news",
     label: "News",
@@ -113,13 +115,15 @@ const Navbar = () => {
 
   const isActive = (to: string) => {
     const target = path(to).split("#")[0];
+    if (to === "/about" && (location.pathname.endsWith("/organization") || location.pathname.endsWith("/safety"))) return true;
+    if (to === "/news" && location.pathname.includes("/vacancies")) return true;
     return target === "/" || target === "/am" ? location.pathname === target : location.pathname.startsWith(target);
   };
   const labelFor = (item: NavLinkItem) => navLabel(locale, item.label);
 
-  const navTextClass = scrolled ? "text-foreground" : "text-white/95";
-  const navMutedClass = scrolled ? "text-muted-foreground" : "text-white/70";
-  const navHoverTextClass = scrolled ? "hover:text-foreground" : "hover:text-white";
+  const navTextClass = scrolled ? "text-foreground" : "on-media";
+  const navMutedClass = scrolled ? "text-foreground/75" : "on-media-muted";
+  const navHoverTextClass = scrolled ? "hover:text-accent" : "hover:text-accent";
 
   const hoverOpen = (label: string) => {
     window.clearTimeout(closeTimer.current);
@@ -139,14 +143,31 @@ const Navbar = () => {
       </a>
 
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? "glass py-2.5 border-b shadow-lg shadow-black/5"
-            : "bg-transparent py-5 border-b border-transparent"
+        className={`fixed top-0 left-0 right-0 z-50 ${reduced ? "" : "transition-[background-color,box-shadow] duration-300"} ${
+          scrolled ? "glass border-b shadow-lg shadow-black/5" : "bg-transparent border-b border-transparent"
         }`}
         style={scrolled ? { borderColor: "var(--glass-border)" } : undefined}
       >
-        <nav aria-label="Primary" className="container-custom px-4 md:px-8 flex items-center justify-between gap-4">
+        {/* Top utility bar — collapses on scroll */}
+        <div
+          className={`hidden md:block overflow-hidden border-b ${reduced ? "" : "transition-[max-height,opacity] duration-300"} ${
+            scrolled ? "max-h-0 opacity-0 border-transparent" : "max-h-10 opacity-100 border-[hsl(var(--on-media)/0.12)]"
+          }`}
+          aria-hidden={scrolled || undefined}
+        >
+          <div className={`container-custom px-4 md:px-8 h-9 flex items-center justify-between gap-6 text-[11px] font-body ${navMutedClass}`}>
+            <div className="flex items-center gap-5">
+              <span className="hidden lg:inline-flex items-center gap-1.5"><MapPin size={12} className="text-accent" aria-hidden />{locale === "am" ? "ባሕር ዳር፣ አማራ፣ ኢትዮጵያ" : "Bahir Dar, Amhara, Ethiopia"}</span>
+              <a tabIndex={scrolled ? -1 : undefined} href={`tel:${companyData.phone.replace(/\s/g, "")}`} className="inline-flex items-center gap-1.5 hover:text-accent transition-colors"><Phone size={12} className="text-accent" aria-hidden />{companyData.phone}</a>
+              <a tabIndex={scrolled ? -1 : undefined} href={`mailto:${companyData.email}`} className="inline-flex items-center gap-1.5 hover:text-accent transition-colors"><Mail size={12} className="text-accent" aria-hidden />{companyData.email}</a>
+            </div>
+            <div className="flex items-center gap-4">
+              <Link tabIndex={scrolled ? -1 : undefined} to={path("/vacancies")} className="hover:text-accent transition-colors">{navLabel(locale, "Vacancies")}</Link>
+              <Link tabIndex={scrolled ? -1 : undefined} to={path("/news")} className="hover:text-accent transition-colors">{navLabel(locale, "News")}</Link>
+            </div>
+          </div>
+        </div>
+        <nav aria-label="Primary" className={`container-custom px-4 md:px-8 flex items-center justify-between gap-4 ${reduced ? "" : "transition-[padding] duration-300"} ${scrolled ? "py-2.5" : "py-4"}`}>
           <Link to={path("/")} className="flex items-center gap-3 group shrink-0" aria-label="Hibir Construction Corporation — home">
             <img
               src="/Hibir%20Logo.png"
@@ -156,24 +177,26 @@ const Navbar = () => {
             />
             <div className="leading-tight">
               <span className={`font-display font-bold text-base block ${navTextClass}`}>Hibir</span>
-              <span className={`text-[9px] tracking-[0.24em] uppercase font-body ${scrolled ? "text-muted-foreground" : "text-white/60"}`}>
+              <span className={`text-[9px] tracking-[0.24em] uppercase font-body ${scrolled ? "text-muted-foreground" : "on-media-muted"}`}>
                 {locale === "am" ? "ኮንስትራክሽን ኮርፖሬሽን" : "Construction Corp."}
               </span>
             </div>
           </Link>
 
-          <div className="hidden xl:flex items-center gap-0.5">
+          <div className="hidden xl:flex items-center gap-1 ml-auto">
             {links.map((l) => (
               <div
                 key={l.to}
                 className="relative"
                 onMouseEnter={() => l.children && hoverOpen(l.label)} onMouseLeave={() => l.children && hoverClose()}
+                onKeyDown={(e) => { if (e.key === "Escape") setOpenMenu(null); }}
+                onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpenMenu(null); }}
               >
                 <div className="flex items-center">
                   <Link
                     to={path(l.to)}
                     aria-current={isActive(l.to) ? "page" : undefined}
-                    className={`relative px-3 py-2 rounded-lg text-[13px] font-medium font-body transition-colors duration-300 ${
+                    className={`relative px-3 py-2 rounded-lg text-[13.5px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent font-medium font-body transition-colors duration-300 ${
                       isActive(l.to) ? "text-accent" : `${navMutedClass} ${navHoverTextClass}`
                     }`}
                   >
@@ -206,9 +229,9 @@ const Navbar = () => {
                 <AnimatePresence>
                   {l.children && openMenu === l.label && (
                     <motion.div
-                      initial={{ opacity: 0, y: -6, filter: "blur(4px)" }}
-                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                      exit={{ opacity: 0, y: -6, filter: "blur(4px)" }}
+                      initial={reduced ? { opacity: 0 } : { opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={reduced ? { opacity: 0 } : { opacity: 0, y: -6 }}
                       transition={{ duration: 0.16, ease: "easeOut" }}
                       className="absolute left-0 top-full pt-3 w-64"
                     >
@@ -230,7 +253,7 @@ const Navbar = () => {
             ))}
           </div>
 
-          <div className="flex items-center gap-2.5">
+          <div className={`flex items-center gap-2.5 ${navTextClass}`}>
             <LanguageSwitcher />
             <ThemeToggle />
             <Link to={path("/contact")} className="hidden xl:inline-flex btn-accent text-[13px] px-5 py-2.5">
@@ -239,7 +262,7 @@ const Navbar = () => {
             <button
               type="button"
               onClick={() => setOpen(true)}
-              className="xl:hidden w-10 h-10 rounded-xl grid place-items-center border border-border/70 text-foreground"
+              className="xl:hidden w-10 h-10 rounded-xl grid place-items-center border border-current/30"
               aria-label={locale === "am" ? "ማውጫን ክፈት" : "Open menu"}
               aria-expanded={open}
             >
