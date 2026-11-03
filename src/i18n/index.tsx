@@ -5,11 +5,29 @@ export type Locale = "en" | "am";
 
 const messages = {
   en: {
+    hero: {
+      eyebrow: "ENGINEERING • INFRASTRUCTURE • CONSTRUCTION",
+      headlineFirst: "Building Infrastructure.",
+      headlineSecond: "Connecting Communities.",
+      description: "Hibir Construction Corporation delivers construction and infrastructure development through engineering expertise, dedicated people, and organizational strength.",
+      projects: "Explore Our Projects",
+      about: "Discover Hibir",
+      imageAlt: "Illustrative landscape view of road construction and heavy machinery",
+    },
     navigation: { home: "Home", about: "About", services: "Services", projects: "Projects", resources: "Resources", safety: "Safety & Quality", news: "News", contact: "Contact", menu: "Menu", skip: "Skip to content", getInTouch: "Get in Touch" },
     common: { loading: "Loading…", notFound: "Page not found", backToProjects: "Back to Projects", allProjects: "All Projects", projectOverview: "Project overview", projectInformation: "Project information", projectGallery: "Project gallery", relatedProjects: "Related projects", contactHibir: "Contact Hibir" },
     seo: { siteSuffix: "Hibir Construction Corporation", newsTitle: "Hibir Construction Corporation News & Updates", newsDescription: "Updates, milestones and stories from Hibir Construction Corporation." },
   },
   am: {
+    hero: {
+      eyebrow: "ምህንድስና • መሠረተ ልማት • ግንባታ",
+      headlineFirst: "መሠረተ ልማትን እንገነባለን።",
+      headlineSecond: "ማህበረሰቦችን እናገናኛለን።",
+      description: "ሂቢር ኮንስትራክሽን ኮርፖሬሽን በምህንድስና እውቀት፣ በትጉህ ሠራተኞችና በድርጅታዊ ጥንካሬ የግንባታና የመሠረተ ልማት ሥራዎችን ያከናውናል።",
+      projects: "ፕሮጀክቶቻችንን ይመልከቱ",
+      about: "ሂቢርን ይወቁ",
+      imageAlt: "የመንገድ ግንባታና ከባድ ማሽነሪዎች ማሳያ ምስል",
+    },
     navigation: { home: "መነሻ", about: "ስለ እኛ", services: "አገልግሎቶች", projects: "ፕሮጀክቶች", resources: "ሀብቶች", safety: "ደህንነትና ጥራት", news: "ዜና", contact: "ያግኙን", menu: "ማውጫ", skip: "ወደ ዋናው ይዘት ይሂዱ", getInTouch: "ያግኙን" },
     common: { loading: "በመጫን ላይ…", notFound: "ገጹ አልተገኘም", backToProjects: "ወደ ፕሮጀክቶች ተመለስ", allProjects: "ሁሉም ፕሮጀክቶች", projectOverview: "የፕሮጀክቱ አጠቃላይ እይታ", projectInformation: "የፕሮጀክት መረጃ", projectGallery: "የፕሮጀክት ምስሎች", relatedProjects: "ተዛማጅ ፕሮጀክቶች", contactHibir: "HIBIRን ያግኙ" },
     seo: { siteSuffix: "Hibir Construction Corporation", newsTitle: "የ Hibir Construction Corporation ዜናዎችና ወቅታዊ መረጃዎች", newsDescription: "ከ Hibir Construction Corporation የሚቀርቡ ወቅታዊ መረጃዎች፣ ዕድገቶችና ታሪኮች።" },
