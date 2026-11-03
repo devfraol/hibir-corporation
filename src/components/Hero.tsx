@@ -29,8 +29,8 @@ const Hero = () => {
       <img
         src={heroImage}
         alt={t("hero.imageAlt")}
-        width={1366}
-        height={768}
+        width={1920}
+        height={1080}
         fetchPriority="high"
         loading="eager"
         className="homepage-editorial-photo absolute inset-0 -z-20 h-full w-full object-cover"
@@ -46,7 +46,7 @@ const Hero = () => {
           <motion.h1
             id="homepage-hero-title"
             {...reveal(0.08)}
-            className="font-display text-[2rem] font-semibold leading-[1.12] on-media sm:text-[2.75rem] lg:text-[3.25rem]"
+            className="font-display text-[2rem] font-semibold leading-[1.12] on-media sm:text-[2.75rem] lg:text-[2.875rem]"
           >
             <span className="block">{t("hero.headlineFirst")}</span>
             <span className="block">{t("hero.headlineSecond")}</span>
@@ -60,7 +60,7 @@ const Hero = () => {
             <Button asChild size="lg" className="h-12 w-full bg-accent font-semibold text-accent-foreground hover:bg-accent/90 sm:w-auto">
               <Link to={path("/projects")}>{t("hero.projects")} <ArrowRight aria-hidden /></Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="homepage-editorial-secondary h-12 w-full font-semibold sm:w-auto">
+            <Button asChild variant="ghost" size="lg" className="h-12 w-full border border-[hsl(var(--on-media)/0.5)] bg-transparent font-semibold text-[hsl(var(--on-media))] hover:border-[hsl(var(--on-media))] hover:bg-[hsl(var(--on-media)/0.12)] hover:text-[hsl(var(--on-media))] sm:w-auto">
               <Link to={path("/about")}>{t("hero.about")}</Link>
             </Button>
           </motion.div>

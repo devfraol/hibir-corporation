@@ -282,16 +282,6 @@
   .homepage-editorial-content { padding-top: 210px; padding-bottom: 96px; }
   .homepage-editorial-shade { background: var(--editorial-shade); }
   .homepage-editorial-photo { object-position: 62% center; }
-  .homepage-editorial-secondary {
-    color: hsl(var(--on-media));
-    background: transparent;
-    border-color: hsl(var(--on-media) / 0.5);
-  }
-  .homepage-editorial-secondary:hover {
-    color: hsl(var(--on-media));
-    background: hsl(var(--on-media) / 0.12);
-    border-color: hsl(var(--on-media));
-  }
   @media (max-width: 767px) {
     .homepage-editorial-hero { min-height: 0; }
     .homepage-editorial-content { padding-top: 128px; padding-bottom: 200px; }
