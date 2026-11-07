@@ -6,7 +6,6 @@ import { formatAdminRole } from "@/lib/admin";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import ThemeToggle from "@/components/ThemeToggle";
 import { cn } from "@/lib/utils";
 
 const navigation = [
@@ -89,7 +88,6 @@ export const AdminLayout = () => {
           </nav>
           <p className="truncate text-sm font-semibold">{current}</p>
         </div>
-        <ThemeToggle className="h-9 w-9" />
         {adminProfile && <span className="hidden rounded-md border border-border px-2 py-1 text-xs text-muted-foreground md:inline">{formatAdminRole(adminProfile.role)}</span>}
         <Button variant="outline" size="sm" className="gap-2" onClick={handleSignOut}><LogOut size={15} /><span className="hidden sm:inline">Sign out</span></Button>
       </header>

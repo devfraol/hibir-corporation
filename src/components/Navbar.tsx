@@ -254,7 +254,6 @@ const Navbar = () => {
 
           <div className={`flex items-center gap-2.5 ${navTextClass}`}>
             <LanguageSwitcher />
-            <ThemeToggle />
             <Link to={path("/contact")} className="hidden xl:inline-flex btn-accent text-[13px] px-5 py-2.5">
               {t("navigation.getInTouch")}
             </Link>
@@ -369,7 +368,6 @@ const Navbar = () => {
                 <Link to={path("/contact")} className="btn-accent flex-1 text-sm">
                   {t("navigation.getInTouch")} <ArrowRight size={16} />
                 </Link>
-                <ThemeToggle />
               </motion.div>
             </div>
           </motion.div>
