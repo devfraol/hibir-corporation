@@ -74,7 +74,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3 — Corporate scale */}
+      {/* 3 — Latest news (published only) */}
+      <LatestNews />
+
+      {/* 4 — Corporate scale */}
       <section id="at-a-glance" aria-labelledby="scale-heading" className="section-padding scroll-mt-24">
         <div className="container-custom">
           <AnimatedSection className="max-w-3xl mb-14">
@@ -175,10 +178,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 7 — Latest news (published only) */}
-      <LatestNews />
-
-      {/* 8 — Closing CTA */}
+      {/* 7 — Closing CTA */}
       <section className="relative py-24 md:py-32 overflow-hidden">
         <img src={ctaBg} alt="" aria-hidden className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-background/90" aria-hidden />
