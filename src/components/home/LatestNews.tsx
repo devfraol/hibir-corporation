@@ -23,7 +23,22 @@ const LatestNews = () => {
     };
   }, []);
 
-  if (articles.length === 0 || (isAm && !articles.some((article) => article.titleAm && article.excerptAm))) return isAm ? <section className="section-padding" aria-labelledby="latest-news-heading"><div className="container-custom"><span className="label-eyebrow">የዜና ክፍል</span><h2 id="latest-news-heading" className="section-title mt-3">የቅርብ ጊዜ ዜናዎች</h2><p className="mt-6 text-muted-foreground font-body">በአማርኛ የጸደቁ ዜናዎች በቅርቡ ይቀርባሉ።</p></div></section> : null;
+  if (articles.length === 0 || (isAm && !articles.some((article) => article.titleAm && article.excerptAm))) return (
+    <section className="section-padding" aria-labelledby="latest-news-heading">
+      <div className="container-custom">
+        <span className="label-eyebrow">{isAm ? "የዜና ክፍል" : "Newsroom"}</span>
+        <h2 id="latest-news-heading" className="section-title mt-3">{isAm ? "የቅርብ ጊዜ ዜናዎች" : "Latest News"}</h2>
+        <p className="mt-6 max-w-xl text-muted-foreground font-body">
+          {isAm
+            ? "በአማርኛ የጸደቁ ዜናዎች በቅርቡ ይቀርባሉ።"
+            : "Published news and announcements from Hibir will appear here. Please check back soon."}
+        </p>
+        <Link to={path("/news")} className="mt-8 inline-flex items-center gap-2 text-xs font-body font-semibold tracking-[0.18em] uppercase text-accent hover:gap-3 transition-all">
+          {isAm ? "የዜና ገጽ" : "Visit the News Page"} <ArrowRight size={15} />
+        </Link>
+      </div>
+    </section>
+  );
 
   const visibleArticles = isAm ? articles.filter((article) => article.titleAm && article.excerptAm) : articles;
 

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import ThemeToggle from "@/components/ThemeToggle";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useI18n } from "@/i18n";
 import { navLabel } from "@/i18n/content";
@@ -255,7 +254,6 @@ const Navbar = () => {
 
           <div className={`flex items-center gap-2.5 ${navTextClass}`}>
             <LanguageSwitcher />
-            <ThemeToggle />
             <Link to={path("/contact")} className="hidden xl:inline-flex btn-accent text-[13px] px-5 py-2.5">
               {t("navigation.getInTouch")}
             </Link>
@@ -370,7 +368,6 @@ const Navbar = () => {
                 <Link to={path("/contact")} className="btn-accent flex-1 text-sm">
                   {t("navigation.getInTouch")} <ArrowRight size={16} />
                 </Link>
-                <ThemeToggle />
               </motion.div>
             </div>
           </motion.div>
