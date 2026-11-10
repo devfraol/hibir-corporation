@@ -120,8 +120,8 @@ const Navbar = () => {
   };
   const labelFor = (item: NavLinkItem) => navLabel(locale, item.label);
 
-  const navTextClass = scrolled ? "text-foreground" : "on-media";
-  const navMutedClass = scrolled ? "text-foreground/75" : "on-media-muted";
+  const navTextClass = scrolled ? "text-foreground" : "on-media nav-on-media";
+  const navMutedClass = scrolled ? "text-foreground/75" : "on-media-muted nav-on-media";
   const navHoverTextClass = scrolled ? "hover:text-accent" : "hover:text-accent";
 
   const hoverOpen = (label: string) => {
