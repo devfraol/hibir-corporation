@@ -120,6 +120,9 @@ const Navbar = () => {
   };
   const labelFor = (item: NavLinkItem) => navLabel(locale, item.label);
 
+  const isHome = location.pathname === "/" || location.pathname === "/am";
+  const heroGlass = !scrolled && isHome;
+
   const navTextClass = scrolled ? "text-foreground" : "on-media nav-on-media";
   const navMutedClass = scrolled ? "text-foreground/75" : "on-media-muted nav-on-media";
   const navHoverTextClass = scrolled ? "hover:text-accent" : "hover:text-accent";
@@ -142,8 +145,12 @@ const Navbar = () => {
       </a>
 
       <header
-        className={`fixed top-0 left-0 right-0 z-50 ${reduced ? "" : "transition-[background-color,box-shadow] duration-300"} ${
-          scrolled ? "glass border-b shadow-lg shadow-black/5" : "bg-transparent border-b border-transparent"
+        className={`fixed top-0 left-0 right-0 z-50 ${reduced ? "" : "transition-[background-color,box-shadow,backdrop-filter] duration-300"} ${
+          scrolled
+            ? "glass border-b shadow-lg shadow-black/5"
+            : heroGlass
+              ? "nav-glass-hero"
+              : "bg-transparent border-b border-transparent"
         }`}
         style={scrolled ? { borderColor: "var(--glass-border)" } : undefined}
       >

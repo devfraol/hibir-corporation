@@ -48,6 +48,7 @@
     --hero-gradient: linear-gradient(135deg, hsl(220 45% 96%) 0%, hsl(214 30% 92%) 100%);
     --glass-bg: hsla(0, 0%, 100%, 0.72);
     --glass-border: hsla(220, 40%, 20%, 0.10);
+    --glass-bg-hero: hsla(220, 45%, 10%, 0.34);
     --glow-gold: 0 18px 50px -22px hsla(26, 92%, 48%, 0.45);
     --glow-blue: 0 18px 50px -24px hsla(220, 55%, 25%, 0.35);
     --shadow-panel: 0 24px 70px -32px hsla(220, 45%, 18%, 0.35);
@@ -109,6 +110,7 @@
     --hero-gradient: linear-gradient(135deg, hsl(222 50% 5%) 0%, hsl(220 45% 11%) 55%, hsl(218 40% 16%) 100%);
     --glass-bg: hsla(220, 34%, 9%, 0.62);
     --glass-border: hsla(210, 30%, 90%, 0.09);
+    --glass-bg-hero: hsla(222, 50%, 4%, 0.42);
     --glow-gold: 0 0 40px hsla(24, 96%, 55%, 0.28);
     --glow-blue: 0 0 46px hsla(218, 70%, 45%, 0.20);
     --shadow-panel: 0 30px 80px -40px hsla(0, 0%, 0%, 0.9);
@@ -280,8 +282,15 @@
     min-height: 640px;
   }
   .homepage-editorial-content { padding-top: 200px; padding-bottom: 56px; }
-  /* Low-opacity navy scrim over every slide; keeps photos bright while aiding contrast */
-  .homepage-editorial-overlay { background: hsl(var(--editorial-panel) / 0.22); }
+  /* Low-opacity navy scrim over every slide; deepened slightly so the headline and panel read first */
+  .homepage-editorial-overlay { background: hsl(var(--editorial-panel) / 0.36); }
+  /* Header glass band while it floats over the homepage hero photo */
+  .nav-glass-hero {
+    background: var(--glass-bg-hero);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border-bottom: 1px solid hsl(var(--on-media) / 0.14);
+  }
   /* Header text over the hero gets a soft shadow so it stays readable on bright slides */
   .nav-on-media { text-shadow: 0 1px 3px hsl(220 45% 8% / 0.6); }
   .homepage-editorial-headline { text-shadow: var(--editorial-text-shadow); }
