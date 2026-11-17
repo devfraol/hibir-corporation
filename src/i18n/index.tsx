@@ -5,6 +5,7 @@ export type Locale = "en" | "am";
 
 const messages = {
   en: {
+    appearance: { label: "Appearance", change: "Change theme", light: "Light", dark: "Dark", system: "System" },
     hero: {
       eyebrow: "ENGINEERING • INFRASTRUCTURE • CONSTRUCTION",
       headlineFirst: "Building Infrastructure.",
@@ -28,6 +29,7 @@ const messages = {
     seo: { siteSuffix: "Hibir Construction Corporation", newsTitle: "Hibir Construction Corporation News & Updates", newsDescription: "Updates, milestones and stories from Hibir Construction Corporation." },
   },
   am: {
+    appearance: { label: "ገጽታ", change: "ገጽታ ይቀይሩ", light: "ብርሃን", dark: "ጨለማ", system: "የመሣሪያው ቅንብር" },
     hero: {
       eyebrow: "ምህንድስና • መሠረተ ልማት • ግንባታ",
       headlineFirst: "መሠረተ ልማትን እንገነባለን።",
