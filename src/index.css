@@ -294,6 +294,23 @@
   /* Header text over the hero gets a soft shadow so it stays readable on bright slides */
   .nav-on-media { text-shadow: 0 1px 3px hsl(220 45% 8% / 0.6); }
   .homepage-editorial-headline { text-shadow: var(--editorial-text-shadow); }
+  .homepage-editorial-title {
+    font-size: 2.5rem;
+    line-height: 1.08;
+    letter-spacing: 0;
+  }
+  @media (min-width: 768px) {
+    .homepage-editorial-title { font-size: 3.5rem; }
+  }
+  @media (min-width: 1024px) {
+    .homepage-editorial-title { font-size: 4.25rem; }
+  }
+  @media (min-width: 1280px) {
+    .homepage-editorial-title { font-size: 4.5rem; }
+  }
+  @media (min-width: 1536px) {
+    .homepage-editorial-title { font-size: 5rem; }
+  }
   .homepage-editorial-photo { object-position: 62% center; }
   /* ACS-style floating information panel: dark, semi-opaque, sharp-edged */
   .homepage-editorial-panel {

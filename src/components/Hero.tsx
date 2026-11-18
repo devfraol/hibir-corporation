@@ -54,19 +54,21 @@ const Hero = () => {
       <div aria-hidden className="homepage-editorial-overlay pointer-events-none absolute inset-0 -z-10" />
 
       <div className="homepage-editorial-content container-custom relative flex w-full flex-col px-5 md:px-8">
-        <div className="homepage-editorial-headline max-w-[720px]">
+        <div className="homepage-editorial-headline w-full max-w-[1120px]">
           <motion.p {...reveal(0)} className="mb-5 font-body text-[10px] font-semibold leading-relaxed tracking-[0.22em] on-media-muted sm:text-xs">
             {t("hero.eyebrow")}
           </motion.p>
 
           <motion.h1
+            key={active}
             id="homepage-hero-title"
-            {...reveal(0.08)}
-            className="font-display text-[2.4rem] font-light leading-[1.08] on-media sm:text-[3.4rem] lg:text-[4rem] xl:text-[4.4rem]"
+            initial={reduced ? false : { opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reduced ? 0 : 0.4, ease }}
+            className="homepage-editorial-title font-display font-normal on-media"
           >
-            <span className="block">
-              {t("hero.headlineFirstLead")} <span className="text-accent">{t("hero.headlineFirstAccent")}</span>
-            </span>
+            <span className="block">{t("hero.headlineFirstLead")}</span>
+            <span className="block text-accent">{t("hero.headlineFirstAccent")}</span>
             <span className="block">
               {t("hero.headlineSecondLead")} <span className="text-accent">{t("hero.headlineSecondAccent")}</span>
             </span>
